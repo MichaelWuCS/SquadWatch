@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # These are some examples of commonly ignored file patterns.
 # You should customize this list as applicable to your project.
 # Learn more about .gitignore:
@@ -47,3 +48,18 @@ Thumbs.db
 *.flv
 *.mov
 *.wmv
+=======
+node_modules/**/*
+.expo/*
+npm-debug.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+
+# macOS
+.DS_Store
+>>>>>>> 251ce32... Created a new Expo app
