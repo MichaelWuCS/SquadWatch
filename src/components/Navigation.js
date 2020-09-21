@@ -1,8 +1,10 @@
-import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { NativeRouter, Switch, Route, Router, Link } from 'react-router-native';
-import Home from '../views/Home.js';
-import MovieList from '../views/MovieList.js';
+import React, { Component } from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { NativeRouter, Switch, Route, Router, Link } from "react-router-native";
+import Home from "../views/Home.js";
+import MovieList from "../views/MovieList.js";
+import Dashboard from "../views/Dashboard.js";
+import WatchList from "../views/WatchList.js";
 
 export default class Navigation extends Component {
     render() {
@@ -10,22 +12,23 @@ export default class Navigation extends Component {
             <View style={styles.container}>
                 <NativeRouter>
                     <View>
-                        <Link
-                            to="/"
-                            underlayColor="#f0f4f7"
-                            style={styles.subNavItem}
-                        >
+                        <Link to="/" underlayColor="#f0f4f7" style={styles.subNavItem}>
                             <Text>Home</Text>
                         </Link>
-                        <Link
-                            to="/movielist"
-                            underlayColor="#f0f4f7"
-                            style={styles.subNavItem}
-                        >
+                        <Link to="/dashboard" underlayColor="#f0f4f7" style={styles.subNavItem}>
+                            <Text>Dashboard</Text>
+                        </Link>
+                        <Link to="/movielist" underlayColor="#f0f4f7" style={styles.subNavItem}>
                             <Text>MovieList</Text>
                         </Link>
+                        <Link to="/watchlist" underlayColor="#f0f4f7" style={styles.subNavItem}>
+                            <Text>WatchList</Text>
+                        </Link>
+
                         <Route exact path="/" component={Home} />
+                        <Route exact path="/dashboard" component={Dashboard} />
                         <Route exact path="/movielist" component={MovieList} />
+                        <Route exact path="/watchlist" component={WatchList} />
                     </View>
                 </NativeRouter>
             </View>
@@ -34,13 +37,10 @@ export default class Navigation extends Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        marginTop: 25,
-        padding: 10,
-    },
+    container: {},
     navItem: {
         flex: 1,
-        alignItems: 'center',
+        alignItems: "center",
         padding: 10,
     },
 });

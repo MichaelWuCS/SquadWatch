@@ -1,12 +1,11 @@
-import { StatusBar } from "expo-status-bar";
 import React, { Component } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-export default class Home extends Component {
+export default class WatchList extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text> THIS IS THE HOME COMPONENT</Text>
+                <Text>THIS IS THE WATCHLIST COMPONENET</Text>
             </View>
         );
     }
