@@ -1,29 +1,46 @@
-import React, { Component } from "react";
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import React, {Component} from "react";
+import {StyleSheet, Text, View, ScrollView, FlatList, Image} from "react-native";
+
+
+const test_watchlist = {
+    creatorID: "5UOPtbbQM03QIVUzwNFn",
+    movies: [
+        {
+            id: "500",
+            name: "Reservoir Dogs",
+            posterPath: "/AjTtJNumZyUDz33VtMlF1K8JPsE.jpg"
+        },
+        {
+            id: "600",
+            name: "Full Metal Jacket",
+            posterPath: "/kMKyx1k8hWWscYFnPbnxxN4Eqo4.jpg"
+        },
+    ]
+};
+
+const Thumbnail = ({title, posterPath}) => (
+    <View style={styles.item}>
+        <Text> {title} </Text>
+        <Image source={{uri: ("https://image.tmdb.org/t/p/w1280" + posterPath)}}
+               style={{width: 70, height: 105}}/>
+    </View>
+);
+
+
+const renderItem = ({item}) => (
+    <Thumbnail title = {item.name} posterPath={item.posterPath}/>
+);
 
 export default class WatchlistPreview extends Component {
     render() {
         return (
             <View style={styles.container}>
                 <Text style={styles.text}>MY WATCHLIST</Text>
-                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                    <Text>Movie </Text>
-                    <Text>Movie </Text>
-                    <Text>Movie </Text>
-                    <Text>Movie </Text>
-                    <Text>Movie </Text>
-                    <Text>Movie </Text>
-                    <Text>Movie </Text>
-                    <Text>Movie </Text>
-                    <Text>Movie </Text>
-                    <Text>Movie </Text>
-                    <Text>Movie </Text>
-                    <Text>Movie </Text>
-                    <Text>Movie </Text>
-                    <Text>Movie </Text>
-                    <Text>Movie </Text>
-                    <Text>Movie </Text>
-                </ScrollView>
+                <FlatList horizontal={true} showsHorizontalScrollIndicator={false}
+                          data={test_watchlist.movies}
+                          renderItem={renderItem}
+                          keyExtractor={item => item.id}
+                />
             </View>
         );
     }
