@@ -94,7 +94,18 @@ function fetch_movie_data(movie_id) {
     if (loading) {
         return <ActivityIndicator/>;
     } else {
-        return <Text>{movie.original_title + "\n" + movie.overview}</Text>;
+        return <Text>
+            <Text style={{
+                color: "white",
+                textAlign: "center",
+                fontWeight:"bold",
+                textDecorationLine:"underline"
+            }}>{movie.original_title+"\n"}</Text>
+            <Text style={{
+                color: "white",
+                fontSize:12
+            }}>{"\n"+movie.overview}</Text>
+        </Text>;
     }
 }
 
@@ -127,22 +138,32 @@ const test_watchlist = {
             name: "Full Metal Jacket",
             posterPath: "/kMKyx1k8hWWscYFnPbnxxN4Eqo4.jpg"
         },
+        {
+            id: "601",
+            name: "E.T. the Extra-Terrestrial",
+            posterPath: "/pEKStszBzTZCvR0H4tosjqxmE7X.jpg"
+        },
     ]
 };
 
 const Thumbnail = ({id, title, posterPath}) => {
     const [modalVisible, setModalVisible] = useState(false);
-    return (<View style={styles.item}>
+    return (
+        <View>
             <Modal animationType="slide" transparent={true}
                    visible={modalVisible} onRequestClose={() => {
                 Alert.alert("Modal view closed");
             }}>
-                <View padding={22} flex={1} justifyContent={"center"} alignItems={"center"} backgroundColor={"blue"}>
+                <View style={styles.container} marginTop={300} justifyContent={"center"} backgroundColor={"dodgerblue"}
+                      opacity={0.9}>
                     <TouchableHighlight
                         onPress={() => {
                             setModalVisible(!modalVisible)
                         }}>
+                        <ScrollView>
+
                         <MovieData id={id}/>
+                        </ScrollView>
                     </TouchableHighlight>
                 </View>
             </Modal>
