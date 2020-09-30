@@ -30,6 +30,32 @@ const config = {
 
 const firestore = firebase.firestore();
 
+const test_watchlist = {
+    creatorID: "5UOPtbbQM03QIVUzwNFn",
+    movies: [
+        {
+            id: "500",
+            name: "Reservoir Dogs",
+            posterPath: "/AjTtJNumZyUDz33VtMlF1K8JPsE.jpg"
+        },
+        {
+            id: "600",
+            name: "Full Metal Jacket",
+            posterPath: "/kMKyx1k8hWWscYFnPbnxxN4Eqo4.jpg"
+        },
+        {
+            id: "601",
+            name: "E.T. the Extra-Terrestrial",
+            posterPath: "/pEKStszBzTZCvR0H4tosjqxmE7X.jpg"
+        },
+        {
+            id: "346",
+            name: "Seven Samurai",
+            posterPath: "/1wCRVLGI7SoTOoDRzWlbt2dMDuy.jpg"
+        },
+    ]
+};
+
 export default class WatchlistPreview extends Component {
     render() {
         return (
