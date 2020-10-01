@@ -11,8 +11,7 @@ import {
     TouchableOpacity,
     View
 } from "react-native";
-
-const TMDB_KEY = "fd6611bdf7d4a175b6de314125440173";
+import {TMDB_KEY} from "@env";
 
 function fetch_movie_data(movie_id) {
     const requestStr = "https://api.themoviedb.org/3/movie/" + movie_id + "?api_key=" + TMDB_KEY;

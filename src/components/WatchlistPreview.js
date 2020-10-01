@@ -16,20 +16,6 @@ import * as firebase from "firebase";
 import "firebase/firestore";
 import ThumbnailList from "./ThumbnailList";
 
-// Set the configuration for your app
-const config = {
-    apiKey: "AIzaSyDRW8Lh0Mn2Dv7PZfLkaPFmtXBZEaLpMgw",
-    authDomain: "squadwatch-e2133.firebaseapp.com",
-    databaseURL: "https://squadwatch-e2133.firebaseio.com",
-    storageBucket: "squadwatch-e2133.appspot.com",
-    projectId: "squadwatch-e2133",
-    appId: "squadwatch"
-};
-
-!firebase.apps.length ? firebase.initializeApp(config) : firebase.app();
-
-const firestore = firebase.firestore();
-
 const test_watchlist = {
     creatorID: "5UOPtbbQM03QIVUzwNFn",
     movies: [
