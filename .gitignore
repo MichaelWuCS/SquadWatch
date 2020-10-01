@@ -63,3 +63,4 @@ web-build/
 # macOS
 .DS_Store
 >>>>>>> 251ce32... Created a new Expo app
+/.env
