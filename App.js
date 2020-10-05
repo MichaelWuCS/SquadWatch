@@ -42,8 +42,6 @@ export default function App() {
             <Text> </Text>
             <Text> </Text>
             <Navigation> </Navigation>
-            <RoomView></RoomView>
-            <Auth/>
         </ScrollView>
     );
 }
