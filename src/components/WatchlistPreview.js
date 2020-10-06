@@ -53,10 +53,10 @@ export default class WatchlistPreview extends Component {
 const styles = StyleSheet.create({
     container: {
         marginTop: 25,
-        marginRight: 5,
-        marginLeft: 5,
+        marginRight: 10,
+        marginLeft: 10,
         padding: 10,
-        borderRadius: 15,
+        borderRadius: 20,
         backgroundColor: "aquamarine",
         height: 150,
     },
