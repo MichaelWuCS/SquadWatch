@@ -28,6 +28,7 @@ const firebase_config = {
     projectId: FIREBASE_PROJECT_ID,
     appId: FIREBASE_APP_ID,
 };
+console.log(firebase_config);
 
 !firebase.apps.length ? firebase.initializeApp(firebase_config) : firebase.app();
 
