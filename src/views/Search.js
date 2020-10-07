@@ -42,13 +42,14 @@ export default class Search extends Component{
     fetch(url)
     .then(res => res.json())
     .then(res => {
-        this.setState({
-        data: res.results,
-        error: res.error || null,
-        loading: false,
-        search: queryString,
-        });
-        this.arrayholder = res.results;
+      res.results.sort((a,b) => b.popularity-a.popularity);
+      this.setState({
+      data: res.results,
+      error: res.error || null,
+      loading: false,
+      search: queryString,
+      });
+      this.arrayholder = res.results;
     })
     .catch(error => {
         this.setState({ error, loading: false });
