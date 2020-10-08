@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View, ScrollView } from "react-native";
+import {swPurple} from '../styles/Colors'
 
 export default class RecommendationsPreview extends Component {
     render() {
@@ -31,12 +32,12 @@ export default class RecommendationsPreview extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 25,
-        marginRight: 5,
-        marginLeft: 5,
+        marginTop: 15,
+        marginRight: 10,
+        marginLeft: 10,
         padding: 10,
-        borderRadius: 15,
-        backgroundColor: "darkorchid",
+        borderRadius: 20,
+        backgroundColor: swPurple,
         height: 150,
     },
     text: {

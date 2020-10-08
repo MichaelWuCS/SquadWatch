@@ -15,7 +15,7 @@ import {
 import * as firebase from "firebase";
 import "firebase/firestore";
 import ThumbnailList from "./ThumbnailList";
-
+import {swGreen} from '../styles/Colors'
 const test_watchlist = {
     creatorID: "5UOPtbbQM03QIVUzwNFn",
     movies: [
@@ -52,7 +52,7 @@ export default class WatchlistPreview extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 25,
+         marginTop: 15,
         marginRight: 10,
         marginLeft: 10,
         padding: 10,
