@@ -111,7 +111,7 @@ export default class Search extends Component{
               </ListItem.Content>
             </ListItem>
           )}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item.id.toString()}
           ItemSeparatorComponent={this.renderSeparator}
           ListHeaderComponent={this.renderHeader}
         />
