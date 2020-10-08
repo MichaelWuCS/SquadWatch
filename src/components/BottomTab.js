@@ -15,6 +15,7 @@ function BottomNav() {
     <Tab.Navigator
       initialRouteName="Dashboard"
       activeColor= {swOrange}
+      shifting={false}
       labelStyle={{ fontSize: 11 }}
       barStyle={{ backgroundColor: swNavy }}
     >
