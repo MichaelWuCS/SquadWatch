@@ -1,14 +1,11 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import {StyleSheet, Text, View, ScrollView} from "react-native";
 import {NativeRouter, Switch, Route, Router, Link} from "react-router-native";
-import Home from "./src/views/Home.js";
-import MovieList from "./src/views/MovieList.js";
-import Navigation from "./src/components/Navigation.js";
 import { NavigationContainer } from '@react-navigation/native';
 import BottomNav from "./src/components/BottomTab.js";
-import HomeStack from './src/components/stackNav'
-
+import HomeStack from './src/components/stackNav';
+import Auth from "./src/components/Auth.js";
+import RoomView from "./src/components/RoomView.js";
 import {
     FIREBASE_API_KEY,
     FIREBASE_AUTH_DOMAIN,
@@ -31,6 +28,8 @@ const firebase_config = {
     projectId: FIREBASE_PROJECT_ID,
     appId: FIREBASE_APP_ID,
 };
+
+console.log(firebase_config);
 
 !firebase.apps.length ? firebase.initializeApp(firebase_config) : firebase.app();
 

@@ -18,8 +18,8 @@ export default class TheatrePreview extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.text}>in theatres</Text>
-                <SliderBox style={styles.slide} images={this.state.moviePosters} />
+                <Text style={styles.text}>IN THEATRES</Text>
+                <SliderBox images={this.state.moviePosters} />
             </View>
         );
     }
@@ -27,18 +27,13 @@ export default class TheatrePreview extends Component {
 
 const styles = StyleSheet.create({
     container: {
+        borderRadius: 25,
+        height: 150,
         marginBottom: 10,
     },
     text: {
-        marginLeft:5,
-        marginTop:10,
-        marginBottom:10,
-        fontSize: 25,
+        fontSize: 20,
         fontWeight: "bold",
-        textTransform:'uppercase',
         color: "white",
-    },
-    slide:{
-        height:400,
     },
 });

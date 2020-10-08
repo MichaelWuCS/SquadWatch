@@ -32,10 +32,10 @@ export default class RecommendationsPreview extends Component {
 const styles = StyleSheet.create({
     container: {
         marginTop: 25,
-        marginRight: 10,
-        marginLeft: 10,
+        marginRight: 5,
+        marginLeft: 5,
         padding: 10,
-        borderRadius: 20,
+        borderRadius: 15,
         backgroundColor: "darkorchid",
         height: 150,
     },
