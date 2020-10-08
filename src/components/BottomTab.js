@@ -4,20 +4,10 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Dashboard from "../views/Dashboard";
 import WatchList from "../views/WatchList";
-import {swNavy,swOrange} from '../styles/Colors'
-import HomeStack from "./stackNav";
-// import { createStackNavigator } from '@react-navigation/stack';
+import Search from "../views/Search";
+import {swNavy,swOrange} from '../styles/Colors';
+import{HomeStack,QueryStack} from './stackNav';
 
-// const DashStack = createStackNavigator();
-
-// function HomeStack(){
-//         return(
-//             <DashStack.Navigator>
-//                 <DashStack.Screen name='new' component={Dashboard}/>
-//             </DashStack.Navigator>
-//         );
-    
-// }
 const Tab = createMaterialBottomTabNavigator();
 
 function BottomNav() {
@@ -25,7 +15,7 @@ function BottomNav() {
     <Tab.Navigator
       initialRouteName="Dashboard"
       activeColor= {swOrange}
-      labelStyle={{ fontSize: 12 }}
+      labelStyle={{ fontSize: 11 }}
       barStyle={{ backgroundColor: swNavy }}
     >
       <Tab.Screen
@@ -40,33 +30,43 @@ function BottomNav() {
       />
       <Tab.Screen
         name="Sync"
-        component={Dashboard}
+        component={HomeStack}
         options={{
-          tabBarLabel:false,
+          tabBarLabel:'Sync',
           tabBarIcon: ({ color }) => (
             <View style = {{
               position:'absolute',
-              width:60,
-              height:60,
+              width:30,
+              height:30,
               justifyContent:"center",
               alignItems: 'center',
             }}>
-              <MaterialCommunityIcons name="infinity" color={color} size={50} style={{bottom:15,}} />
+              <MaterialCommunityIcons name="infinity" color={color} size={30}/>
             </View>
             
           ),
         }}
       />
       <Tab.Screen
-        name="Watchlist"
-        component={WatchList}
+      name='WatchList'
+      component={WatchList}
+      options={{
+        tabBarLabel: "WatchList",
+        tabBarIcon: ({ color }) => (
+          <MaterialCommunityIcons name='movie-roll' color={color} size={26} />
+        ),
+      }}
+      />
+      <Tab.Screen
+        name="Search"
+        component={QueryStack}
         options={{
-          tabBarLabel: 'Friends',
+          tabBarLabel: 'search',
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name='account' color={color} size={26} />
-          ),
+              <MaterialCommunityIcons name="magnify" color={color} size={26}/>)
         }}
       />
+  
     </Tab.Navigator>
   );
 }

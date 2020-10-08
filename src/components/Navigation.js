@@ -5,6 +5,7 @@ import Home from "../views/Home.js";
 import MovieList from "../views/MovieList.js";
 import Dashboard from "../views/Dashboard.js";
 import WatchList from "../views/WatchList.js";
+import Search from "../views/Search.js";
 
 export default class Navigation extends Component {
     render() {
@@ -24,11 +25,14 @@ export default class Navigation extends Component {
                         <Link to="/watchlist" underlayColor="#f0f4f7" style={styles.subNavItem}>
                             <Text>WatchList</Text>
                         </Link>
-
+                        <Link to="/search" underlayColor="#f0f4f7" style={styles.subNavItem}>
+                            <Text>Search</Text>
+                        </Link>
                         <Route exact path="/" component={Home} />
                         <Route exact path="/dashboard" component={Dashboard} />
                         <Route exact path="/movielist" component={MovieList} />
                         <Route exact path="/watchlist" component={WatchList} />
+                        <Route exact path="/search" component={Search} />
                     </View>
                 </NativeRouter>
             </View>

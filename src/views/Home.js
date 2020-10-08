@@ -1,13 +1,13 @@
-
+import { StatusBar } from "expo-status-bar";
 import React, { Component } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, SafeAreaView} from "react-native";
 
 export default class Home extends Component {
     render() {
         return (
-            <View style={styles.container}>
+            <SafeAreaView style={styles.container}>
                 <Text> THIS IS THE HOME COMPONENT</Text>
-            </View>
+            </SafeAreaView>
         );
     }
 }

@@ -22,7 +22,7 @@ import "firebase/firestore";
 import "firebase/auth";
 
 //set up firebase configuration from environment variables
-
+console.log(FIREBASE_API_KEY);
 const firebase_config = {
     apiKey: FIREBASE_API_KEY,
     authDomain: FIREBASE_AUTH_DOMAIN,
