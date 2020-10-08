@@ -5,7 +5,8 @@ import {
     View,
     StyleSheet,
     FlatList,
-    ActivityIndicator, NativeEventEmitter
+    ActivityIndicator, NativeEventEmitter,
+    SafeAreaView
 } from "react-native";
 import {TMDB_KEY} from "@env";
 import { ListItem, SearchBar, Avatar, Image } from 'react-native-elements';
@@ -91,13 +92,13 @@ export default class Search extends Component{
   render() {
     if (this.state.loading) {
       return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <ActivityIndicator />
-        </View>
+        </SafeAreaView>
       );
     }
     return (
-      <View style={{ flex: 1 }}>
+      <SafeAreaView style={{ flex: 1 }}>
         <FlatList
           data={this.state.data}
           renderItem={({ item }) => (
@@ -114,7 +115,7 @@ export default class Search extends Component{
           ItemSeparatorComponent={this.renderSeparator}
           ListHeaderComponent={this.renderHeader}
         />
-      </View>
+      </SafeAreaView>
     );
   }
 }
