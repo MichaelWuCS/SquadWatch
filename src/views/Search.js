@@ -6,11 +6,12 @@ import {
     StyleSheet,
     FlatList,
     ActivityIndicator, NativeEventEmitter,
+    TouchableHighlight,
     SafeAreaView
 } from "react-native";
 import {TMDB_KEY} from "@env";
 import { ListItem, SearchBar, Avatar, Image } from 'react-native-elements';
-
+import {MovieDetailStack} from '../components/stackNav';
 
 export default class Search extends Component{
   constructor(props){
@@ -102,14 +103,22 @@ export default class Search extends Component{
         <FlatList
           data={this.state.data}
           renderItem={({ item }) => (
-            <ListItem>
-              <Image  source= {{ uri: "https://image.tmdb.org/t/p/w1280"+item.poster_path }}
-                      style={{ width: 60, height: 90 }}/>
-              <ListItem.Content>
-          <ListItem.Title style={{fontWeight: 'bold' }}>{item.title}</ListItem.Title>
-          <ListItem.Subtitle>{item.overview.substring(0, 120)+"..."}</ListItem.Subtitle>
-              </ListItem.Content>
-            </ListItem>
+            <TouchableHighlight onPress={()=>{
+              const id_nav = item.id;
+              //console.log(this.props.navigation);
+              this.props.navigation.push('Movie', {
+                id:id_nav
+              })
+            }}>
+              <ListItem>
+                <Image  source= {{ uri: "https://image.tmdb.org/t/p/w1280"+item.poster_path }}
+                        style={{ width: 60, height: 90 }}/>
+                <ListItem.Content>
+                  <ListItem.Title style={{fontWeight: 'bold' }}>{item.title}</ListItem.Title>
+                  <ListItem.Subtitle>{item.overview.substring(0, 120)+"..."}</ListItem.Subtitle>
+                </ListItem.Content>
+              </ListItem>
+            </TouchableHighlight>
           )}
           keyExtractor={item => item.id.toString()}
           ItemSeparatorComponent={this.renderSeparator}
