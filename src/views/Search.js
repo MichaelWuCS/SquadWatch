@@ -109,6 +109,7 @@ export default class Search extends Component{
               this.props.navigation.push('Movie', {
                 id:id_nav
               })
+              console.log(item.id);
             }}>
               <ListItem>
                 <Image  source= {{ uri: "https://image.tmdb.org/t/p/w1280"+item.poster_path }}

@@ -6,12 +6,14 @@ import {
     StyleSheet,
     FlatList,
     ActivityIndicator, NativeEventEmitter,
-    SafeAreaView
+    SafeAreaView,
+    ImageBackground
 } from "react-native";
 import {TMDB_KEY} from "@env";
 import { ListItem, SearchBar, Avatar, Image } from 'react-native-elements';
 import Navigation from "../components/Navigation";
 import { createStackNavigator } from "@react-navigation/stack";
+import LinearGradient from "react-native-linear-gradient";
 
 
 export default class Search extends Component{
@@ -64,14 +66,22 @@ export default class Search extends Component{
         }else{
             return (
                 <SafeAreaView>
-                    <Image source={{uri:"https://image.tmdb.org/t/p/w1280"+this.state.data.poster_path}}
-                    style={{ width: 300, height: 450 }}/>
-                    <Text>
-                        {this.state.data.title}
-                    </Text>
+                    <ImageBackground source={{uri:"https://image.tmdb.org/t/p/w1280"+this.state.data.poster_path}}
+                    style={{ width: '100%', height: undefined, aspectRatio:2/3}}>
+                        <Text>{this.state.data.title}</Text>
+                    </ImageBackground>
                 </SafeAreaView>
             );
         }
     }
-
+    
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: "#fff",
+        alignItems: "center",
+        justifyContent: "center",
+    }
+});
