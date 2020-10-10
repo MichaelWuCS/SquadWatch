@@ -17,6 +17,7 @@ import {
 import * as firebase from "firebase";
 import "firebase/firestore";
 import "firebase/auth";
+import Login from "./src/views/Login.js";
 
 //set up firebase configuration from environment variables
 console.log(FIREBASE_API_KEY);
@@ -38,9 +39,11 @@ const firebaseAuth = firebase.auth();
 
 export default function App() {
     return (
-        <NavigationContainer>
-            <BottomNav/>
-        </NavigationContainer>
+        // <NavigationContainer>
+            <Login>
+            </Login>
+            /* <BottomNav/>
+        </NavigationContainer> */
     );
 }
 

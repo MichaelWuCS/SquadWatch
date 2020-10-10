@@ -22,13 +22,6 @@ export default class Login extends Component {
                 <StatusBar
                 barStyle='light-content'
                 />
-                <View
-                    style={{
-                    height: 100,
-                    width: '75%',
-                    marginLeft: '12.5%'
-                    }}
-                />
                 <TextInput style={styles.text} autoCapitalize={"none"} placeholder={"username"}/>
                 <View
                     style={{
@@ -76,6 +69,8 @@ const styles = StyleSheet.create({
         color:"white",
         textAlign:"center",
         fontWeight:"bold",
-        fontSize:30
+        fontSize:30,
+        marginTop:"20%",
+        marginBottom:"10%"
     },
 });
