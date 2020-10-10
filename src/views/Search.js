@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import {TMDB_KEY} from "@env";
 import { ListItem, SearchBar, Avatar, Image } from 'react-native-elements';
-import {MovieDetailStack} from '../components/stackNav';
 
 export default class Search extends Component{
   constructor(props){

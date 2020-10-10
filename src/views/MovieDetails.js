@@ -7,13 +7,14 @@ import {
     FlatList,
     ActivityIndicator, NativeEventEmitter,
     SafeAreaView,
-    ImageBackground
+    ImageBackground,
+    ScrollView,
+    Image
 } from "react-native";
 import {TMDB_KEY} from "@env";
-import { ListItem, SearchBar, Avatar, Image } from 'react-native-elements';
-import Navigation from "../components/Navigation";
-import { createStackNavigator } from "@react-navigation/stack";
-import LinearGradient from "react-native-linear-gradient";
+import { ListItem, SearchBar, Avatar } from 'react-native-elements';
+import LinearGradient from "expo-linear-gradient";
+import { swGrey } from "../styles/Colors";
 
 
 export default class Search extends Component{
@@ -42,7 +43,7 @@ export default class Search extends Component{
         fetch(url)
         .then(res => res.json())
         .then(res => {
-            console.log(res);
+            //console.log(res);
             this.setState({
                 loading:false,
                 data:res        
@@ -64,12 +65,24 @@ export default class Search extends Component{
             </SafeAreaView>
             );
         }else{
+        
             return (
                 <SafeAreaView>
-                    <ImageBackground source={{uri:"https://image.tmdb.org/t/p/w1280"+this.state.data.poster_path}}
+                    <ScrollView height="100%" backgroundColor={swGrey}>
+                    <ImageBackground opacity={1} source={{uri:"https://image.tmdb.org/t/p/w1280"+this.state.data.poster_path}}
                     style={{ width: '100%', height: undefined, aspectRatio:2/3}}>
-                        <Text>{this.state.data.title}</Text>
+                        <View style={styles.container}>
+                        <Text style={styles.title}>{this.state.data.title}</Text>
+                        <Text numberOfLines={3} style={styles.description}>{this.state.data.overview}</Text>
+                        <FlatList
+                            
+                        />
+                        </View>
                     </ImageBackground>
+                    <View>
+
+                    </View>
+                    </ScrollView>
                 </SafeAreaView>
             );
         }
@@ -80,8 +93,38 @@ export default class Search extends Component{
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#fff",
-        alignItems: "center",
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
         justifyContent: "center",
+    },
+    linearGradient: {
+        flex: 1,
+        paddingLeft: 15,
+        paddingRight: 15,
+        borderRadius: 5
+    },
+    title: {
+        fontWeight:"700",
+        textAlign: "left",
+        color:"#ffffff",
+        fontSize:35,
+        marginTop:"50%",
+        paddingLeft:"7.5%"
+    },
+    description: {
+        textAlign: "left",
+        color:"#ffffff",
+        fontSize:11,
+        marginTop:"1%",
+        paddingLeft:"5%",
+        paddingRight:"25%"
+    },
+    detail: {
+        textAlign: "left",
+        color:"#ffffff",
+        fontWeight:'100',
+        fontSize:11,
+        marginTop:"1%",
+        paddingLeft:"5%",
+        paddingRight:"25%"
     }
 });
