@@ -6,6 +6,7 @@ import RecommendationsPreview from "../components/RecommendationsPreview.js";
 import FromFriendsPreview from "../components/FromFriendsPreview.js";
 import {swGrey, swOrange} from '../styles/Colors'
 import { ScrollView } from "react-native-gesture-handler";
+import {signIn} from "../components/Auth.js"
 
 export default class Login extends Component {
     render() {
@@ -22,14 +23,9 @@ export default class Login extends Component {
                 <StatusBar
                 barStyle='light-content'
                 />
-                <TextInput style={styles.text} autoCapitalize={"none"} placeholder={"username"}/>
+                <TextInput style={styles.text} autoCapitalize={"none"} placeholder={"username/email"}/>
                 <View
-                    style={{
-                    height: 2,
-                    width: '75%',
-                    backgroundColor: "white",
-                    marginLeft: '12.5%'
-                    }}
+                    style={styles.bar}
                 />
                 <View
                     style={{
@@ -40,14 +36,10 @@ export default class Login extends Component {
                 />
                 <TextInput style={styles.text} autoCapitalize={"none"} secureTextEntry placeholder="password"/>
                 <View
-                    style={{
-                    height: 2,
-                    width: '75%',
-                    backgroundColor: "white",
-                    marginLeft: '12.5%'
-                    }}
+                    style={styles.bar}
                 />
             </SafeAreaView>
+
             
         );
     }
@@ -73,4 +65,10 @@ const styles = StyleSheet.create({
         marginTop:"20%",
         marginBottom:"10%"
     },
+    bar: {
+        height: 2,
+        width: '75%',
+        backgroundColor: "white",
+        marginLeft: '12.5%'
+    }
 });
