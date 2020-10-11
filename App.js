@@ -17,6 +17,8 @@ import {
 import * as firebase from "firebase";
 import "firebase/firestore";
 import "firebase/auth";
+import {Provider} from "react-redux";
+import {store} from "./src/store/store.js"
 
 //set up firebase configuration from environment variables
 console.log(FIREBASE_API_KEY);
@@ -38,9 +40,12 @@ const firebaseAuth = firebase.auth();
 
 export default function App() {
     return (
-        <NavigationContainer>
-            <BottomNav/>
-        </NavigationContainer>
+        <Provider store={store}>
+            <NavigationContainer>
+                <BottomNav/>
+            </NavigationContainer>
+        </Provider>
+
     );
 }
 
