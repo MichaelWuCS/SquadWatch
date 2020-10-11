@@ -11,8 +11,16 @@ import {signUp} from "../components/Auth.js"
 import { Button } from "react-native-paper";
 
 export default class SignUp extends Component {
+    constructor(props){
+        super(props);
+        this.state = ({
+            email: '',
+            first: '',
+            last:'',
+            password:''
+        })
+    }
     render() {
-        var buttonText = "Register";
         return (
             <SafeAreaView style={styles.container}>
                 <View
@@ -26,7 +34,8 @@ export default class SignUp extends Component {
                 <StatusBar
                 barStyle='light-content'
                 />
-                <TextInput style={styles.text} autoCapitalize={"none"} placeholder={"email"}/>
+                <TextInput style={styles.text} autoCapitalize={"none"} placeholder={"email"}
+                onChangeText = {(email) => this.setState({email})}/>
                 <View
                     style={styles.bar}
                 />
@@ -48,7 +57,8 @@ export default class SignUp extends Component {
                     marginLeft: '12.5%'
                     }}
                 />
-                <TextInput style={styles.text} autoCapitalize={"none"} secureTextEntry placeholder="password"/>
+                <TextInput style={styles.text} autoCapitalize={"none"} secureTextEntry placeholder="password"
+                onChangeText = {(password) => this.setState({password})}/>
                 <View
                     style={styles.bar}
                 />
@@ -75,7 +85,7 @@ export default class SignUp extends Component {
                     <Button
                         style= {styles.buttonContainer}
                         title= "Register"
-                        onPress= {() => signUp(signUp.state.email, signUp.state.password)}
+                        onPress= {() => signUp(this.state.email, this.state.password)}
                     />
                     <Button title = "test"></Button>
                 </View>
