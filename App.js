@@ -17,6 +17,8 @@ import {
 import * as firebase from "firebase";
 import "firebase/firestore";
 import "firebase/auth";
+//import Login from "./src/views/Login.js";
+import SignUp from "./src/views/SignUp.js";
 import {Provider} from "react-redux";
 import {store} from "./src/store/store.js"
 
@@ -45,7 +47,13 @@ export default function App() {
                 <BottomNav/>
             </NavigationContainer>
         </Provider>
-
+        //  <NavigationContainer>
+        // //    // <Login>
+        // //     //</Login>
+        // //     <SignUp>
+        // //     </SignUp>
+        //     <BottomNav/>
+        // </NavigationContainer>
     );
 }
 
