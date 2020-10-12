@@ -169,12 +169,12 @@ export default class Search extends Component{
                     <ImageBackground opacity={1} source={{uri:"https://image.tmdb.org/t/p/w1280"+this.state.data.poster_path}}
                     style={{ width: '100%', height: undefined, aspectRatio:2/3}}>
                         <View style={styles.container}>
-                            <Text style={styles.title}>{this.state.data.title}</Text>
+                            <Text style={styles.title}>{this.state.data.title + " (" + this.state.year + ")"}</Text>
                             <Text numberOfLines={3} style={styles.description}>{this.state.data.overview}</Text>
                             <View style = {{flexDirection:'row'}}>
                                 <Text style={styles.detail}>{this.state.genres}</Text>
                                 <Text style={styles.detail}>|</Text>
-                                <Text style={styles.detail}>{this.state.year}</Text>
+                                <Text style={styles.detail}>{""+Math.floor(this.state.data.runtime/60)+"h "+this.state.data.runtime%60+"m"}</Text>
                             </View>
                         </View>
                         <View style={styles.buttonRow}>
