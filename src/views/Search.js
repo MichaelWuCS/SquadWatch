@@ -29,6 +29,19 @@ export default class Search extends Component{
     this.makeRemoteRequest("");
   }
   
+  scoreResult(queryString, result){
+    console.log(result);
+    let score = 0;
+    if(result.title.contains(queryString)){
+      score += 1000 * 10^(queryString.length - result.title.length);
+    }
+    else if(result.original_title.contains(queryString)){
+      score += 1000 * 10^(queryString.length - result.original_title.length);
+    }
+    score += 0.1 * result.popularity;
+    return score;  
+  }
+
   makeRemoteRequest = (queryString) => {
     console.log("request made!: "+queryString);
     this.setState({ loading: true, search: queryString,});
@@ -43,7 +56,9 @@ export default class Search extends Component{
     fetch(url)
     .then(res => res.json())
     .then(res => {
-      res.results.sort((a,b) => b.popularity-a.popularity);
+      res.results.sort((a,b) => {
+        return b.popularity - a.popularity;
+      });
       this.setState({
       data: res.results,
       error: res.error || null,
