@@ -25,6 +25,21 @@ function HomeStack(){
                     }
                 }}
                 />
+                <DashStack.Screen 
+                name={'Movie'}
+                title='Movie Details' 
+                component={MovieDetails}
+                options={({route}) => ({
+                    headerStyle:{
+                        backgroundColor:swGrey,
+                    },
+                    headerTitleStyle:{
+                        color:'white',
+                        fontWeight:'bold',
+                    },
+                    title: route.params.name 
+                })}
+                />
             </DashStack.Navigator>
         );
 }
@@ -52,15 +67,16 @@ function QueryStack(){
             name={'Movie'}
             title='Movie Details' 
             component={MovieDetails}
-            options={{
+            options={({route}) => ({
                 headerStyle:{
                     backgroundColor:swGrey,
                 },
                 headerTitleStyle:{
                     color:'white',
                     fontWeight:'bold',
-                }
-            }}
+                },
+                title: route.params.name 
+            })}
             />
         </SearchStack.Navigator>
     );

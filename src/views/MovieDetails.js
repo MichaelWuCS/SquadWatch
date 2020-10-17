@@ -48,6 +48,7 @@ export default class Search extends Component{
 
     componentDidMount(){
         //console.log(this.props);
+        console.log("name: "+this.props.route.params.name+"=========");
         const firebase_config = {
             apiKey: FIREBASE_API_KEY,
             authDomain: FIREBASE_AUTH_DOMAIN,

@@ -9,13 +9,14 @@ import { ScrollView } from "react-native-gesture-handler";
 
 export default class Dashboard extends Component {
     render() {
+        console.log(this.props.navigation);
         return (
             <SafeAreaView style={styles.container}>
                 <StatusBar
                 barStyle='light-content'
                 />
                 <ScrollView>
-                <TheatrePreview></TheatrePreview>
+                <TheatrePreview navigation={this.props.navigation}></TheatrePreview>
                 <WatchlistPreview> </WatchlistPreview>
                 <RecommendationsPreview></RecommendationsPreview>
                 <FromFriendsPreview></FromFriendsPreview>

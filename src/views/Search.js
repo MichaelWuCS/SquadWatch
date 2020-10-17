@@ -119,9 +119,11 @@ export default class Search extends Component{
           renderItem={({ item }) => (
             <TouchableHighlight onPress={()=>{
               const id_nav = item.id;
+              const name_nav = item.title;
               //console.log(this.props.navigation);
               this.props.navigation.push('Movie', {
-                id:id_nav
+                id:id_nav,
+                name:name_nav
               })
               console.log(item.id);
             }}>
