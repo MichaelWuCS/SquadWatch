@@ -4,6 +4,7 @@ import Dashboard from '../views/Dashboard';
 import{swOrange,swGrey,swBlack,sw} from '../styles/Colors';
 import WatchList from '../views/WatchList';
 import Search from '../views/Search';
+import MovieDetails from '../views/MovieDetails';
 
 const DashStack = createStackNavigator();
 
@@ -23,6 +24,21 @@ function HomeStack(){
                         fontWeight:'bold',
                     }
                 }}
+                />
+                <DashStack.Screen 
+                name={'Movie'}
+                title='Movie Details' 
+                component={MovieDetails}
+                options={({route}) => ({
+                    headerStyle:{
+                        backgroundColor:swGrey,
+                    },
+                    headerTitleStyle:{
+                        color:'white',
+                        fontWeight:'bold',
+                    },
+                    title: route.params.name 
+                })}
                 />
             </DashStack.Navigator>
         );
@@ -47,9 +63,25 @@ function QueryStack(){
                 }
             }}
             />
+            <SearchStack.Screen 
+            name={'Movie'}
+            title='Movie Details' 
+            component={MovieDetails}
+            options={({route}) => ({
+                headerStyle:{
+                    backgroundColor:swGrey,
+                },
+                headerTitleStyle:{
+                    color:'white',
+                    fontWeight:'bold',
+                },
+                title: route.params.name 
+            })}
+            />
         </SearchStack.Navigator>
     );
 }
+
 export{
     HomeStack,
     QueryStack

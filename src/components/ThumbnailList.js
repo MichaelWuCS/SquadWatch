@@ -12,6 +12,9 @@ import {
     View
 } from "react-native";
 import {TMDB_KEY} from "@env";
+import {swGreen} from '../styles/Colors'
+
+
 
 function fetch_movie_data(movie_id) {
     const requestStr = "https://api.themoviedb.org/3/movie/" + movie_id + "?api_key=" + TMDB_KEY;
@@ -121,12 +124,12 @@ export default class ThumbnailList extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 25,
+        marginTop: 10,
         marginRight: 10,
         marginLeft: 10,
         padding: 10,
         borderRadius: 20,
-        backgroundColor: "aquamarine",
+        backgroundColor: swGreen,
         height: 150,
     },
     text: {

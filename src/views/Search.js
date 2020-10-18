@@ -6,11 +6,11 @@ import {
     StyleSheet,
     FlatList,
     ActivityIndicator, NativeEventEmitter,
+    TouchableHighlight,
     SafeAreaView
 } from "react-native";
 import {TMDB_KEY} from "@env";
 import { ListItem, SearchBar, Avatar, Image } from 'react-native-elements';
-
 
 export default class Search extends Component{
   constructor(props){
@@ -29,6 +29,19 @@ export default class Search extends Component{
     this.makeRemoteRequest("");
   }
   
+  scoreResult(queryString, result){
+    console.log(result);
+    let score = 0;
+    if(result.title.contains(queryString)){
+      score += 1000 * 10^(queryString.length - result.title.length);
+    }
+    else if(result.original_title.contains(queryString)){
+      score += 1000 * 10^(queryString.length - result.original_title.length);
+    }
+    score += 0.1 * result.popularity;
+    return score;  
+  }
+
   makeRemoteRequest = (queryString) => {
     console.log("request made!: "+queryString);
     this.setState({ loading: true, search: queryString,});
@@ -43,7 +56,9 @@ export default class Search extends Component{
     fetch(url)
     .then(res => res.json())
     .then(res => {
-      res.results.sort((a,b) => b.popularity-a.popularity);
+      res.results.sort((a,b) => {
+        return b.popularity - a.popularity;
+      });
       this.setState({
       data: res.results,
       error: res.error || null,
@@ -102,16 +117,27 @@ export default class Search extends Component{
         <FlatList
           data={this.state.data}
           renderItem={({ item }) => (
-            <ListItem>
-              <Image  source= {{ uri: "https://image.tmdb.org/t/p/w1280"+item.poster_path }}
-                      style={{ width: 60, height: 90 }}/>
-              <ListItem.Content>
-          <ListItem.Title style={{fontWeight: 'bold' }}>{item.title}</ListItem.Title>
-          <ListItem.Subtitle>{item.overview.substring(0, 120)+"..."}</ListItem.Subtitle>
-              </ListItem.Content>
-            </ListItem>
+            <TouchableHighlight onPress={()=>{
+              const id_nav = item.id;
+              const name_nav = item.title;
+              //console.log(this.props.navigation);
+              this.props.navigation.push('Movie', {
+                id:id_nav,
+                name:name_nav
+              })
+              console.log(item.id);
+            }}>
+              <ListItem>
+                <Image  source= {{ uri: "https://image.tmdb.org/t/p/w1280"+item.poster_path }}
+                        style={{ width: 60, height: 90 }}/>
+                <ListItem.Content>
+                  <ListItem.Title style={{fontWeight: 'bold' }}>{item.title}</ListItem.Title>
+                  <ListItem.Subtitle>{item.overview.substring(0, 120)+"..."}</ListItem.Subtitle>
+                </ListItem.Content>
+              </ListItem>
+            </TouchableHighlight>
           )}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item.id.toString()}
           ItemSeparatorComponent={this.renderSeparator}
           ListHeaderComponent={this.renderHeader}
         />
