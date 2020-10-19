@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View, ScrollView, Button, ImageBackground } from "react-native";
 
-const image = { uri: "https://www.ocregister.com/wp-content/uploads/migration/kpi/kpiguu-10blizzard2large.jpg"};
 
 
 export default class MovieElement extends Component {
@@ -10,12 +9,18 @@ export default class MovieElement extends Component {
         this.state = { };
     }
 
-
     render() {
         return (
-                <ImageBackground source={image} style={styles.image} imageStyle={styles.imageStyle}>
-                    <Text style={styles.movieTitle}>{this.props.title}</Text>
-                    <Text>Rating</Text> 
+                <ImageBackground source={{uri: "https://image.tmdb.org/t/p/w1280" + this.props.movie.posterPath}} style={styles.image} imageStyle={styles.imageStyle}>
+                    <Text style={styles.movieTitle} onPress={ ()=>{
+                        const movieId = this.props.movie.id;
+                        const movieName = this.props.movie.name;
+                        this.props.navigation.push('Movie', {
+                            id:movieId,
+                            name:movieName
+                        })
+                    }}>{this.props.movie.name}</Text>
+                    <Text style={styles.description}>{this.props.movie.description}</Text>
                 </ImageBackground>
         );
     }
@@ -29,6 +34,12 @@ const styles = StyleSheet.create({
         color: "white",
         fontWeight: "bold",
         fontSize: 18,
+        textShadowRadius: 3,
+        textShadowColor: "black"
+    },
+    description: {
+        color: "black",
+        fontSize: 12,
     },
     image: {
         flex: 1,

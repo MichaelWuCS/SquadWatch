@@ -17,7 +17,7 @@ export default class Dashboard extends Component {
                 />
                 <ScrollView>
                 <TheatrePreview navigation={this.props.navigation}></TheatrePreview>
-                <WatchlistPreview> </WatchlistPreview>
+                <WatchlistPreview > </WatchlistPreview>
                 <RecommendationsPreview></RecommendationsPreview>
                 <FromFriendsPreview></FromFriendsPreview>
                 </ScrollView>

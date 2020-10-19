@@ -9,11 +9,11 @@ class WatchList extends Component {
     constructor(props){
         super(props);
         this.state = {
-            movies: ["test", "test1","test2","test3","test4","test5","test6","test7","test8","test9",],
-            counter: 0
+            watchListArray: [{description: "A botched robbery...", id: 500, name: "Reservoir Dogs", posterPath: "/AjTtJNumZyUDz33VtMlF1K8JPsE.jpg"},]
         };
     }
 
+    /*
     movieArray = () =>{
         return this.state.movies.map(movie =>{
             return(
@@ -22,6 +22,20 @@ class WatchList extends Component {
             </View>
             )
         })
+    }
+
+    movies: ["test", "test1","test2","test3","test4","test5","test6","test7","test8","test9",],
+            counter: 0
+    */
+
+   movieArray = () =>{
+    this.state.watchListArray = this.props.watchList;
+    return this.state.watchListArray.map((movie,index)=>{
+        return(
+        <View key={index}>
+            <MovieElement movie={movie} navigation={this.props.navigation}></MovieElement>
+        </View>
+        )})
     }
     
 
@@ -32,38 +46,33 @@ class WatchList extends Component {
                 <View style={styles.header}>
                     <Text style={styles.headerText}>WATCHLIST</Text>
                 </View>
-                <Button onPress={()=>this.props.updateMovieList()} title="increase"/>
-                    <Text>{this.props.counter}</Text>
                 <ScrollView styles={styles.scrollView}>
                     <View>{this.movieArray()}</View>
                 </ScrollView>
-                <Button title="Add Movie" onPress={this.addMovieToMovieList}></Button>
+                <Button onPress ={()=>{
+                    var copy = [...this.props.watchList];
+                    copy.push({description: "A botched robbery...", id: 500, name: "TESTDOG", posterPath: "/AjTtJNumZyUDz33VtMlF1K8JPsE.jpg"})
+                    this.props.updateWatchList(copy);
+                }} title="Test"> </Button>
             </View>
         );
     }
 
-    addMovieToMovieList = ()=>{
-
-        const copy = [...this.state.movies];
-        copy.push("TEST");
-        console.log(copy);
-        console.log(this.state.movies);
-        this.setState({movies: copy})
-        console.log(this.state.movies);
-        console.log(this.state.counter)
-
-    }
 }
+
 
 function mapStateToProps(state){
     return {
-        counter: state.counter
+        watchList: state.watchList
     }
 }
 
 function mapDispatchToProps(dispatch){
     return{
-        updateMovieList: ()=> dispatch({type:"ADDCUSTOMUSER" })
+        updateWatchList: (watchList)=> dispatch({
+            type:"UPDATEWATCHLIST",
+            payload: watchList
+        })
     }
 }
 
