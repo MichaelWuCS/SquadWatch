@@ -57,4 +57,6 @@ export default function App() {
     );
 }
 
+export {firestore};
+
 const styles = StyleSheet.create({});

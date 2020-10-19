@@ -6,6 +6,7 @@ import WatchList from '../views/WatchList';
 import Search from '../views/Search';
 import MovieDetails from '../views/MovieDetails';
 import SyncScreen from '../views/SyncScreen';
+import RoomScreen from '../views/RoomScreen';
 
 const DashStack = createStackNavigator();
 
@@ -47,6 +48,20 @@ function SyncStack(){
                         fontWeight:'bold',
                     }
                 }}
+            />
+            <RoomStack.Screen
+                name='Room'
+                component={RoomScreen}
+                options={({route}) => ({
+                    headerStyle:{
+                        backgroundColor:swGrey,
+                    },
+                    headerTitleStyle:{
+                        color:'white',
+                        fontWeight:'bold',
+                    },
+                    title: route.params.name 
+                })}
             />
         </RoomStack.Navigator>
     )
