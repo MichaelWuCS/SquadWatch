@@ -3,7 +3,7 @@ import { ADDCUSTOMUSER, UPDATEMOVIELIST, UPDATEWATCHLIST } from "./actionTypes.j
 const initialState = {
     customUser: {},
     movieList: [],
-    watchList: [{description: "A botched robbery...", id: 500, name: "Reservoir Dogs", posterPath: "/AjTtJNumZyUDz33VtMlF1K8JPsE.jpg"},],
+    watchList: [],
     counter: 0
 };
 

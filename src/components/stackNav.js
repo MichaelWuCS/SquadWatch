@@ -82,7 +82,44 @@ function QueryStack(){
     );
 }
 
+function WatchListStack() {
+    return (
+        <SearchStack.Navigator>
+            <SearchStack.Screen 
+            name='WatchList' 
+            component={WatchList}
+            options={{
+                headerStyle:{
+                    backgroundColor:swGrey,
+                },
+                headerTitleStyle:{
+                    color:'white',
+                    fontWeight:'bold',
+                }
+            }}
+            />
+            <SearchStack.Screen 
+            name={'Movie'}
+            title='Movie Details' 
+            component={MovieDetails}
+            options={({route}) => ({
+                headerStyle:{
+                    backgroundColor:swGrey,
+                },
+                headerTitleStyle:{
+                    color:'white',
+                    fontWeight:'bold',
+                },
+                title: route.params.name 
+            })}
+            />
+        </SearchStack.Navigator>
+    )
+}
+
+
 export{
     HomeStack,
-    QueryStack
+    QueryStack,
+    WatchListStack
 }

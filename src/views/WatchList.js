@@ -2,31 +2,43 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View, ScrollView, Button } from "react-native";
 import MovieElement from "../components/MovieElement.js";
 import {connect} from "react-redux";
-import {updateMovieList, addCustomUser} from "../store/actions.js";
+import {getWatchList, addWatchList} from "../api/WatchListApi.js"
 
 
 class WatchList extends Component {
     constructor(props){
         super(props);
         this.state = {
-            watchListArray: [{description: "A botched robbery...", id: 500, name: "Reservoir Dogs", posterPath: "/AjTtJNumZyUDz33VtMlF1K8JPsE.jpg"},]
+            watchList: []
         };
     }
 
-    /*
-    movieArray = () =>{
-        return this.state.movies.map(movie =>{
-            return(
-            <View key={movie}>
-                <MovieElement title={movie}></MovieElement>
-            </View>
-            )
-        })
+    componentDidMount() {
+        getWatchList(this.onWatchListsReceived);
     }
 
-    movies: ["test", "test1","test2","test3","test4","test5","test6","test7","test8","test9",],
-            counter: 0
-    */
+    onWatchListsReceived = (watchList) => {
+
+        //customUserID = this.props.customUser.userID;
+        customUserID = "5UOPtbbQM03QIVUzwNFn";
+        
+        const userWatchList = watchList.filter(element =>{
+            if (element.creatorID == customUserID){
+                return true;
+            }
+            return false;
+        })
+
+        this.setState(prevState =>({
+            watchList: prevState.watchList = userWatchList[0].movies
+        }))
+
+        this.props.updateWatchList(userWatchList[0].movies);
+
+        
+
+    }
+
 
    movieArray = () =>{
     this.state.watchListArray = this.props.watchList;
@@ -49,11 +61,6 @@ class WatchList extends Component {
                 <ScrollView styles={styles.scrollView}>
                     <View>{this.movieArray()}</View>
                 </ScrollView>
-                <Button onPress ={()=>{
-                    var copy = [...this.props.watchList];
-                    copy.push({description: "A botched robbery...", id: 500, name: "TESTDOG", posterPath: "/AjTtJNumZyUDz33VtMlF1K8JPsE.jpg"})
-                    this.props.updateWatchList(copy);
-                }} title="Test"> </Button>
             </View>
         );
     }
@@ -63,6 +70,7 @@ class WatchList extends Component {
 
 function mapStateToProps(state){
     return {
+        customUser: state.customUser,
         watchList: state.watchList
     }
 }

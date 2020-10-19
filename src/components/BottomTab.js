@@ -6,7 +6,7 @@ import Dashboard from "../views/Dashboard";
 import WatchList from "../views/WatchList";
 import Search from "../views/Search";
 import {swNavy,swOrange} from '../styles/Colors';
-import{HomeStack,QueryStack} from './stackNav';
+import{HomeStack,QueryStack, WatchListStack} from './stackNav';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -50,7 +50,7 @@ function BottomNav() {
       />
       <Tab.Screen
       name='WatchList'
-      component={WatchList}
+      component={WatchListStack}
       options={{
         tabBarLabel: "WatchList",
         tabBarIcon: ({ color }) => (

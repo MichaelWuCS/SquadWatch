@@ -29,8 +29,9 @@ import {
 import * as firebase from "firebase";
 import "firebase/firestore";
 import "firebase/auth";
+import {connect} from "react-redux"
 
-export default class Search extends Component{
+class MovieDetails extends Component{
 
     constructor(props){
         super(props);
@@ -156,6 +157,21 @@ export default class Search extends Component{
         }
     }
 
+    addMovieToRedux = () =>{
+        console.log("MOVIE");
+        var copy = [...this.props.watchList];
+        var currentMovie = {
+            name: this.state.data.title,
+            description: this.state.data.overview,
+            posterPath: this.state.data.poster_path,
+            id: this.props.route.params.id
+
+        }
+        console.log(currentMovie);
+        copy.push(currentMovie);
+        this.props.updateWatchList(copy);
+    }
+
     render(){
         if(this.state.loading){
             return (
@@ -194,6 +210,9 @@ export default class Search extends Component{
                                     />
                                     <Text style={styles.buttonLabel}>{(this.state.inWatchlist)?"Remove from Watchlist":"Add to Watchlist"}</Text>
                                 </TouchableOpacity>
+                                <TouchableOpacity>
+                                    <Text style={{color: "white"}} onPress={()=>this.addMovieToRedux()}>Add to WatchList</Text>
+                                </TouchableOpacity>
                         </View>
                     </ImageBackground>
                     <View>
@@ -206,6 +225,25 @@ export default class Search extends Component{
     }
     
 }
+
+function mapStateToProps(state){
+    return {
+        customUser: state.customUser,
+        watchList: state.watchList
+    }
+}
+
+function mapDispatchToProps(dispatch){
+    return{
+        updateWatchList: (watchList)=> dispatch({
+            type:"UPDATEWATCHLIST",
+            payload: watchList
+        })
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MovieDetails)
+
 
 const styles = StyleSheet.create({
     container: {
