@@ -10,7 +10,9 @@ import {
     ImageBackground,
     ScrollView,
     Image,
-    TouchableOpacity
+    TouchableOpacity,
+    Modal,
+    TextInput
 } from "react-native";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {TMDB_KEY} from "@env";
@@ -28,6 +30,7 @@ import "firebase/auth";
 import { ListItem, SearchBar, Avatar } from 'react-native-elements';
 import { swBlue, swGreen, swGrey, swPink, swPurple } from "../styles/Colors";
 import {connect} from "react-redux";
+import { TouchableHighlight } from "react-native-gesture-handler";
 
 const firebase_config = {
     apiKey: FIREBASE_API_KEY,
@@ -49,6 +52,8 @@ class SyncScreen extends Component{
         this.state = {
             loading:false,
             data:[], //Data here is a list of roomIDs in use
+            searching:false,
+            roomFind:""
         }
         this.uid;
     }
@@ -107,6 +112,65 @@ class SyncScreen extends Component{
         });
     }
     
+    searchButton = () => {
+        if(this.state.searching){
+            return(
+                <View style={styles.input} backgroundColor={swBlue} flexDirection={"row"}>
+                    <View borderBottomWidth={1} width="30%" borderColor={"#fff"}>
+                        <TextInput styles={styles.textIn} 
+                            color="#fff"
+                            placeholder={"Enter Room ID here"} 
+                            autoCapitalize="none"
+                            onChangeText={(text)=>{
+                                this.setState({roomFind:text});     
+                            }}
+                        />
+                    </View>
+                    <View flexDirection={"column"} paddingLeft = "15%" paddingRight="1%">
+                        <TouchableOpacity onPress={()=>{
+                            this.setState({searching:false})
+                        }}>
+                            <MaterialCommunityIcons 
+                                name="close" 
+                                alignSelf="center" 
+                                color={"#ffffff"} 
+                                size={30}
+                            />
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={()=>{
+                            this.props.navigation.push('Room',{
+                                id:this.state.roomFind,
+                                name: "Room Code: "+this.state.roomFind
+                            })
+                        }}>
+                            <MaterialCommunityIcons 
+                                name="location-enter" 
+                                alignSelf="center" 
+                                color={"#ffffff"} 
+                                size={30}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            );
+        }else{
+            return (
+                <TouchableOpacity onPress={()=>{
+                    this.setState({searching:true});
+                }}>
+                    <View style={styles.button} backgroundColor={swBlue}>
+                        <Text style={styles.buttonText}>
+                            Join Room
+                        </Text>
+                        <MaterialCommunityIcons 
+                        name="magnify" 
+                        color={"white"}
+                        size={70}/>
+                    </View>
+                </TouchableOpacity>
+            );
+        }
+    }
 
     render(){
     !firebase.apps.length ? firebase.initializeApp(firebase_config) : firebase.app();
@@ -131,17 +195,7 @@ class SyncScreen extends Component{
                         size={60}/>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity>
-                    <View style={styles.button} backgroundColor={swBlue}>
-                        <Text style={styles.buttonText}>
-                            Join Room
-                        </Text>
-                        <MaterialCommunityIcons 
-                        name="magnify" 
-                        color={"white"}
-                        size={70}/>
-                    </View>
-                </TouchableOpacity>
+                {this.searchButton()}
             </View>
         );
         }
@@ -181,6 +235,24 @@ const styles = StyleSheet.create({
     buttonText:{
         textAlign:"center",
         color:"white",
+        fontSize:30,
+        paddingVertical:15,
+        paddingHorizontal:"5%"
+    },
+    input:{
+        borderRadius: 25,
+        height :"11%",
+        width: "75%",
+        alignSelf:"center",
+        marginTop:10,
+        flexDirection:"row",
+        alignItems:"center",
+        justifyContent:"center",
+        padding:"1%"
+    },
+    textIn:{
+        textAlign:"center",
+        color:"#fff",
         fontSize:30,
         paddingVertical:15,
         paddingHorizontal:"5%"

@@ -67,7 +67,7 @@ export default class RoomScreen extends Component{
                 data: data_store
             });
         }).catch((error) => {
-            this.setState({error:error});
+            this.setState({error:error, loading:false});
             console.warn("Error!: " + error);
         });
     }
@@ -77,8 +77,8 @@ export default class RoomScreen extends Component{
             return <ActivityIndicator/>
         }else if(this.state.error){
             return (
-                <View>
-                    <Text>{"An error has occurred. Make sure you entered the name correctly."}</Text>
+                <View style={styles.container} backgroundColor={"red"}>
+                    <Text style={styles.text}>{"An error has occurred. Make sure you entered the name correctly."}</Text>
                 </View>
             );
         }else{
@@ -95,14 +95,11 @@ export default class RoomScreen extends Component{
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 25,
-        marginRight: 5,
-        marginLeft: 5,
-        padding: 10,
-        borderRadius: 15,
         backgroundColor: swBlack,
         width: "100%",
         height: undefined,
+        alignContent:"center",
+        alignItems:"center"
     },
     text: {
         fontSize: 20,
