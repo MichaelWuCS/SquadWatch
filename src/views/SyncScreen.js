@@ -79,7 +79,7 @@ class SyncScreen extends Component{
             watchlistID: "WiEkX1WL5XmcYp4jODIb"
         });
         console.log(this.props);
-        this.uid = this.props.customUser.id;
+        this.uid = "kcnprYOOyDQzT1FYpyTGpaT322u1";//this.props.customUser.id;
         console.log("currentuser:"+this.uid);
         this.fetchData();
     }
