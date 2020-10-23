@@ -9,6 +9,7 @@ var Colors ={
     swPurple:'#5B00C9',
     swGreen:'#00B465',
     swBlue:'#006ECC',
+    swWhite:'#FFFFFF',
 };
 
 module.exports = Colors;

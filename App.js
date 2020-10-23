@@ -47,13 +47,6 @@ export default function App() {
                 <BottomNav/>
             </NavigationContainer>
         </Provider>
-        //  <NavigationContainer>
-        // //    // <Login>
-        // //     //</Login>
-        // //     <SignUp>
-        // //     </SignUp>
-        //     <BottomNav/>
-        // </NavigationContainer>
     );
 }
 

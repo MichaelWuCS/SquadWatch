@@ -7,6 +7,9 @@ import WatchList from "../views/WatchList";
 import Search from "../views/Search";
 import {swNavy,swOrange} from '../styles/Colors';
 import{HomeStack,QueryStack} from './stackNav';
+import Index from '../views/index';
+import SignUp from "../views/SignUp";
+
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -31,7 +34,7 @@ function BottomNav() {
       />
       <Tab.Screen
         name="Sync"
-        component={HomeStack}
+        component={SignUp}
         options={{
           tabBarLabel:'Sync',
           tabBarIcon: ({ color }) => (

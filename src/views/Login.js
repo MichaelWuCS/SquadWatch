@@ -1,43 +1,72 @@
 import React, { Component } from "react";
-import {SafeAreaView, StyleSheet, Text, View, StatusBar, TextInput} from "react-native";
-import TheatrePreview from "../components/TheatrePreview.js";
-import WatchlistPreview from "../components/WatchlistPreview.js";
-import RecommendationsPreview from "../components/RecommendationsPreview.js";
-import FromFriendsPreview from "../components/FromFriendsPreview.js";
-import {swGrey, swOrange} from '../styles/Colors'
-import { ScrollView } from "react-native-gesture-handler";
+import {SafeAreaView, StyleSheet, Text, View, StatusBar,TouchableWithoutFeedback,Keyboard, Alert} from "react-native";
+import {Button,Input} from "react-native-elements";
+import Icon from 'react-native-vector-icons/Ionicons';
+import {swGrey, swOrange,swWhite} from '../styles/Colors'
 import {signIn} from "../components/Auth.js"
 
 export default class Login extends Component {
     render() {
         return (
             <SafeAreaView style={styles.container}>
-                <View
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                    <View>
+                    <View
                     style={{
-                    height: 70,
+                    height: 50,
                     width: '75%',
-                    marginLeft: '12.5%'
                     }}
                 />
                 <Text style={styles.header}>LOGIN</Text>
                 <StatusBar
                 barStyle='light-content'
                 />
-                <TextInput style={styles.text} autoCapitalize={"none"} placeholder={"username/email"}/>
-                <View
-                    style={styles.bar}
+                <Input
+                inputContainerStyle={styles.input}
+                placeholder='email/username'
+                leftIcon={
+                    <Icon
+                    name='md-person'
+                    size={24}
+                    color='white'
+                    />
+                }
+                leftIconContainerStyle={styles.leftIconStyle}
+                placeholderTextColor={'#d4d4d4'}
                 />
-                <View
-                    style={{
-                    height: 40,
-                    width: '75%',
-                    marginLeft: '12.5%'
-                    }}
+                <Input
+                    inputContainerStyle={styles.input}
+                    placeholder='password'
+                    secureTextEntry={true}
+                    leftIcon={
+                        <Icon
+                        name='md-key'
+                        size={24}
+                        color={swWhite}
+                        />
+                    }
+                    leftIconContainerStyle={styles.leftIconStyle}
+                    inputStyle={{color:swWhite}}
+                    placeholderTextColor={'#d4d4d4'}
                 />
-                <TextInput style={styles.text} autoCapitalize={"none"} secureTextEntry placeholder="password"/>
-                <View
-                    style={styles.bar}
+                    </View>
+                </TouchableWithoutFeedback>
+                <View style= {styles.buttonContainer}>
+                
+                <Button
+                    type={'clear'}
+                    title= ""
+                    containerStyle={{alignSelf:"center"}}
+                    icon={
+                        <Icon
+                         name="ios-arrow-forward" size={50} color={swWhite} style={{alignItems:'center',opacity:1}}
+                        />
+                    }
+                    titleStyle={{color:swOrange}}
+                    onPress= {() => Alert.alert('not impremented yet')}
                 />
+            </View>
+
             </SafeAreaView>
 
             
@@ -50,25 +79,29 @@ const styles = StyleSheet.create({
         flex:1,
         backgroundColor:swOrange,
     },
-    text: {
-        color:"white",
-        textAlign:"left",
-        fontWeight:"bold",
-        marginLeft:"13%",
-        marginBottom:"3%"
+    buttonContainer:{
+        alignSelf:'center',
+        justifyContent:'center',
+        backgroundColor: 'rgba(255, 255, 255, 0.25)',
+        borderRadius: 80,
+        marginTop:80,
+        width: 65,
+        height:65,
     },
     header: {
-        color:"white",
-        textAlign:"center",
+        color:swWhite,
+        alignSelf:"center",
         fontWeight:"bold",
         fontSize:30,
         marginTop:"20%",
-        marginBottom:"10%"
+        marginBottom:70,
     },
-    bar: {
-        height: 2,
-        width: '75%',
-        backgroundColor: "white",
-        marginLeft: '12.5%'
+    input:{
+        alignSelf:'center',
+        width:'70%',
+        borderBottomColor:swWhite,
+    },
+    leftIconStyle:{
+        marginRight:20,
     }
 });

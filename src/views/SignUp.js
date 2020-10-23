@@ -1,14 +1,15 @@
 import React, { Component } from "react";
-import {SafeAreaView, StyleSheet, Text, View, StatusBar, TextInput} from "react-native";
+import {SafeAreaView, StyleSheet, Text, View, StatusBar, TextInput,TouchableWithoutFeedback,Keyboard, Alert} from "react-native";
+import Icon from 'react-native-vector-icons/Ionicons';
 import TheatrePreview from "../components/TheatrePreview.js";
 import WatchlistPreview from "../components/WatchlistPreview.js";
 import RecommendationsPreview from "../components/RecommendationsPreview.js";
 import FromFriendsPreview from "../components/FromFriendsPreview.js";
-import {swGrey, swOrange} from '../styles/Colors'
+import {swGrey, swOrange, swWhite} from '../styles/Colors'
 import { ScrollView } from "react-native-gesture-handler";
 import{Auth} from "../components/Auth.js";
 import {signUp} from "../components/Auth.js"
-import { Button } from "react-native-paper";
+import { Button,Input} from "react-native-elements";
 
 export default class SignUp extends Component {
     constructor(props){
@@ -17,15 +18,17 @@ export default class SignUp extends Component {
             email: '',
             first: '',
             last:'',
-            password:''
+            password:'',
         })
     }
     render() {
         return (
             <SafeAreaView style={styles.container}>
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+            <View>
                 <View
                     style={{
-                    height: 40,
+                    height: 50,
                     width: '75%',
                     marginLeft: '12.5%'
                     }}
@@ -34,60 +37,79 @@ export default class SignUp extends Component {
                 <StatusBar
                 barStyle='light-content'
                 />
-                <TextInput style={styles.text} autoCapitalize={"none"} placeholder={"email"}
-                onChangeText = {(email) => this.setState({email})}/>
-                <View
-                    style={styles.bar}
+                <Input
+                    inputContainerStyle={styles.input}
+                    onChangeText={email => this.setState({ email:email})}
+                    value={this.state.email}
+                    placeholder='email'
+                    leftIcon={
+                        <Icon
+                        name='ios-mail'
+                        size={24}
+                        color='white'
+                        />
+                    }
+                    leftIconContainerStyle={styles.leftIconStyle}
+                    inputStyle={{color:swWhite}}
+                    placeholderTextColor={'#d4d4d4'}
                 />
-                <View
-                    style={{
-                    height: 30,
-                    width: '75%',
-                    marginLeft: '12.5%'
-                    }}
+                <Input
+                    inputContainerStyle={styles.input}
+                    placeholder='username'
+                    leftIcon={
+                        <Icon
+                        name='md-person'
+                        size={24}
+                        color='white'
+                        />
+                    }
+                    leftIconContainerStyle={styles.leftIconStyle}
+                    placeholderTextColor={'#d4d4d4'}
                 />
-                <TextInput style={styles.text} autoCapitalize={"none"} placeholder="username"/>
-                <View
-                    style={styles.bar}
+                <Input
+                    inputContainerStyle={styles.input}
+                    onChangeText = {password => this.setState({ password:password})}
+                    value={this.state.password}
+                    placeholder='password'
+                    secureTextEntry={true}
+                    leftIcon={
+                        <Icon
+                        name='md-key'
+                        size={24}
+                        color='white'
+                        />
+                    }
+                    leftIconContainerStyle={styles.leftIconStyle}
+                    inputStyle={{color:swWhite}}
+                    placeholderTextColor={'#d4d4d4'}
                 />
-                <View
-                    style={{
-                    height: 30,
-                    width: '75%',
-                    marginLeft: '12.5%'
-                    }}
+                <Input
+                    inputContainerStyle={styles.input}
+                    placeholder='re-type password'
+                    secureTextEntry={true}
+                    leftIcon={
+                        <Icon
+                        name='md-key'
+                        size={24}
+                        color='white'
+                        />
+                    }
+                    leftIconContainerStyle={styles.leftIconStyle}
+                    inputStyle={{color:swWhite}}
+                    placeholderTextColor={'#d4d4d4'}
                 />
-                <TextInput style={styles.text} autoCapitalize={"none"} secureTextEntry placeholder="password"
-                onChangeText = {(password) => this.setState({password})}/>
-                <View
-                    style={styles.bar}
-                />
-                <View
-                    style={{
-                    height: 30,
-                    width: '75%',
-                    marginLeft: '12.5%'
-                    }}
-                />
-                <TextInput style={styles.text} autoCapitalize={"none"} secureTextEntry placeholder="re-type password"/>
-                <View
-                    style={styles.bar}
-                />
-                <View
-                    style={{
-                    height: 60,
-                    width: '75%',
-                    marginLeft: '12.5%'
-                    }}
-                />
+                
+            </View>
+            </TouchableWithoutFeedback>
                 <View>
                 
                     <Button
-                        style= {styles.buttonContainer}
-                        title= "Register"
-                        onPress= {() => signUp(this.state.email, this.state.password)}
+                        type={'clear'}
+                        containerStyle= {styles.buttonContainer}
+                        title= "REGISTER"
+                        titleStyle={{color:swOrange}}
+                        onPress= {() => Alert.alert("SignUp","Sign up page")}
                     />
-                    <Button title = "test"></Button>
                 </View>
             </SafeAreaView>
         );
@@ -100,32 +122,27 @@ const styles = StyleSheet.create({
         backgroundColor:swOrange,
     },
     buttonContainer:{
-       
-        backgroundColor: "#f6ecd9",
+        alignSelf:'center',
+        backgroundColor: swWhite,
         borderRadius: 30,
-        paddingVertical: 8,
-        width: '50%',
-        marginLeft: '25%'
+        marginTop:70,
+        width: '40%',
     },
-    text: {
-        color:"white",
-        textAlign:"left",
-        fontWeight:"bold",
-        marginLeft:"13%",
-        marginBottom:"3%"
-    },
+
     header: {
-        color:"white",
-        textAlign:"center",
+        color:swWhite,
+        alignSelf:"center",
         fontWeight:"bold",
         fontSize:30,
         marginTop:"20%",
-        marginBottom:"10%"
+        marginBottom:80,
     },
-    bar: {
-        height: 2,
-        width: '75%',
-        backgroundColor: "white",
-        marginLeft: '12.5%'
+    input:{
+        alignSelf:'center',
+        width:'70%',
+        borderBottomColor:swWhite,
+    },
+    leftIconStyle:{
+        marginRight:20,
     }
 });
