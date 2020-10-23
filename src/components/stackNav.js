@@ -1,13 +1,18 @@
 import * as React from 'react';
 import { createStackNavigator, Header, HeaderTitle } from '@react-navigation/stack';
+import{Button} from 'react-native-elements';
+import  Icon from  'react-native-vector-icons/Ionicons'
 import Dashboard from '../views/Dashboard';
-import{swOrange,swGrey,swBlack,sw} from '../styles/Colors';
+import{swOrange,swGrey,swBlack,swWhite} from '../styles/Colors';
 import WatchList from '../views/WatchList';
 import Search from '../views/Search';
+import MovieDetails from '../views/MovieDetails';
+import Settings from '../views/settings'
+import { StackActions } from '@react-navigation/core';
 
 const DashStack = createStackNavigator();
 
-function HomeStack(){
+function HomeStack({navigation}){
         return(
             
             <DashStack.Navigator>
@@ -17,12 +22,48 @@ function HomeStack(){
                 options={{
                     headerStyle:{
                         backgroundColor:swOrange,
+                        borderBottomWidth:0,
+                        elevation:0,
+                        shadowOpacity:0,
                     },
                     headerTitleStyle:{
-                        color:'white',
+                        color:swWhite,
                         fontWeight:'bold',
-                    }
+                    },
+                    headerRight: () => (
+                        <Button
+                        buttonStyle={{
+                           paddingRight:20,
+                        }}
+                        icon={
+                            <Icon  
+                            name='md-settings' 
+                            size={23} 
+                            color={swWhite}
+                            />
+                        }
+                          onPress={() => navigation.dispatch(StackActions.push('Settings')) }
+                          title=""
+                          color="#fff"
+                          type="clear"
+                        />),
                 }}
+                />
+                <DashStack.Screen
+                    name={'Settings'} 
+                    component={Settings}
+                    options={{
+                        headerStyle:{
+                            backgroundColor:swOrange,
+                            borderBottomWidth:0,
+                            elevation:0,
+                            shadowOpacity:0,
+                        },
+                        headerTitleStyle:{
+                            color:swWhite,
+                            fontWeight:'bold',
+                        },
+                    }}
                 />
             </DashStack.Navigator>
         );
@@ -40,9 +81,29 @@ function QueryStack(){
             options={{
                 headerStyle:{
                     backgroundColor:swGrey,
+                    borderBottomWidth:0,
+                    elevation:0,
+                    shadowOpacity:0,
                 },
                 headerTitleStyle:{
-                    color:'white',
+                    color:swWhite,
+                    fontWeight:'bold',
+                }
+            }}
+            />
+            <SearchStack.Screen 
+            name={'Movie'}
+            title='Movie Details' 
+            component={MovieDetails}
+            options={{
+                headerStyle:{
+                    backgroundColor:swGrey,
+                    borderBottomWidth:0,
+                    elevation:0,
+                    shadowOpacity:0,
+                },
+                headerTitleStyle:{
+                    color:swWhite,
                     fontWeight:'bold',
                 }
             }}
@@ -50,6 +111,7 @@ function QueryStack(){
         </SearchStack.Navigator>
     );
 }
+
 export{
     HomeStack,
     QueryStack
