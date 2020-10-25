@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View,SafeAreaView } from "react-native";
-import { Card } from "react-native-elements";
+import { Card,Divider } from "react-native-elements";
 import  { swGrey,swWhite } from "../styles/Colors";
 import firebase from 'firebase';
 

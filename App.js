@@ -1,5 +1,5 @@
 import React from "react";
-import {StyleSheet, Text, View, ScrollView} from "react-native";
+import {StyleSheet, StatusBar} from "react-native";
 import {NativeRouter, Switch, Route, Router, Link} from "react-router-native";
 import { NavigationContainer } from '@react-navigation/native';
 import BottomNav from "./src/components/BottomTab.js";
@@ -44,6 +44,9 @@ export default function App() {
     return (
         <Provider store={store}>
             <NavigationContainer>
+            <StatusBar
+                barStyle='light-content'
+                />
                 <BottomNav/>
             </NavigationContainer>
         </Provider>

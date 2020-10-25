@@ -51,7 +51,14 @@ export default class Index extends Component{
                         name='md-create' size={40} color={swOrange}
                         />
                     }
-                    onPress={()=> Alert.alert("SignUP","Should go to Sign Up") }
+                    onPress={()=> Alert.alert("SignUP","Should go to Sign Up",[
+                        {
+                          text: "Cancel",
+                          onPress: () => console.log("Cancel Pressed"),
+                          style: "cancel"
+                        },
+                        { text: "OK", onPress: () => console.log("OK Pressed") }
+                      ]) }
                 />
     <Text style={{bottom:0, position:'absolute',color:'rgba(255, 255, 255, 0.25)'}}>SquadWatch Inc. {this.state.date}</Text>
             </SafeAreaView>

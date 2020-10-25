@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import {SafeAreaView, StyleSheet, Text, View, StatusBar,TouchableWithoutFeedback,Keyboard, Alert} from "react-native";
 import {Button,Input} from "react-native-elements";
 import Icon from 'react-native-vector-icons/Ionicons';
-import {swGrey, swOrange,swWhite} from '../styles/Colors'
+import {swNavy, swOrange,swWhite} from '../styles/Colors'
 import {signIn} from "../components/Auth.js"
 
 export default class Login extends Component {
@@ -24,6 +24,7 @@ export default class Login extends Component {
                 <Input
                 inputContainerStyle={styles.input}
                 placeholder='email/username'
+                inputStyle={{color:swWhite}}
                 leftIcon={
                     <Icon
                     name='md-person'
@@ -33,11 +34,13 @@ export default class Login extends Component {
                 }
                 leftIconContainerStyle={styles.leftIconStyle}
                 placeholderTextColor={'#d4d4d4'}
+                onChangeText = {(email) => this.setState({email})}
                 />
                 <Input
                     inputContainerStyle={styles.input}
                     placeholder='password'
                     secureTextEntry={true}
+                    inputStyle={{color:swWhite}}
                     leftIcon={
                         <Icon
                         name='md-key'
@@ -48,9 +51,21 @@ export default class Login extends Component {
                     leftIconContainerStyle={styles.leftIconStyle}
                     inputStyle={{color:swWhite}}
                     placeholderTextColor={'#d4d4d4'}
+                    onChangeText = {(password) => this.setState({password})}
                 />
                     </View>
                 </TouchableWithoutFeedback>
+                <Button type='clear' title='forgot password?' 
+                icon={<Icon
+                    name="md-information-circle" 
+                    size={20} color={swWhite}
+                    style={{marginRight:5}}
+                />}
+                titleStyle={{color:swWhite, fontWeight:'200', fontSize:15}}
+                leftIcon
+                onPress= {async() => {
+                    await(firebase.auth().sendPasswordResetEmail(this.state.email));}}
+                />
                 <View style= {styles.buttonContainer}>
                 
                 <Button
@@ -63,8 +78,11 @@ export default class Login extends Component {
                         />
                     }
                     titleStyle={{color:swOrange}}
-                    onPress= {() => Alert.alert('not impremented yet')}
+                    onPress= {async() => {
+                        await(signIn(this.state.email, this.state.password));
+                    }}
                 />
+                
             </View>
 
             </SafeAreaView>

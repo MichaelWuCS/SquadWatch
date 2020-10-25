@@ -63,6 +63,10 @@ function HomeStack({navigation}){
                             color:swWhite,
                             fontWeight:'bold',
                         },
+                        // header:({goBack})=>({
+                        //     left:()
+                        // })
+
                     }}
                 />
             </DashStack.Navigator>

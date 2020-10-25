@@ -4,7 +4,6 @@ export const updateMovielist = () => ({
     type: UPDATEMOVIELIST,
 });
 
-export const addCustomuser = () => ({
+export const addCustomUser = () => ({
     type: ADDCUSTOMUSER,
 });
-
