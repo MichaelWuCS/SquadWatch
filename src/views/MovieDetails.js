@@ -30,6 +30,7 @@ import * as firebase from "firebase";
 import "firebase/firestore";
 import "firebase/auth";
 import {connect} from "react-redux"
+import {getWatchList, updateWatchList} from "../api/WatchListApi.js"
 
 class MovieDetails extends Component{
 
@@ -44,47 +45,35 @@ class MovieDetails extends Component{
             year:"",
             inWatchlist: false
         };
-        this.firestore;
     }
 
     componentDidMount(){
         //console.log(this.props);
         console.log("name: "+this.props.route.params.name+"=========");
-        const firebase_config = {
-            apiKey: FIREBASE_API_KEY,
-            authDomain: FIREBASE_AUTH_DOMAIN,
-            databaseURL: FIREBASE_DB_URL,
-            storageBucket: FIREBASE_STORAGE_BUCKET,
-            projectId: FIREBASE_PROJECT_ID,
-            appId: FIREBASE_APP_ID,
-        };
-        !firebase.apps.length ? firebase.initializeApp(firebase_config) : firebase.app();
-        this.firestore = firebase.firestore();
         this.id = this.props.route.params.id;
         console.log(this.id);
         this.getWatchlistInfo()
         this.makeRemoteRequest();
     }
 
-    getWatchlistInfo = () =>{
-        this.firestore
-        .collection("watchList")
-        .doc("WiEkX1WL5XmcYp4jODIb")
-        .get()
-        .then((doc) => {
-            var i;
-            for(i = 0; i<doc.data().movies.length; i++){
-                if(this.id==doc.data().movies[i].id){
-                    console.log(this.id);
-                    console.log(doc.data().movies[i].id);
-                    this.setState({
-                        inWatchlist:true
-                    });
-                    console.log("This movie is here");
-                    break;
+    getWatchlistInfo = async() =>{
+        try {
+            //var userIDkey = this.props.customUser.userId;
+            var userWatchList = await getWatchList("WiEkX1WL5XmcYp4jODIb");
+            userWatchList.forEach((movie)=>{
+                var i;
+                for(i = 0; i<userWatchList.length; i++){
+                    if(this.id==movie.id){
+                        this.setState({
+                            inWatchlist:true
+                        });
+                    }
                 }
-            }
-        });
+            })
+            this.props.updateWatchList(userWatchList);
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     makeRemoteRequest = () => {
@@ -118,59 +107,57 @@ class MovieDetails extends Component{
 
     toggleInWatchlistRequest = () =>{
         if(this.state.inWatchlist){
-            this.firestore
-            .collection("watchList")
-            .doc("WiEkX1WL5XmcYp4jODIb")
-            .get()
-            .then((doc) => {
-                var temp = doc.data().movies;
-                var i;
-                for(i = 0; i<temp.length; i++){
-                    if(temp[i].id==this.id){
-                        temp.splice(i,1);
-                        break;
-                    }
-                }
-                this.firestore
-                .collection("watchList")
-                .doc("WiEkX1WL5XmcYp4jODIb")
-                .update({movies:temp});
-            });
+            this.removeMovieFromWatchList();
         }else{
-            this.firestore
-            .collection("watchList")
-            .doc("WiEkX1WL5XmcYp4jODIb")
-            .get()
-            .then((doc) => {
-                var temp = doc.data().movies;
-                temp.push({
-                    description:this.state.data.overview,
-                    id:this.id,
-                    name:this.state.data.title,
-                    posterPath:this.state.data.poster_path
-                })
-                this.firestore
-                .collection("watchList")
-                .doc("WiEkX1WL5XmcYp4jODIb")
-                .update({movies:temp});
-            });
+            this.addMovieToWatchList();
         }
     }
 
-    addMovieToRedux = () =>{
-        console.log("MOVIE");
-        var copy = [...this.props.watchList];
-        var currentMovie = {
-            name: this.state.data.title,
-            description: this.state.data.overview,
-            posterPath: this.state.data.poster_path,
-            id: this.props.route.params.id
-
+    removeMovieFromWatchList = async ()=>{
+        try {
+            //var userIDkey = this.props.customUser.userId;
+            var userWatchList = await getWatchList("WiEkX1WL5XmcYp4jODIb");
+            userWatchList = userWatchList.filter((movie) => {
+                if (movie.id == this.id){
+                    return false;
+                }
+                return true;
+            })
+            watchListObject = {
+                movies: userWatchList,
+                creatorID: "5UOPtbbQM03QIVUzwNFn"
+            }
+            updateWatchList("WiEkX1WL5XmcYp4jODIb", watchListObject);
+            this.props.updateWatchList(userWatchList);
+            console.log(watchListObject);
+        } catch (error) {
+            console.log(error)
         }
-        console.log(currentMovie);
-        copy.push(currentMovie);
-        this.props.updateWatchList(copy);
     }
+
+    addMovieToWatchList = async ()=>{
+        try {
+            var userWatchList = await getWatchList("WiEkX1WL5XmcYp4jODIb");
+            var currentMovie = {
+                description:this.state.data.overview,
+                id:this.id,
+                name:this.state.data.title,
+                posterPath:this.state.data.poster_path
+            }
+            userWatchList.push(currentMovie);
+            watchListObject = {
+                movies: userWatchList,
+                creatorID: "5UOPtbbQM03QIVUzwNFn"
+            }
+            updateWatchList("WiEkX1WL5XmcYp4jODIb", watchListObject);
+            this.props.updateWatchList(userWatchList);
+            console.log(watchListObject);
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    
 
     render(){
         if(this.state.loading){
@@ -209,9 +196,6 @@ class MovieDetails extends Component{
                                     color="#ffffff" size ={32}
                                     />
                                     <Text style={styles.buttonLabel}>{(this.state.inWatchlist)?"Remove from Watchlist":"Add to Watchlist"}</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity>
-                                    <Text style={{color: "white"}} onPress={()=>this.addMovieToRedux()}>Add to WatchList</Text>
                                 </TouchableOpacity>
                         </View>
                     </ImageBackground>

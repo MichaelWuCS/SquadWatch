@@ -32,57 +32,55 @@ export function addWatchList(watchList, addComplete){
     }).then((data) => addComplete(data))
     .catch((error)=> console.log(error));
 
-
 }
 
-export async function getWatchList(onWatchListsRecieved){
+
+export async function getAllWatchLists(){
 
     var watchList = [];
 
     var snapshot = await firestore
     .collection("watchList")
     .get()
+    .catch((error)=> console.log(error));
+
 
     snapshot.forEach(element => {
          watchList.push(element.data());
-         console.log("-----------------------------------------")
-
     });
 
-    onWatchListsRecieved(watchList);
+    return watchList
 }
 
-/*
-import firebase from "react-native-firebase";
-import WatchList from "../views/WatchList";
 
-export function addWatchList(watchList, addComplete){
-    
-    firebase.firestore()
+export async function getWatchList(key){
+
+    var snapshot = await firestore
     .collection("watchList")
-    .add({
-        
-    }).then((data) => addComplete(data))
+    .doc(key)
+    .get()
+    .catch((error)=> console.log(error));
+
+    return snapshot.data().movies;
+}
+
+export async function updateWatchList(key, watchlist){
+
+    firestore.collection("watchList")
+    .doc(key)
+    .update(watchlist)
     .catch((error)=> console.log(error));
 
 
 }
 
-export async function getWatchList(watchListsRecieved){
+export async function deleteWatchList(key){
+    firestore.collection("watchList")
+    .doc(key)
+    .delete()
+    .catch((error)=> console.log(error));
 
-    var watchList = [];
-
-    var snapshot = await firebase.firestore()
-    .collection("watchList")
-    .get()
-
-    snapshot.array.forEach(element => {
-        watchList.push(element.data());
-    });
-
-    watchListsRecieved(WatchList);
 }
-*/
 
 
 

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View, ScrollView, Button } from "react-native";
 import MovieElement from "../components/MovieElement.js";
 import {connect} from "react-redux";
-import {getWatchList, addWatchList} from "../api/WatchListApi.js"
+import {getWatchList} from "../api/WatchListApi.js"
 
 
 class WatchList extends Component {
@@ -14,33 +14,24 @@ class WatchList extends Component {
     }
 
     componentDidMount() {
-        getWatchList(this.onWatchListsReceived);
+        this.getUserWatchList();
     }
 
-    onWatchListsReceived = (watchList) => {
+    getUserWatchList = async () => {
 
-        //customUserID = this.props.customUser.userID;
-        customUserID = "5UOPtbbQM03QIVUzwNFn";
-        
-        const userWatchList = watchList.filter(element =>{
-            if (element.creatorID == customUserID){
-                return true;
-            }
-            return false;
-        })
+        try {
+            //var userIDkey = this.props.customUser.userId;
+            var userWatchList = await getWatchList("WiEkX1WL5XmcYp4jODIb");
+            this.props.updateWatchList(userWatchList);
 
-        this.setState(prevState =>({
-            watchList: prevState.watchList = userWatchList[0].movies
-        }))
-
-        this.props.updateWatchList(userWatchList[0].movies);
-
-        
+        } catch (error) {
+            console.log(error);
+        }
 
     }
 
 
-   movieArray = () =>{
+   movieArray = () => {
     this.state.watchListArray = this.props.watchList;
     return this.state.watchListArray.map((movie,index)=>{
         return(
@@ -50,7 +41,6 @@ class WatchList extends Component {
         )})
     }
     
-
 
     render() {
         return (
