@@ -60,7 +60,7 @@ class SyncScreen extends Component{
 
     makeid(length) {
         var result           = '';
-        var characters       = 'abcdefghijklmnopqrstuvwxyz0123456789';
+        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         var charactersLength = characters.length;
         while(result=='' && !(this.state.data.includes(result))){
             result = '';
@@ -73,8 +73,8 @@ class SyncScreen extends Component{
 
     componentDidMount(){
         this.props.addCustomUserToRedux({
-            id:"kcnprYOOyDQzT1FYpyTGpaT322u1", 
-            first:"Bhargav", 
+            id:"kcnprYOOyDQzT1FYpyTGpaT322u1",
+            first:"Bhargav",
             last:"Annigeri",
             watchlistID: "WiEkX1WL5XmcYp4jODIb"
         });
@@ -89,7 +89,7 @@ class SyncScreen extends Component{
         firestore
         .collection("squadRoom")
         .get()
-        .then((querySnapshot) => { 
+        .then((querySnapshot) => {
             var temp = []
             querySnapshot.forEach((doc)=> {
                 // doc.data() is never undefined for query doc snapshots=
@@ -111,18 +111,18 @@ class SyncScreen extends Component{
             name: "Room Code: "+newRoomID
         });
     }
-    
+
     searchButton = () => {
         if(this.state.searching){
             return(
                 <View style={styles.input} backgroundColor={swBlue} flexDirection={"row"}>
                     <View borderBottomWidth={1} width="30%" borderColor={"#fff"}>
-                        <TextInput styles={styles.textIn} 
+                        <TextInput styles={styles.textIn}
                             color="#fff"
-                            placeholder={"Enter Room ID here"} 
-                            autoCapitalize="none"
+                            placeholder={"Enter Room ID here"}
+                            autoCapitalize="on"
                             onChangeText={(text)=>{
-                                this.setState({roomFind:text});     
+                                this.setState({roomFind:text});
                             }}
                         />
                     </View>
@@ -130,10 +130,10 @@ class SyncScreen extends Component{
                         <TouchableOpacity onPress={()=>{
                             this.setState({searching:false})
                         }}>
-                            <MaterialCommunityIcons 
-                                name="close" 
-                                alignSelf="center" 
-                                color={"#ffffff"} 
+                            <MaterialCommunityIcons
+                                name="close"
+                                alignSelf="center"
+                                color={"#ffffff"}
                                 size={30}
                             />
                         </TouchableOpacity>
@@ -143,10 +143,10 @@ class SyncScreen extends Component{
                                 name: "Room Code: "+this.state.roomFind
                             })
                         }}>
-                            <MaterialCommunityIcons 
-                                name="location-enter" 
-                                alignSelf="center" 
-                                color={"#ffffff"} 
+                            <MaterialCommunityIcons
+                                name="location-enter"
+                                alignSelf="center"
+                                color={"#ffffff"}
                                 size={30}
                             />
                         </TouchableOpacity>
@@ -162,8 +162,8 @@ class SyncScreen extends Component{
                         <Text style={styles.buttonText}>
                             Join Room
                         </Text>
-                        <MaterialCommunityIcons 
-                        name="magnify" 
+                        <MaterialCommunityIcons
+                        name="magnify"
                         color={"white"}
                         size={70}/>
                     </View>
@@ -189,8 +189,8 @@ class SyncScreen extends Component{
                             Create Room
                         </Text>
                         <MaterialCommunityIcons
-                        alignSelf="center" 
-                        name="arrow-right-bold-box-outline" 
+                        alignSelf="center"
+                        name="arrow-right-bold-box-outline"
                         color={"white"}
                         size={60}/>
                     </View>

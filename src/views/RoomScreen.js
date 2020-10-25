@@ -41,7 +41,7 @@ export default class RoomScreen extends Component{
     }
 
     componentDidMount(){
-        this.id = this.props.route.params.id;
+        this.id = this.props.route.params.id.toUpperCase();
         console.log("room view");
         this.fetchRoom(this.id);
     }
@@ -53,9 +53,9 @@ export default class RoomScreen extends Component{
         .doc(roomID)
         .get()
         .then((doc) => {
-            var cur_members = doc.data().members;
+            let cur_members = doc.data().members;
             cur_members.push(firebase.auth().currentUser.uid);
-            var data_store = doc.data();
+            let data_store = doc.data();
             console.log(doc.data())
             data_store.members = cur_members;
             // firestore
