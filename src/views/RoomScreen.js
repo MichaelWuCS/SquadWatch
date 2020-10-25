@@ -1,93 +1,131 @@
-import React, {Component, useEffect, useState} from "react";
+import React, { Component, useEffect, useState } from "react";
 import {
     Text,
-    Button,
     View,
     StyleSheet,
     FlatList,
-    ActivityIndicator, NativeEventEmitter,
-    SafeAreaView,
-    ImageBackground,
-    ScrollView,
-    Image,
+    ActivityIndicator,
     TouchableOpacity
 } from "react-native";
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import {TMDB_KEY} from "@env";
-import {
-    FIREBASE_API_KEY,
-    FIREBASE_AUTH_DOMAIN,
-    FIREBASE_DB_URL,
-    FIREBASE_STORAGE_BUCKET,
-    FIREBASE_PROJECT_ID,
-    FIREBASE_APP_ID
-} from '@env';
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as firebase from "firebase";
 import "firebase/firestore";
 import "firebase/auth";
-import { swBlack, swBlue, swGreen, swGrey, swPink, swPurple } from "../styles/Colors";
+import { swBlack, swBlue, swGreen, swGrey, swPink, swPurple, swOrange } from "../styles/Colors";
 
 const firestore = firebase.firestore();
 
-export default class RoomScreen extends Component{
-    constructor(props){
+export default class RoomScreen extends Component {
+    constructor(props) {
         super(props);
         this.state = {
-            loading:false,
-            error:false,
-            data:{}
-        }
+            loading: false,
+            error: false,
+            data: {}
+        };
+        this.dataMembers = [];
         this.id;
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.id = this.props.route.params.id.toUpperCase();
         console.log("room view");
         this.fetchRoom(this.id);
     }
 
     fetchRoom(roomID) {
-        this.setState({loading:true});
+        this.setState({ loading: true });
         firestore
-        .collection("squadRoom")
-        .doc(roomID)
-        .get()
-        .then((doc) => {
-            let cur_members = doc.data().members;
-            cur_members.push(firebase.auth().currentUser.uid);
-            let data_store = doc.data();
-            console.log(doc.data())
-            data_store.members = cur_members;
-            // firestore
-            //     .collection("squadRoom")
-            //     .doc(roomID)
-            //     .set({host: doc.data().host, members: cur_members, id:roomID, isActive:true});
-            this.setState({
-                loading:false,
-                data: data_store
-            });
-        }).catch((error) => {
-            this.setState({error:error, loading:false});
+            .collection("squadRoom")
+            .doc(roomID)
+            .get()
+            .then((doc) => {
+                let cur_members = doc.data().members;
+                //cur_members.push(firebase.auth().currentUser.uid);
+                let data_store = doc.data();
+                console.log(doc.data());
+                data_store.members = cur_members;
+                firestore
+                    .collection("squadRoom")
+                    .doc(roomID)
+                    .update({ members: cur_members });
+                this.setState({
+                    data: data_store
+                });
+                for (let i = 0; i < data_store.members.length; i++) {
+                    console.log("iteration " + i);
+                    firestore
+                        .collection("customUser")
+                        .doc(data_store.members[i])
+                        .get()
+                        .then((doc) => {
+                            this.dataMembers.push(doc.data());
+                            console.log(this.dataMembers);
+                            this.setState({ loading: false });
+                        });
+                }
+            }).catch((error) => {
+            this.setState({ error: error, loading: false });
             console.warn("Error!: " + error);
         });
     }
 
-    render(){
-        if(this.state.loading){
-            return <ActivityIndicator/>
-        }else if(this.state.error){
+    renderMember = (memberObj) => {
+        console.log(memberObj);
+        const cur_lightness = 15 + memberObj.index * 3;
+        let member = memberObj.item;
+        return (
+            <View flexDirection={"row"} height={50}
+                  justifyContent={"center"}
+                  alignItems={"center"}
+                  backgroundColor={"hsl(211,53%," + cur_lightness + "%)"}
+                  width={450}>
+                <Text style={styles.text}>
+                    {member.first + " " + member.last.charAt(0)}
+                </Text>
+                <TouchableOpacity style={{ paddingLeft: 50 }}>
+                    <MaterialCommunityIcons name={"dots-vertical"} color={"white"} size={20} />
+                </TouchableOpacity>
+            </View>
+        );
+    };
+
+    render() {
+        if (this.state.loading) {
+            return <ActivityIndicator />;
+        } else if (this.state.error) {
             return (
                 <View style={styles.container} backgroundColor={"red"}>
-                    <Text style={styles.text}>{"An error has occurred. Make sure you entered the name correctly."}</Text>
+                    <Text
+                        style={styles.text}>{"An error has occurred. Make sure you entered the name correctly."}</Text>
                 </View>
             );
-        }else{
+        } else {
             // LOADED ROOM VIEW
-            return (<View style={styles.container}>
-                <Text style = {styles.text}>
-                    {"Room host: "+this.state.data.host}
-                </Text>
-            </View>)
+            return (<View backgroundColor={swGrey}>
+
+                <TouchableOpacity width={10}>
+                    <View style={{ alignSelf: "center", justifyContent: "center", borderRadius: 2 }}>
+                        <MaterialCommunityIcons style={{ alignSelf: "center" }} name="infinity" color={swOrange}
+                                                size={50} />
+                    </View>
+                </TouchableOpacity>
+                <View style={styles.container}>
+                    <View style={styles.container}
+                          width={"22%"}
+                          borderBottomColor={"white"}
+                          borderBottomWidth={2}
+                          marginBottom={10}>
+                        <Text style={styles.text}>
+                            Members
+                        </Text>
+                    </View>
+                    <FlatList data={this.dataMembers}
+                              renderItem={this.renderMember}
+                              keyExtractor={item => item.watchlistID}>
+                    </FlatList>
+                </View>
+            </View>);
         }
     }
 }
@@ -95,15 +133,15 @@ export default class RoomScreen extends Component{
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: swBlack,
+        backgroundColor: swBlue,
         width: "100%",
         height: undefined,
-        alignContent:"center",
-        alignItems:"center"
+        alignContent: "center",
+        alignItems: "center"
     },
     text: {
         fontSize: 20,
         fontWeight: "bold",
-        color: "white",
-    },
+        color: "white"
+    }
 });

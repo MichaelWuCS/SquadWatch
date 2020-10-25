@@ -120,7 +120,7 @@ class SyncScreen extends Component{
                         <TextInput styles={styles.textIn}
                             color="#fff"
                             placeholder={"Enter Room ID here"}
-                            autoCapitalize="on"
+                            autoCapitalize="characters"
                             onChangeText={(text)=>{
                                 this.setState({roomFind:text});
                             }}
