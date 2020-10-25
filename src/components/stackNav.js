@@ -5,6 +5,7 @@ import{swOrange,swGrey,swBlack,sw} from '../styles/Colors';
 import WatchList from '../views/WatchList';
 import Search from '../views/Search';
 import MovieDetails from '../views/MovieDetails';
+import Friends from "../views/Friends"
 
 const DashStack = createStackNavigator();
 
@@ -18,6 +19,32 @@ function HomeStack(){
                 options={{
                     headerStyle:{
                         backgroundColor:swOrange,
+                    },
+                    headerTitleStyle:{
+                        color:'white',
+                        fontWeight:'bold',
+                    }
+                }}
+                />
+                <DashStack.Screen 
+                name='WatchList' 
+                component={WatchList}
+                options={{
+                    headerStyle:{
+                        backgroundColor:swGrey,
+                    },
+                    headerTitleStyle:{
+                        color:'white',
+                        fontWeight:'bold',
+                    }
+                }}
+                />
+                <DashStack.Screen 
+                name='Friends' 
+                component={Friends}
+                options={{
+                    headerStyle:{
+                        backgroundColor:swGrey,
                     },
                     headerTitleStyle:{
                         color:'white',
