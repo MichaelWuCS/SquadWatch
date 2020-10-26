@@ -6,7 +6,8 @@ import Dashboard from "../views/Dashboard";
 import WatchList from "../views/WatchList";
 import Search from "../views/Search";
 import {swNavy,swOrange} from '../styles/Colors';
-import{HomeStack,QueryStack,SyncStack} from './stackNav';
+import{HomeStack,QueryStack, WatchListStack} from './stackNav';
+import{SyncStack} from './stackNav';
 import Index from '../views/index';
 import SignUp from "../views/SignUp";
 
@@ -53,7 +54,7 @@ function BottomNav() {
       />
       <Tab.Screen
       name='WatchList'
-      component={WatchList}
+      component={WatchListStack}
       options={{
         tabBarLabel: "WatchList",
         tabBarIcon: ({ color }) => (

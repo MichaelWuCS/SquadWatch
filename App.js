@@ -21,6 +21,16 @@ import "firebase/auth";
 import SignUp from "./src/views/SignUp.js";
 import {Provider} from "react-redux";
 import {store} from "./src/store/store.js"
+import { YellowBox } from 'react-native';
+import _ from 'lodash';
+
+YellowBox.ignoreWarnings(['Setting a timer']);
+const _console = _.clone(console);
+console.warn = message => {
+  if (message.indexOf('Setting a timer') <= -1) {
+    _console.warn(message);
+  }
+};
 
 //set up firebase configuration from environment variables
 console.log(FIREBASE_API_KEY);

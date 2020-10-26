@@ -1,15 +1,10 @@
 import * as React from 'react';
 import { createStackNavigator, Header, HeaderTitle } from '@react-navigation/stack';
-import{Button} from 'react-native-elements';
-import  Icon from  'react-native-vector-icons/Ionicons'
 import Dashboard from '../views/Dashboard';
-import{swOrange,swGrey,swBlack,swWhite} from '../styles/Colors';
+import{swOrange,swGrey,swBlack,sw} from '../styles/Colors';
 import WatchList from '../views/WatchList';
 import Search from '../views/Search';
 import MovieDetails from '../views/MovieDetails';
-import SyncScreen from '../views/SyncScreen';
-import RoomScreen from '../views/RoomScreen';
-import Settings from "../views/settings";
 
 const DashStack = createStackNavigator();
 
@@ -65,6 +60,47 @@ function HomeStack({navigation}){
                             fontWeight:'bold',
                         },
                     }}
+                />
+                <DashStack.Screen
+                    name='WatchList'
+                    component={WatchList}
+                    options={{
+                        headerStyle:{
+                            backgroundColor:swGrey,
+                        },
+                        headerTitleStyle:{
+                            color:'white',
+                            fontWeight:'bold',
+                        }
+                    }}
+                />
+                <DashStack.Screen
+                    name='Friends'
+                    component={Friends}
+                    options={{
+                        headerStyle:{
+                            backgroundColor:swGrey,
+                        },
+                        headerTitleStyle:{
+                            color:'white',
+                            fontWeight:'bold',
+                        }
+                    }}
+                />
+                <DashStack.Screen
+                    name={'Movie'}
+                    title='Movie Details'
+                    component={MovieDetails}
+                    options={({route}) => ({
+                        headerStyle:{
+                            backgroundColor:swGrey,
+                        },
+                        headerTitleStyle:{
+                            color:'white',
+                            fontWeight:'bold',
+                        },
+                        title: route.params.name
+                    })}
                 />
             </DashStack.Navigator>
         );
@@ -132,6 +168,27 @@ function QueryStack(){
             name={'Movie'}
             title='Movie Details'
             component={MovieDetails}
+            options={({route}) => ({
+                headerStyle:{
+                    backgroundColor:swGrey,
+                },
+                headerTitleStyle:{
+                    color:'white',
+                    fontWeight:'bold',
+                },
+                title: route.params.name
+            })}
+            />
+        </SearchStack.Navigator>
+    );
+}
+
+function WatchListStack() {
+    return (
+        <SearchStack.Navigator>
+            <SearchStack.Screen
+            name='WatchList'
+            component={WatchList}
             options={{
                 headerStyle:{
                     backgroundColor:swGrey,
@@ -145,6 +202,21 @@ function QueryStack(){
                 }
             }}
             />
+            <SearchStack.Screen
+            name={'Movie'}
+            title='Movie Details'
+            component={MovieDetails}
+            options={({route}) => ({
+                headerStyle:{
+                    backgroundColor:swGrey,
+                },
+                headerTitleStyle:{
+                    color:'white',
+                    fontWeight:'bold',
+                },
+                title: route.params.name
+            })}
+            />
         </SearchStack.Navigator>
     );
 }
@@ -152,5 +224,6 @@ function QueryStack(){
 export{
     HomeStack,
     QueryStack,
+    WatchListStack,
     SyncStack
 }
