@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { createStackNavigator, Header, HeaderTitle } from '@react-navigation/stack';
 import Dashboard from '../views/Dashboard';
-import{swOrange,swGrey,swBlack,sw} from '../styles/Colors';
+import{swOrange,swGrey,swBlack,swWhite} from '../styles/Colors';
 import WatchList from '../views/WatchList';
 import Search from '../views/Search';
 import MovieDetails from '../views/MovieDetails';
+import Settings from '../views/settings';
 
 const DashStack = createStackNavigator();
 
