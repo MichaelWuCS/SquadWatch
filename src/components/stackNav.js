@@ -8,7 +8,12 @@ import WatchList from '../views/WatchList';
 import Search from '../views/Search';
 import MovieDetails from '../views/MovieDetails';
 import Settings from '../views/settings'
-import { StackActions } from '@react-navigation/core';
+import StackActions from '@react-navigation/core';
+import SignUp  from '../views/SignUp';
+import Login from '../views/Login';
+import Index_page from "../views/Index"
+ 
+
 
 const DashStack = createStackNavigator();
 
@@ -116,7 +121,36 @@ function QueryStack(){
     );
 }
 
+const IndexStack = createStackNavigator();
+
+function InitStack(){
+    return(
+        <IndexStack.Navigator
+        initialRouteName='Starter'
+        screenOptions={{
+            headerShown: false
+          }}
+        >
+            <IndexStack.Screen
+                name='Starter'
+                component={Index_page}
+            />
+            
+            <IndexStack.Screen
+                name='Login'
+                component={Login}
+            />
+            <IndexStack.Screen
+            name='signUp'
+            component={SignUp}
+            />
+        </IndexStack.Navigator>
+    );
+
+}
+
 export{
     HomeStack,
-    QueryStack
+    QueryStack,
+    InitStack
 }

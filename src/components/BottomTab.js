@@ -7,7 +7,7 @@ import WatchList from "../views/WatchList";
 import Search from "../views/Search";
 import {swNavy,swOrange} from '../styles/Colors';
 import{HomeStack,QueryStack} from './stackNav';
-import Index from '../views/index';
+import Index from '../views/Index';
 import SignUp from "../views/SignUp";
 import Login from '../views/Login'
 

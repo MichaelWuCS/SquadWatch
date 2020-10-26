@@ -3,7 +3,7 @@ import {StyleSheet, StatusBar} from "react-native";
 import {NativeRouter, Switch, Route, Router, Link} from "react-router-native";
 import { NavigationContainer } from '@react-navigation/native';
 import BottomNav from "./src/components/BottomTab.js";
-import HomeStack from './src/components/stackNav';
+import {InitStack,HomeStack } from './src/components/stackNav';
 import Auth from "./src/components/Auth.js";
 import RoomView from "./src/components/RoomView.js";
 import {
@@ -47,7 +47,7 @@ export default function App() {
             <StatusBar
                 barStyle='light-content'
                 />
-                <BottomNav/>
+                <InitStack/>
             </NavigationContainer>
         </Provider>
     );
