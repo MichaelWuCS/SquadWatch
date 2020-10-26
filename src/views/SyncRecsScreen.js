@@ -21,11 +21,14 @@ export default class SyncRecsScreen extends Component {
         super(props);
         this.state = {
             loading: false,
+            topPick: {},
             data: []
         };
     }
 
     componentDidMount() {
+        const results = this.props.route.params.recommendations;
+
         this.setState({ data: this.props.route.params.recommendations})
     }
 
@@ -37,9 +40,15 @@ export default class SyncRecsScreen extends Component {
 
     };
 
+    renderRec = (obj) => {
+        return (
+            <Text>{obj.title}</Text>
+        )
+    }
+
     renderList = () => {
         return (
-            <FlatList renderItem={} data={} >
+            <FlatList renderItem={this.renderRec} data={this.state.data} >
             </FlatList>
         );
     };

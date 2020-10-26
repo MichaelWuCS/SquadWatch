@@ -12,10 +12,11 @@ import * as firebase from "firebase";
 import "firebase/firestore";
 import "firebase/auth";
 import { swBlack, swBlue, swGreen, swGrey, swPink, swPurple, swOrange } from "../styles/Colors";
+import { connect } from "react-redux";
 
 const firestore = firebase.firestore();
 
-export default class RoomScreen extends Component {
+export class RoomScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -41,7 +42,7 @@ export default class RoomScreen extends Component {
             .get()
             .then((doc) => {
                 let cur_members = doc.data().members;
-                //cur_members.push(firebase.auth().currentUser.uid);
+                cur_members.push(this.props.customUser.id);
                 let data_store = doc.data();
                 console.log(doc.data());
                 data_store.members = cur_members;
@@ -90,6 +91,17 @@ export default class RoomScreen extends Component {
         );
     };
 
+    componentWillUnmount() {
+        let curIDs = this.state.data.members;
+        const ind_to_rem = curIDs.indexOf(this.props.customUser.id);
+        curIDs.splice(ind_to_rem,1);
+        let now_active = curIDs.length>0;
+        firestore
+            .collection("squadRoom")
+            .doc(this.id)
+            .update({members: curIDs, isActive:now_active});
+    }
+
     render() {
         if (this.state.loading) {
             return <ActivityIndicator />;
@@ -104,7 +116,11 @@ export default class RoomScreen extends Component {
             // LOADED ROOM VIEW
             return (<View backgroundColor={swGrey}>
 
-                <TouchableOpacity width={10}>
+                <TouchableOpacity width={10}
+                                  // onPress={() => {
+                                  //     this.props.navigation.push("Recommendations")
+                                  // }}
+                >
                     <View style={{ alignSelf: "center", justifyContent: "center", borderRadius: 2 }}>
                         <MaterialCommunityIcons style={{ alignSelf: "center" }} name="infinity" color={swOrange}
                                                 size={50} />
@@ -130,6 +146,23 @@ export default class RoomScreen extends Component {
     }
 }
 
+function mapStateToProps(state){
+    return {
+        customUser: state.customUser
+    }
+
+}
+
+function mapDispatchToProps(dispatch){
+    return {
+        addCustomUserToRedux: (customUser)=> dispatch({
+            type: "ADDCUSTOMUSER",
+            payload: customUser
+        })
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(RoomScreen);
 
 const styles = StyleSheet.create({
     container: {

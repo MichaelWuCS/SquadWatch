@@ -46,7 +46,7 @@ const firebase_config = {
 const firestore = firebase.firestore();
 const auth = firebase.auth();
 
-class SyncScreen extends Component{
+export class SyncScreen extends Component{
     constructor(props){
         super(props);
         this.state = {
@@ -79,7 +79,7 @@ class SyncScreen extends Component{
             watchlistID: "WiEkX1WL5XmcYp4jODIb"
         });
         console.log(this.props);
-        this.uid = "kcnprYOOyDQzT1FYpyTGpaT322u1";//this.props.customUser.id;
+        this.uid = this.props.customUser.id;
         console.log("currentuser:"+this.uid);
         this.fetchData();
     }
@@ -105,7 +105,7 @@ class SyncScreen extends Component{
         firestore
         .collection("squadRoom")
         .doc(newRoomID)
-        .set({host: this.uid, members: [this.uid], isActive:true});
+        .set({host: this.uid, members: [], isActive:true});
         this.props.navigation.push('Room',{
             id: newRoomID,
             name: "Room Code: "+newRoomID
