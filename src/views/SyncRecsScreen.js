@@ -11,35 +11,38 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as firebase from "firebase";
 import "firebase/firestore";
 import "firebase/auth";
-import {TMDB_KEY} from "@env";
+import { TMDB_KEY } from "@env";
 import { swBlack, swBlue, swGreen, swGrey, swPink, swPurple, swOrange } from "../styles/Colors";
 
 
-export default class SyncRecsScreen extends Component{
+export default class SyncRecsScreen extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
-            loading:false,
-            data:[]
-        }
+            loading: false,
+            data: []
+        };
     }
 
     componentDidMount() {
+        this.setState({ data: this.props.route.params.recommendations})
+    }
+
+    makeRemoteRequest() {
 
     }
 
-    makeRemoteRequest(){
+    renderTopPick = () => {
 
-    }
-
-    renderTopPick = () =>{
-
-    }
+    };
 
     renderList = () => {
-
-    }
+        return (
+            <FlatList renderItem={} data={} >
+            </FlatList>
+        );
+    };
 
     render() {
         return (
