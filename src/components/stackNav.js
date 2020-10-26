@@ -6,6 +6,8 @@ import WatchList from '../views/WatchList';
 import Search from '../views/Search';
 import MovieDetails from '../views/MovieDetails';
 import Settings from '../views/settings';
+import Friends from '../views/Friends';
+import {Button, Icon} from "react-native-elements";
 
 const DashStack = createStackNavigator();
 
