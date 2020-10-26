@@ -6,7 +6,7 @@ import Dashboard from "../views/Dashboard";
 import WatchList from "../views/WatchList";
 import Search from "../views/Search";
 import {swNavy,swOrange} from '../styles/Colors';
-import{HomeStack,QueryStack} from './stackNav';
+import{HomeStack,QueryStack,SyncStack} from './stackNav';
 import Index from '../views/index';
 import SignUp from "../views/SignUp";
 
@@ -34,7 +34,7 @@ function BottomNav() {
       />
       <Tab.Screen
         name="Sync"
-        component={SignUp}
+        component={HomeStack}
         options={{
           tabBarLabel:'Sync',
           tabBarIcon: ({ color }) => (
@@ -47,7 +47,7 @@ function BottomNav() {
             }}>
               <MaterialCommunityIcons name="infinity" color={color} size={30}/>
             </View>
-            
+
           ),
         }}
       />
@@ -70,7 +70,7 @@ function BottomNav() {
               <MaterialCommunityIcons name="magnify" color={color} size={26}/>)
         }}
       />
-  
+
     </Tab.Navigator>
   );
 }

@@ -224,7 +224,8 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 15,
         backgroundColor: "grey",
-        height: 150,
+        width: "100%",
+        height: undefined,
     },
     text: {
         fontSize: 20,

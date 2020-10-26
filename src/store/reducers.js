@@ -9,7 +9,7 @@ const initialState = {
 export const mainReducer = (state = initialState, action) => {
     switch (action.type) {
         case ADDCUSTOMUSER:
-            return {counter: state.counter+1};
+            return {customUser: action.payload};
         case UPDATEMOVIELIST:
             return {counter: state.counter+1};
         default:

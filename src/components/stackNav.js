@@ -7,17 +7,17 @@ import{swOrange,swGrey,swBlack,swWhite} from '../styles/Colors';
 import WatchList from '../views/WatchList';
 import Search from '../views/Search';
 import MovieDetails from '../views/MovieDetails';
-import Settings from '../views/settings'
-import { StackActions } from '@react-navigation/core';
+import SyncScreen from '../views/SyncScreen';
+import RoomScreen from '../views/RoomScreen';
 
 const DashStack = createStackNavigator();
 
 function HomeStack({navigation}){
         return(
-            
+
             <DashStack.Navigator>
-                <DashStack.Screen 
-                name='Dashboard' 
+                <DashStack.Screen
+                name='Dashboard'
                 component={Dashboard}
                 options={{
                     headerStyle:{
@@ -36,9 +36,9 @@ function HomeStack({navigation}){
                            paddingRight:20,
                         }}
                         icon={
-                            <Icon  
-                            name='md-settings' 
-                            size={23} 
+                            <Icon
+                            name='md-settings'
+                            size={23}
                             color={swWhite}
                             />
                         }
@@ -50,7 +50,7 @@ function HomeStack({navigation}){
                 }}
                 />
                 <DashStack.Screen
-                    name={'Settings'} 
+                    name={'Settings'}
                     component={Settings}
                     options={{
                         headerStyle:{
@@ -69,14 +69,50 @@ function HomeStack({navigation}){
         );
 }
 
+const RoomStack = createStackNavigator();
+
+function SyncStack(){
+    return(
+        <RoomStack.Navigator>
+            <RoomStack.Screen
+                name='Sync'
+                component={SyncScreen}
+                options={{
+                    headerStyle:{
+                        backgroundColor:swOrange,
+                    },
+                    headerTitleStyle:{
+                        color:'white',
+                        fontWeight:'bold',
+                    }
+                }}
+            />
+            <RoomStack.Screen
+                name='Room'
+                component={RoomScreen}
+                options={({route}) => ({
+                    headerStyle:{
+                        backgroundColor:swGrey,
+                    },
+                    headerTitleStyle:{
+                        color:'white',
+                        fontWeight:'bold',
+                    },
+                    title: route.params.name
+                })}
+            />
+        </RoomStack.Navigator>
+    )
+}
+
 const SearchStack = createStackNavigator();
 
 function QueryStack(){
     return(
-        
+
         <SearchStack.Navigator>
-            <SearchStack.Screen 
-            name='Search' 
+            <SearchStack.Screen
+            name='Search'
             component={Search}
             options={{
                 headerStyle:{
@@ -91,9 +127,9 @@ function QueryStack(){
                 }
             }}
             />
-            <SearchStack.Screen 
+            <SearchStack.Screen
             name={'Movie'}
-            title='Movie Details' 
+            title='Movie Details'
             component={MovieDetails}
             options={{
                 headerStyle:{
@@ -114,5 +150,6 @@ function QueryStack(){
 
 export{
     HomeStack,
-    QueryStack
+    QueryStack,
+    SyncStack
 }
