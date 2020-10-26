@@ -7,7 +7,10 @@ import Search from '../views/Search';
 import MovieDetails from '../views/MovieDetails';
 import Settings from '../views/settings';
 import Friends from '../views/Friends';
+import SyncScreen from "../views/SyncScreen";
+import RoomScreen from "../views/RoomScreen";
 import {Button, Icon} from "react-native-elements";
+import { StackActions } from "@react-navigation/routers";
 
 const DashStack = createStackNavigator();
 

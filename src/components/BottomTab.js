@@ -35,7 +35,7 @@ function BottomNav() {
       />
       <Tab.Screen
         name="Sync"
-        component={HomeStack}
+        component={SyncStack}
         options={{
           tabBarLabel:'Sync',
           tabBarIcon: ({ color }) => (
