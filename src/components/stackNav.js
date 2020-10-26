@@ -9,6 +9,7 @@ import Search from '../views/Search';
 import MovieDetails from '../views/MovieDetails';
 import SyncScreen from '../views/SyncScreen';
 import RoomScreen from '../views/RoomScreen';
+import Settings from "../views/settings";
 
 const DashStack = createStackNavigator();
 
