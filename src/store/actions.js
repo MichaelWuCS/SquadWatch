@@ -12,5 +12,3 @@ export const addCustomUser = () => ({
     type: ADDCUSTOMUSER,
 });
 
-
-

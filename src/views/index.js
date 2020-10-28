@@ -4,6 +4,8 @@ import* as Font from 'expo-font';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Button} from 'react-native-elements';
 import {swOrange,swNavy,swWhite} from '../styles/Colors';
+import {Login} from '../views/Login'
+import {SignUp} from '../views/SignUp'
 
 export default class Index extends Component{
     constructor(props){
@@ -36,7 +38,7 @@ export default class Index extends Component{
                 titleStyle={{fontSize:20, color:swWhite,fontWeight:'bold'}}
                 containerStyle={styles.loginbtn}
                 title="LOGIN"
-                onPress={()=> Alert.alert("Login","Should go to Login") }
+                onPress={()=> this.props.navigation.navigate('Login') }
                 />
                 <Text style={{marginTop:"30%",color:swWhite,fontSize:18,
                 opacity:0.8,fontFamily:'OpenSansLight', width:'50%', textAlign:'center'}}> Don't have an Account?
@@ -51,7 +53,7 @@ export default class Index extends Component{
                         name='md-create' size={40} color={swOrange}
                         />
                     }
-                    onPress={()=> Alert.alert("SignUP","Should go to Sign Up") }
+                    onPress={()=> this.props.navigation.navigate('SignUp') }
                 />
     <Text style={{bottom:0, position:'absolute',color:'rgba(255, 255, 255, 0.25)'}}>SquadWatch Inc. {this.state.date}</Text>
             </SafeAreaView>

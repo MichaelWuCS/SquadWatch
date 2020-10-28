@@ -10,6 +10,7 @@ import{HomeStack,QueryStack, WatchListStack} from './stackNav';
 import{SyncStack} from './stackNav';
 import Index from '../views/index';
 import SignUp from "../views/SignUp";
+import Login from '../views/Login'
 
 
 const Tab = createMaterialBottomTabNavigator();

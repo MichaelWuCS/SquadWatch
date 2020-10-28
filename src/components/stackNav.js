@@ -11,6 +11,11 @@ import SyncScreen from "../views/SyncScreen";
 import RoomScreen from "../views/RoomScreen";
 import {Button, Icon} from "react-native-elements";
 import { StackActions } from "@react-navigation/routers";
+import SignUp  from '../views/SignUp';
+import Login from '../views/Login';
+import Index_page from "../views/Index"
+
+
 
 const DashStack = createStackNavigator();
 
@@ -227,9 +232,38 @@ function WatchListStack() {
     );
 }
 
+const IndexStack = createStackNavigator();
+
+function InitStack(){
+    return(
+        <IndexStack.Navigator
+        initialRouteName='Starter'
+        screenOptions={{
+            headerShown: false
+          }}
+        >
+            <IndexStack.Screen
+                name='Starter'
+                component={Index_page}
+            />
+
+            <IndexStack.Screen
+                name='Login'
+                component={Login}
+            />
+            <IndexStack.Screen
+            name='signUp'
+            component={SignUp}
+            />
+        </IndexStack.Navigator>
+    );
+
+}
+
 export{
     HomeStack,
     QueryStack,
     WatchListStack,
-    SyncStack
+    SyncStack,
+    InitStack
 }

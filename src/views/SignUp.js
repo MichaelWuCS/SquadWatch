@@ -10,8 +10,9 @@ import { ScrollView } from "react-native-gesture-handler";
 import{Auth} from "../components/Auth.js";
 import {signUp} from "../components/Auth.js"
 import { Button,Input} from "react-native-elements";
+import {connect} from 'react-redux'
 
-export default class SignUp extends Component {
+export class SignUp extends Component {
     constructor(props){
         super(props);
         this.state = ({
@@ -19,6 +20,7 @@ export default class SignUp extends Component {
             first: '',
             last:'',
             password:'',
+            confirmPassword: ''
         })
     }
     render() {
@@ -52,10 +54,11 @@ export default class SignUp extends Component {
                     leftIconContainerStyle={styles.leftIconStyle}
                     inputStyle={{color:swWhite}}
                     placeholderTextColor={'#d4d4d4'}
+                    onChangeText = {(email) => this.setState({email})}
                 />
                 <Input
                     inputContainerStyle={styles.input}
-                    placeholder='username'
+                    placeholder='first'
                     leftIcon={
                         <Icon
                         name='md-person'
@@ -65,6 +68,23 @@ export default class SignUp extends Component {
                     }
                     leftIconContainerStyle={styles.leftIconStyle}
                     placeholderTextColor={'#d4d4d4'}
+                    inputStyle={{color:swWhite}}
+                    onChangeText = {(first) => this.setState({first})}
+                />
+                <Input
+                    inputContainerStyle={styles.input}
+                    placeholder='last'
+                    leftIcon={
+                        <Icon
+                        name='md-person'
+                        size={24}
+                        color='white'
+                        />
+                    }
+                    leftIconContainerStyle={styles.leftIconStyle}
+                    placeholderTextColor={'#d4d4d4'}
+                    inputStyle={{color:swWhite}}
+                    onChangeText = {(last) => this.setState({last})}
                 />
                 <Input
                     inputContainerStyle={styles.input}
@@ -82,6 +102,7 @@ export default class SignUp extends Component {
                     leftIconContainerStyle={styles.leftIconStyle}
                     inputStyle={{color:swWhite}}
                     placeholderTextColor={'#d4d4d4'}
+                    onChangeText = {(password) => this.setState({password})}
                 />
                 <Input
                     inputContainerStyle={styles.input}
@@ -97,6 +118,7 @@ export default class SignUp extends Component {
                     leftIconContainerStyle={styles.leftIconStyle}
                     inputStyle={{color:swWhite}}
                     placeholderTextColor={'#d4d4d4'}
+                    onChangeText = {(confirmPassword) => this.setState({confirmPassword})}
                 />
                 
             </View>
@@ -108,13 +130,37 @@ export default class SignUp extends Component {
                         containerStyle= {styles.buttonContainer}
                         title= "REGISTER"
                         titleStyle={{color:swOrange}}
-                        onPress= {() => Alert.alert("SignUp","Sign up page")}
+                        onPress= {async() => {
+                            await(this.props.addCustomUserToRedux({
+                                first: this.state.first,
+                                last: this.state.last, 
+                                watchListId: ""
+                               }));
+                            await(signUp(this.state.email, this.state.password, this.state.first, this.state.last));
+                        }}
                     />
                 </View>
             </SafeAreaView>
         );
     }
 }
+
+function mapStateToProps(state){
+    return {
+        customUser: state.customUser
+    }
+}
+
+function mapDispatchToProps(dispatch){
+    return {
+       addCustomUserToRedux: (customUser) => dispatch({
+           type: "ADDCUSTOMUSER", 
+           payload: customUser
+       })
+    }
+}
+
+export default connect (mapStateToProps, mapDispatchToProps)(SignUp)
 
 const styles = StyleSheet.create({
     container: {
