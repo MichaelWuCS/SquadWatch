@@ -12,6 +12,7 @@ import StackActions from '@react-navigation/core';
 import SignUp  from '../views/SignUp';
 import Login from '../views/Login';
 import Index_page from "../views/Index"
+import BottomNav from './BottomTab';
  
 
 
@@ -47,7 +48,7 @@ function HomeStack({navigation}){
                             color={swWhite}
                             />
                         }
-                          onPress={() => navigation.dispatch(StackActions.push('Settings')) }
+                          onPress={() => navigation.navigate('Settings') }
                           title=""
                           color="#fff"
                           type="clear"
@@ -113,7 +114,7 @@ function QueryStack(){
                 },
                 headerTitleStyle:{
                     color:swWhite,
-                    fontWeight:'bold',
+                    fontcWeight:'bold',
                 }
             }}
             />
@@ -143,6 +144,11 @@ function InitStack(){
             <IndexStack.Screen
             name='signUp'
             component={SignUp}
+            />
+            <IndexStack.Screen
+           
+            name='Dashboard'
+            component={BottomNav}
             />
         </IndexStack.Navigator>
     );

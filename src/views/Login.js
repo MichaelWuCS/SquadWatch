@@ -6,6 +6,17 @@ import {swNavy, swOrange,swWhite} from '../styles/Colors'
 import {signIn} from "../components/Auth.js"
 
 export default class Login extends Component {
+    constructor(props){
+        super(props);
+        this.state={
+            loading:true,
+            date:''
+        }
+    }
+    async componentDidMount () {
+        const year = new Date().getFullYear();
+        this.setState({ date:year })
+      }
     render() {
         return (
             <SafeAreaView style={styles.container}>
@@ -79,12 +90,24 @@ export default class Login extends Component {
                     }
                     titleStyle={{color:swOrange}}
                     onPress= {async() => {
-                        await(signIn(this.state.email, this.state.password));
-                    }}
+                        try {
+                            let  singin= await(signIn(this.state.email, this.state.password));
+                            if(signIn){
+                                this.props.navigation.reset({
+                                    index: 0,
+                                    routes: [{ name: 'Dashboard' }],
+                                  });
+                            }
+                        } catch (error) {
+                            console.log(err);
+                        }
+                        
+                        
+                }}
                 />
                 
             </View>
-
+            <Text style={{bottom:25, position:'absolute',color:'rgba(255, 255, 255, 0.25)',  alignSelf:'center'}}>SquadWatch Inc. {this.state.date}</Text>
             </SafeAreaView>
 
             

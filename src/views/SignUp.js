@@ -13,9 +13,11 @@ import { Button,Input} from "react-native-elements";
 import {connect} from 'react-redux'
 
 export class SignUp extends Component {
+  
     constructor(props){
         super(props);
         this.state = ({
+            date:'',
             email: '',
             first: '',
             last:'',
@@ -23,6 +25,10 @@ export class SignUp extends Component {
             confirmPassword: ''
         })
     }
+    async componentDidMount () {
+        const year = new Date().getFullYear();
+        this.setState({date:year })
+      }
     render() {
         return (
             <SafeAreaView style={styles.container}>
@@ -131,15 +137,25 @@ export class SignUp extends Component {
                         title= "REGISTER"
                         titleStyle={{color:swOrange}}
                         onPress= {async() => {
-                            await(this.props.addCustomUserToRedux({
-                                first: this.state.first,
-                                last: this.state.last, 
-                                watchListId: ""
-                               }));
-                            await(signUp(this.state.email, this.state.password, this.state.first, this.state.last));
+                            try {
+                                await(this.props.addCustomUserToRedux({
+                                    first: this.state.first,
+                                    last: this.state.last, 
+                                    watchListId: ""
+                                   }));
+                                await(signUp(this.state.email, this.state.password, this.state.first, this.state.last));
+                                this.props.navigation.reset({
+                                    index: 0,
+                                    routes: [{ name: 'Dashboard' }],
+                                  });
+                            } catch (error) {
+                                console.log(error);
+                            }
+                            
                         }}
                     />
                 </View>
+                <Text style={{bottom:25, position:'absolute',color:'rgba(255, 255, 255, 0.25)',alignSelf:'center'}}>SquadWatch Inc. {this.state.date}</Text>
             </SafeAreaView>
         );
     }
