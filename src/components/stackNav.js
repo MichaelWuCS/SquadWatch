@@ -13,7 +13,7 @@ import {Button, Icon} from "react-native-elements";
 import { StackActions } from "@react-navigation/routers";
 import SignUp  from '../views/SignUp';
 import Login from '../views/Login';
-import Index_page from "../views/Index"
+import Index_page from "../views/Index";
 
 
 
@@ -252,7 +252,7 @@ function InitStack(){
                 component={Login}
             />
             <IndexStack.Screen
-            name='signUp'
+            name='SignUp'
             component={SignUp}
             />
         </IndexStack.Navigator>

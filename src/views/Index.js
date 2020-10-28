@@ -15,13 +15,14 @@ export default class Index extends Component{
             date:''
         }
     }
-    async componentDidMount () {
+
+    componentDidMount () {
         const year = new Date().getFullYear();
-        await Font.loadAsync({
-            OpenSansBold: require('../../assets/fonts/OpenSans-Bold.ttf'),
-            OpenSans:require('../../assets/fonts/OpenSans-Regular.ttf'),
-            OpenSansLight: require('../../assets/fonts/OpenSans-Light.ttf'),
-        });
+        // await Font.loadAsync({
+        //     OpenSansBold: require('../../assets/fonts/OpenSans-Bold.ttf'),
+        //     OpenSans:require('../../assets/fonts/OpenSans-Regular.ttf'),
+        //     OpenSansLight: require('../../assets/fonts/OpenSans-Light.ttf'),
+        // });
         this.setState({ loading: false,date:year })
       }
 
@@ -41,7 +42,7 @@ export default class Index extends Component{
                 onPress={()=> this.props.navigation.navigate('Login') }
                 />
                 <Text style={{marginTop:"30%",color:swWhite,fontSize:18,
-                opacity:0.8,fontFamily:'OpenSansLight', width:'50%', textAlign:'center'}}> Don't have an Account?
+                opacity:0.8,fontWeight:'200', width:'50%', textAlign:'center'}}> Don't have an Account?
                         Let's create one!
                 </Text>
                 <Button
@@ -68,14 +69,14 @@ const styles = StyleSheet.create({
         },
         header1:{
             textTransform:'capitalize',
-            fontFamily:'OpenSansBold',
+            fontWeight:'700',
             fontSize:30,
             color:swOrange,
             marginBottom:"-3%",
         },
         header2:{
             textTransform:'capitalize',
-            fontFamily:'OpenSansLight',
+            fontWeight:'200',
             fontSize:30,
             color:swOrange,
             marginLeft:"10%",

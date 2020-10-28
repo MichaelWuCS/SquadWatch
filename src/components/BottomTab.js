@@ -8,7 +8,7 @@ import Search from "../views/Search";
 import {swNavy,swOrange} from '../styles/Colors';
 import{HomeStack,QueryStack, WatchListStack} from './stackNav';
 import{SyncStack} from './stackNav';
-import Index from '../views/index';
+import Index from '../views/Index.js';
 import SignUp from "../views/SignUp";
 import Login from '../views/Login'
 
