@@ -1,16 +1,10 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View,SafeAreaView } from "react-native";
-import { Card,Divider } from "react-native-elements";
+import Icon from 'react-native-vector-icons/Ionicons';
+import { Menu } from 'react-native-paper';
 import  { swGrey,swWhite } from "../styles/Colors";
 import firebase from 'firebase';
-
-const signOutUser = async () => {
-    try {
-        await firebase.auth().signOut();
-    } catch (e) {
-        console.log(e);
-    }
-}
+import { signOut } from "../components/Auth";
 
 export default class settings extends Component {
     // constructor(props){
@@ -22,18 +16,25 @@ export default class settings extends Component {
     render() {
         return (
             <SafeAreaView style={styles.container}>
-                <Card containerStyle={styles.card}>
-                    <Text style={styles.text}>Edit Profile</Text>
-                </Card>
-                <Card  containerStyle={styles.card}>
-                <Text style={styles.text}>Privacy</Text>
-                </Card >
-                <Card containerStyle={styles.card}>
-                <Text style={styles.text}>Get Help</Text>
-                </Card >
-                <Card containerStyle={styles.card}>
-                    <Text style={styles.logout} >Logout</Text>
-                </Card>
+                <Menu.Item titleStyle={styles.text} onPress={() => {}} title="Edit Profile" />
+                <Menu.Item titleStyle={styles.text} onPress={() => {}} title="Privacy" />
+                <Menu.Item titleStyle={styles.text} onPress={() => {}} title="Get Help" />
+                <Menu.Item  titleStyle={styles.logout} onPress={async() => {
+                        try {
+                            let logout= await(signOut());
+                            
+                                this.props.navigation.reset({
+                                    index: 0,
+                                    routes: [{ name: 'Starter' }],
+                                  });
+                
+                        } catch (error) {
+                            console.log(err);
+                        }
+                        
+                        
+                }} title="Logout" />
+
                 
             
             </SafeAreaView>
@@ -59,6 +60,11 @@ const styles = StyleSheet.create({
     card:{
         backgroundColor:swGrey,
         borderColor:'transparent',
+        width:"90%",
+       
+    },
+    cardDivider:{
+        marginBottom:0,
     }
 
 });

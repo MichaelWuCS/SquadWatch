@@ -15,14 +15,8 @@ export default class Index extends Component{
             date:''
         }
     }
-
-    componentDidMount () {
+    async componentDidMount () {
         const year = new Date().getFullYear();
-        // await Font.loadAsync({
-        //     OpenSansBold: require('../../assets/fonts/OpenSans-Bold.ttf'),
-        //     OpenSans:require('../../assets/fonts/OpenSans-Regular.ttf'),
-        //     OpenSansLight: require('../../assets/fonts/OpenSans-Light.ttf'),
-        // });
         this.setState({ loading: false,date:year })
       }
 
@@ -42,7 +36,7 @@ export default class Index extends Component{
                 onPress={()=> this.props.navigation.navigate('Login') }
                 />
                 <Text style={{marginTop:"30%",color:swWhite,fontSize:18,
-                opacity:0.8,fontWeight:'200', width:'50%', textAlign:'center'}}> Don't have an Account?
+                opacity:0.8,fontWeight:'100', width:'50%', textAlign:'center'}}> Don't have an Account?
                         Let's create one!
                 </Text>
                 <Button
@@ -54,9 +48,9 @@ export default class Index extends Component{
                         name='md-create' size={40} color={swOrange}
                         />
                     }
-                    onPress={()=> this.props.navigation.navigate('SignUp') }
+                    onPress={()=> this.props.navigation.navigate('signUp') }
                 />
-    <Text style={{bottom:0, position:'absolute',color:'rgba(255, 255, 255, 0.25)'}}>SquadWatch Inc. {this.state.date}</Text>
+    <Text style={{bottom:25, position:'absolute',color:'rgba(255, 255, 255, 0.25)'}}>SquadWatch Inc. {this.state.date}</Text>
             </SafeAreaView>
         );
     }
@@ -69,17 +63,19 @@ const styles = StyleSheet.create({
         },
         header1:{
             textTransform:'capitalize',
-            fontWeight:'700',
+            // fontFamily:'OpenSansBold',
+            fontWeight:"700",
             fontSize:30,
             color:swOrange,
-            marginBottom:"-3%",
+            marginBottom:-10,
         },
         header2:{
             textTransform:'capitalize',
-            fontWeight:'200',
+            // fontFamily:'OpenSansLight',
+            fontWeight:"200",
             fontSize:30,
             color:swOrange,
-            marginLeft:"10%",
+            marginLeft:35,
         },
 
         loginbtn:{

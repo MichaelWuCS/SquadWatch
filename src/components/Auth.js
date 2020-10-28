@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Component } from "react";
-import { StyleSheet, Text, View, ScrollView } from "react-native";
 import firebase from 'firebase';
-import {Button, TextInput} from 'react-native';
 //import {addCustomUser} from "./CustomUser.js";
 //import CustomUser from "../components/CustomUser.js";
 import {connect} from "react-redux";
@@ -15,6 +13,7 @@ import {
   FIREBASE_APP_ID
 } from '@env';
 
+// const navigation = useNavigation();
 class Auth extends Component {
 
   //setting the state to be empty since we want the input for the user to be in

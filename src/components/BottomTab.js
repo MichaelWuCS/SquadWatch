@@ -18,7 +18,7 @@ const Tab = createMaterialBottomTabNavigator();
 function BottomNav() {
   return (
     <Tab.Navigator
-      initialRouteName="Dashboard"
+      initialRouteName="Home"
       activeColor= {swOrange}
       shifting={false}
       labelStyle={{ fontSize: 11 }}

@@ -14,6 +14,7 @@ import { StackActions } from "@react-navigation/routers";
 import SignUp  from '../views/SignUp';
 import Login from '../views/Login';
 import Index_page from "../views/Index";
+import BottomNav from './BottomTab';
 
 
 
@@ -49,7 +50,7 @@ function HomeStack({navigation}){
                             color={swWhite}
                             />
                         }
-                          onPress={() => navigation.dispatch(StackActions.push('Settings')) }
+                          onPress={() => navigation.navigate('Settings') }
                           title=""
                           color="#fff"
                           type="clear"
@@ -254,6 +255,11 @@ function InitStack(){
             <IndexStack.Screen
             name='SignUp'
             component={SignUp}
+            />
+            <IndexStack.Screen
+
+            name='Dashboard'
+            component={BottomNav}
             />
         </IndexStack.Navigator>
     );
