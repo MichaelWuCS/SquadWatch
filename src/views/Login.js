@@ -66,9 +66,9 @@ export default class Login extends Component {
                 />
                     </View>
                 </TouchableWithoutFeedback>
-                <Button type='clear' title='forgot password?' 
+                <Button type='clear' title='forgot password?'
                 icon={<Icon
-                    name="md-information-circle" 
+                    name="md-information-circle"
                     size={20} color={swWhite}
                     style={{marginRight:5}}
                 />}
@@ -78,7 +78,7 @@ export default class Login extends Component {
                     await(firebase.auth().sendPasswordResetEmail(this.state.email));}}
                 />
                 <View style= {styles.buttonContainer}>
-                
+
                 <Button
                     type={'clear'}
                     title= ""
@@ -91,7 +91,7 @@ export default class Login extends Component {
                     titleStyle={{color:swOrange}}
                     onPress= {async() => {
                         try {
-                            let  singin= await(signIn(this.state.email, this.state.password));
+                            let  signIn= await(signIn(this.state.email, this.state.password));
                             if(signIn){
                                 this.props.navigation.reset({
                                     index: 0,
@@ -101,16 +101,16 @@ export default class Login extends Component {
                         } catch (error) {
                             console.log(err);
                         }
-                        
-                        
+
+
                 }}
                 />
-                
+
             </View>
             <Text style={{bottom:25, position:'absolute',color:'rgba(255, 255, 255, 0.25)',  alignSelf:'center'}}>SquadWatch Inc. {this.state.date}</Text>
             </SafeAreaView>
 
-            
+
         );
     }
 }
