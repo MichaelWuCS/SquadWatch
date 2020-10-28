@@ -9,12 +9,14 @@ import Settings from '../views/settings';
 import Friends from '../views/Friends';
 import SyncScreen from "../views/SyncScreen";
 import RoomScreen from "../views/RoomScreen";
-import {Button, Icon} from "react-native-elements";
+import {Button} from "react-native-elements";
 import { StackActions } from "@react-navigation/routers";
 import SignUp  from '../views/SignUp';
 import Login from '../views/Login';
 import Index_page from "../views/Index";
 import BottomNav from './BottomTab';
+import  Icon from  'react-native-vector-icons/Ionicons';
+
 
 
 
