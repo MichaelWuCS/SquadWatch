@@ -91,15 +91,15 @@ export default class Login extends Component {
                     titleStyle={{color:swOrange}}
                     onPress= {async() => {
                         try {
-                            let  signIn= await(signIn(this.state.email, this.state.password));
-                            if(signIn){
-                                this.props.navigation.reset({
-                                    index: 0,
-                                    routes: [{ name: 'Dashboard' }],
-                                  });
-                            }
+                            await(signIn(this.state.email, this.state.password));
+                            //if(signInn){
+                            this.props.navigation.reset({
+                                index: 0,
+                                routes: [{ name: 'Dashboard' }],
+                              });
+                            //}
                         } catch (error) {
-                            console.log(err);
+                            console.log(error);
                         }
 
 
