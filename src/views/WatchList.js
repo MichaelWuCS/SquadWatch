@@ -2,28 +2,44 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View, ScrollView, Button } from "react-native";
 import MovieElement from "../components/MovieElement.js";
 import {connect} from "react-redux";
-import {updateMovieList, addCustomUser} from "../store/actions.js";
+import {getWatchList} from "../api/WatchListApi.js"
 
 
 class WatchList extends Component {
     constructor(props){
         super(props);
         this.state = {
-            movies: ["test", "test1","test2","test3","test4","test5","test6","test7","test8","test9",],
-            counter: 0
+            watchListArray: []
         };
     }
 
-    movieArray = () =>{
-        return this.state.movies.map(movie =>{
-            return(
-            <View key={movie}>
-                <MovieElement title={movie}></MovieElement>
-            </View>
-            )
-        })
+    componentDidMount() {
+        this.getUserWatchList();
     }
-    
+
+    getUserWatchList = async () => {
+
+        try {
+            //var userIDkey = this.props.customUser.userId;
+            var userWatchList = await getWatchList("WiEkX1WL5XmcYp4jODIb");
+            this.props.updateWatchList(userWatchList);
+
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+
+
+   movieArray = () => {
+    this.state.watchListArray = this.props.watchList;
+    return this.state.watchListArray.map((movie,index)=>{
+        return(
+        <View key={index}>
+            <MovieElement movie={movie} navigation={this.props.navigation}></MovieElement>
+        </View>
+        )})
+    }
 
 
     render() {
@@ -32,38 +48,29 @@ class WatchList extends Component {
                 <View style={styles.header}>
                     <Text style={styles.headerText}>WATCHLIST</Text>
                 </View>
-                <Button onPress={()=>this.props.updateMovieList()} title="increase"/>
-                    <Text>{this.props.counter}</Text>
                 <ScrollView styles={styles.scrollView}>
                     <View>{this.movieArray()}</View>
                 </ScrollView>
-                <Button title="Add Movie" onPress={this.addMovieToMovieList}></Button>
             </View>
         );
     }
 
-    addMovieToMovieList = ()=>{
-
-        const copy = [...this.state.movies];
-        copy.push("TEST");
-        console.log(copy);
-        console.log(this.state.movies);
-        this.setState({movies: copy})
-        console.log(this.state.movies);
-        console.log(this.state.counter)
-
-    }
 }
+
 
 function mapStateToProps(state){
     return {
-        counter: state.counter
+        customUser: state.customUser,
+        watchList: state.watchList
     }
 }
 
 function mapDispatchToProps(dispatch){
     return{
-        updateMovieList: ()=> dispatch({type:"ADDCUSTOMUSER" })
+        updateWatchList: (watchList)=> dispatch({
+            type:"UPDATEWATCHLIST",
+            payload: watchList
+        })
     }
 }
 

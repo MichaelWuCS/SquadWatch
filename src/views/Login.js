@@ -1,46 +1,116 @@
 import React, { Component } from "react";
-import {SafeAreaView, StyleSheet, Text, View, StatusBar, TextInput} from "react-native";
-import TheatrePreview from "../components/TheatrePreview.js";
-import WatchlistPreview from "../components/WatchlistPreview.js";
-import RecommendationsPreview from "../components/RecommendationsPreview.js";
-import FromFriendsPreview from "../components/FromFriendsPreview.js";
-import {swGrey, swOrange} from '../styles/Colors'
-import { ScrollView } from "react-native-gesture-handler";
+import {SafeAreaView, StyleSheet, Text, View, StatusBar,TouchableWithoutFeedback,Keyboard, Alert} from "react-native";
+import {Button,Input} from "react-native-elements";
+import Icon from 'react-native-vector-icons/Ionicons';
+import {swNavy, swOrange,swWhite} from '../styles/Colors'
 import {signIn} from "../components/Auth.js"
 
 export default class Login extends Component {
+    constructor(props){
+        super(props);
+        this.state={
+            loading:true,
+            date:''
+        }
+    }
+    async componentDidMount () {
+        const year = new Date().getFullYear();
+        this.setState({ date:year })
+      }
     render() {
         return (
             <SafeAreaView style={styles.container}>
-                <View
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                    <View>
+                    <View
                     style={{
-                    height: 70,
+                    height: 50,
                     width: '75%',
-                    marginLeft: '12.5%'
                     }}
                 />
                 <Text style={styles.header}>LOGIN</Text>
                 <StatusBar
                 barStyle='light-content'
                 />
-                <TextInput style={styles.text} autoCapitalize={"none"} placeholder={"username/email"}/>
-                <View
-                    style={styles.bar}
+                <Input
+                inputContainerStyle={styles.input}
+                placeholder='email/username'
+                inputStyle={{color:swWhite}}
+                leftIcon={
+                    <Icon
+                    name='md-person'
+                    size={24}
+                    color='white'
+                    />
+                }
+                leftIconContainerStyle={styles.leftIconStyle}
+                placeholderTextColor={'#d4d4d4'}
+                onChangeText = {(email) => this.setState({email})}
                 />
-                <View
-                    style={{
-                    height: 40,
-                    width: '75%',
-                    marginLeft: '12.5%'
-                    }}
+                <Input
+                    inputContainerStyle={styles.input}
+                    placeholder='password'
+                    secureTextEntry={true}
+                    inputStyle={{color:swWhite}}
+                    leftIcon={
+                        <Icon
+                        name='md-key'
+                        size={24}
+                        color={swWhite}
+                        />
+                    }
+                    leftIconContainerStyle={styles.leftIconStyle}
+                    inputStyle={{color:swWhite}}
+                    placeholderTextColor={'#d4d4d4'}
+                    onChangeText = {(password) => this.setState({password})}
                 />
-                <TextInput style={styles.text} autoCapitalize={"none"} secureTextEntry placeholder="password"/>
-                <View
-                    style={styles.bar}
+                    </View>
+                </TouchableWithoutFeedback>
+                <Button type='clear' title='forgot password?'
+                icon={<Icon
+                    name="md-information-circle"
+                    size={20} color={swWhite}
+                    style={{marginRight:5}}
+                />}
+                titleStyle={{color:swWhite, fontWeight:'200', fontSize:15}}
+                leftIcon
+                onPress= {async() => {
+                    await(firebase.auth().sendPasswordResetEmail(this.state.email));}}
                 />
+                <View style= {styles.buttonContainer}>
+
+                <Button
+                    type={'clear'}
+                    title= ""
+                    containerStyle={{alignSelf:"center"}}
+                    icon={
+                        <Icon
+                         name="ios-arrow-forward" size={50} color={swWhite} style={{alignItems:'center',opacity:1}}
+                        />
+                    }
+                    titleStyle={{color:swOrange}}
+                    onPress= {async() => {
+                        try {
+                            await(signIn(this.state.email, this.state.password));
+                            //if(signInn){
+                            this.props.navigation.reset({
+                                index: 0,
+                                routes: [{ name: 'Dashboard' }],
+                              });
+                            //}
+                        } catch (error) {
+                            console.log(error);
+                        }
+
+
+                }}
+                />
+
+            </View>
+            <Text style={{bottom:25, position:'absolute',color:'rgba(255, 255, 255, 0.25)',  alignSelf:'center'}}>SquadWatch Inc. {this.state.date}</Text>
             </SafeAreaView>
 
-            
+
         );
     }
 }
@@ -50,25 +120,29 @@ const styles = StyleSheet.create({
         flex:1,
         backgroundColor:swOrange,
     },
-    text: {
-        color:"white",
-        textAlign:"left",
-        fontWeight:"bold",
-        marginLeft:"13%",
-        marginBottom:"3%"
+    buttonContainer:{
+        alignSelf:'center',
+        justifyContent:'center',
+        backgroundColor: 'rgba(255, 255, 255, 0.25)',
+        borderRadius: 80,
+        marginTop:80,
+        width: 65,
+        height:65,
     },
     header: {
-        color:"white",
-        textAlign:"center",
+        color:swWhite,
+        alignSelf:"center",
         fontWeight:"bold",
         fontSize:30,
         marginTop:"20%",
-        marginBottom:"10%"
+        marginBottom:70,
     },
-    bar: {
-        height: 2,
-        width: '75%',
-        backgroundColor: "white",
-        marginLeft: '12.5%'
+    input:{
+        alignSelf:'center',
+        width:'70%',
+        borderBottomColor:swWhite,
+    },
+    leftIconStyle:{
+        marginRight:20,
     }
 });

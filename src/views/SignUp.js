@@ -1,31 +1,42 @@
 import React, { Component } from "react";
-import {SafeAreaView, StyleSheet, Text, View, StatusBar, TextInput} from "react-native";
+import {SafeAreaView, StyleSheet, Text, View, StatusBar, TextInput,TouchableWithoutFeedback,Keyboard, Alert} from "react-native";
+import Icon from 'react-native-vector-icons/Ionicons';
 import TheatrePreview from "../components/TheatrePreview.js";
 import WatchlistPreview from "../components/WatchlistPreview.js";
 import RecommendationsPreview from "../components/RecommendationsPreview.js";
 import FromFriendsPreview from "../components/FromFriendsPreview.js";
-import {swGrey, swOrange} from '../styles/Colors'
+import {swGrey, swOrange, swWhite} from '../styles/Colors'
 import { ScrollView } from "react-native-gesture-handler";
 import{Auth} from "../components/Auth.js";
 import {signUp} from "../components/Auth.js"
-import { Button } from "react-native-paper";
+import { Button,Input} from "react-native-elements";
+import {connect} from 'react-redux'
 
-export default class SignUp extends Component {
+export class SignUp extends Component {
+  
     constructor(props){
         super(props);
         this.state = ({
+            date:'',
             email: '',
             first: '',
             last:'',
-            password:''
+            password:'',
+            confirmPassword: ''
         })
     }
+    async componentDidMount () {
+        const year = new Date().getFullYear();
+        this.setState({date:year })
+      }
     render() {
         return (
             <SafeAreaView style={styles.container}>
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+            <View>
                 <View
                     style={{
-                    height: 40,
+                    height: 50,
                     width: '75%',
                     marginLeft: '12.5%'
                     }}
@@ -34,65 +45,138 @@ export default class SignUp extends Component {
                 <StatusBar
                 barStyle='light-content'
                 />
-                <TextInput style={styles.text} autoCapitalize={"none"} placeholder={"email"}
-                onChangeText = {(email) => this.setState({email})}/>
-                <View
-                    style={styles.bar}
+                <Input
+                    inputContainerStyle={styles.input}
+                    onChangeText={email => this.setState({ email:email})}
+                    value={this.state.email}
+                    placeholder='email'
+                    leftIcon={
+                        <Icon
+                        name='ios-mail'
+                        size={24}
+                        color='white'
+                        />
+                    }
+                    leftIconContainerStyle={styles.leftIconStyle}
+                    inputStyle={{color:swWhite}}
+                    placeholderTextColor={'#d4d4d4'}
+                    onChangeText = {(email) => this.setState({email})}
                 />
-                <View
-                    style={{
-                    height: 30,
-                    width: '75%',
-                    marginLeft: '12.5%'
-                    }}
+                <Input
+                    inputContainerStyle={styles.input}
+                    placeholder='first'
+                    leftIcon={
+                        <Icon
+                        name='md-person'
+                        size={24}
+                        color='white'
+                        />
+                    }
+                    leftIconContainerStyle={styles.leftIconStyle}
+                    placeholderTextColor={'#d4d4d4'}
+                    inputStyle={{color:swWhite}}
+                    onChangeText = {(first) => this.setState({first})}
                 />
-                <TextInput style={styles.text} autoCapitalize={"none"} placeholder="username"/>
-                <View
-                    style={styles.bar}
+                <Input
+                    inputContainerStyle={styles.input}
+                    placeholder='last'
+                    leftIcon={
+                        <Icon
+                        name='md-person'
+                        size={24}
+                        color='white'
+                        />
+                    }
+                    leftIconContainerStyle={styles.leftIconStyle}
+                    placeholderTextColor={'#d4d4d4'}
+                    inputStyle={{color:swWhite}}
+                    onChangeText = {(last) => this.setState({last})}
                 />
-                <View
-                    style={{
-                    height: 30,
-                    width: '75%',
-                    marginLeft: '12.5%'
-                    }}
+                <Input
+                    inputContainerStyle={styles.input}
+                    onChangeText = {password => this.setState({ password:password})}
+                    value={this.state.password}
+                    placeholder='password'
+                    secureTextEntry={true}
+                    leftIcon={
+                        <Icon
+                        name='md-key'
+                        size={24}
+                        color='white'
+                        />
+                    }
+                    leftIconContainerStyle={styles.leftIconStyle}
+                    inputStyle={{color:swWhite}}
+                    placeholderTextColor={'#d4d4d4'}
+                    onChangeText = {(password) => this.setState({password})}
                 />
-                <TextInput style={styles.text} autoCapitalize={"none"} secureTextEntry placeholder="password"
-                onChangeText = {(password) => this.setState({password})}/>
-                <View
-                    style={styles.bar}
+                <Input
+                    inputContainerStyle={styles.input}
+                    placeholder='re-type password'
+                    secureTextEntry={true}
+                    leftIcon={
+                        <Icon
+                        name='md-key'
+                        size={24}
+                        color='white'
+                        />
+                    }
+                    leftIconContainerStyle={styles.leftIconStyle}
+                    inputStyle={{color:swWhite}}
+                    placeholderTextColor={'#d4d4d4'}
+                    onChangeText = {(confirmPassword) => this.setState({confirmPassword})}
                 />
-                <View
-                    style={{
-                    height: 30,
-                    width: '75%',
-                    marginLeft: '12.5%'
-                    }}
-                />
-                <TextInput style={styles.text} autoCapitalize={"none"} secureTextEntry placeholder="re-type password"/>
-                <View
-                    style={styles.bar}
-                />
-                <View
-                    style={{
-                    height: 60,
-                    width: '75%',
-                    marginLeft: '12.5%'
-                    }}
-                />
+                
+            </View>
+            </TouchableWithoutFeedback>
                 <View>
                 
                     <Button
-                        style= {styles.buttonContainer}
-                        title= "Register"
-                        onPress= {() => signUp(this.state.email, this.state.password)}
+                        type={'clear'}
+                        containerStyle= {styles.buttonContainer}
+                        title= "REGISTER"
+                        titleStyle={{color:swOrange}}
+                        onPress= {async() => {
+                            try {
+                                await(this.props.addCustomUserToRedux({
+                                    first: this.state.first,
+                                    last: this.state.last, 
+                                    watchListId: ""
+                                   }));
+                                await(signUp(this.state.email, this.state.password, this.state.first, this.state.last));
+                                this.props.navigation.reset({
+                                    index: 0,
+                                    routes: [{ name: 'Dashboard' }],
+                                  });
+                            } catch (error) {
+                                console.log(error);
+                            }
+                            
+                        }}
                     />
-                    <Button title = "test"></Button>
                 </View>
+                <Text style={{bottom:25, position:'absolute',color:'rgba(255, 255, 255, 0.25)',alignSelf:'center'}}>SquadWatch Inc. {this.state.date}</Text>
             </SafeAreaView>
         );
     }
 }
+
+function mapStateToProps(state){
+    return {
+        customUser: state.customUser
+    }
+}
+
+function mapDispatchToProps(dispatch){
+    return {
+       addCustomUserToRedux: (customUser) => dispatch({
+           type: "ADDCUSTOMUSER", 
+           payload: customUser
+       })
+    }
+}
+
+export default connect (mapStateToProps, mapDispatchToProps)(SignUp)
 
 const styles = StyleSheet.create({
     container: {
@@ -100,32 +184,27 @@ const styles = StyleSheet.create({
         backgroundColor:swOrange,
     },
     buttonContainer:{
-       
-        backgroundColor: "#f6ecd9",
+        alignSelf:'center',
+        backgroundColor: swWhite,
         borderRadius: 30,
-        paddingVertical: 8,
-        width: '50%',
-        marginLeft: '25%'
+        marginTop:70,
+        width: '40%',
     },
-    text: {
-        color:"white",
-        textAlign:"left",
-        fontWeight:"bold",
-        marginLeft:"13%",
-        marginBottom:"3%"
-    },
+
     header: {
-        color:"white",
-        textAlign:"center",
+        color:swWhite,
+        alignSelf:"center",
         fontWeight:"bold",
         fontSize:30,
         marginTop:"20%",
-        marginBottom:"10%"
+        marginBottom:80,
     },
-    bar: {
-        height: 2,
-        width: '75%',
-        backgroundColor: "white",
-        marginLeft: '12.5%'
+    input:{
+        alignSelf:'center',
+        width:'70%',
+        borderBottomColor:swWhite,
+    },
+    leftIconStyle:{
+        marginRight:20,
     }
 });

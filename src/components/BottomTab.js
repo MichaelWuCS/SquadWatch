@@ -6,14 +6,19 @@ import Dashboard from "../views/Dashboard";
 import WatchList from "../views/WatchList";
 import Search from "../views/Search";
 import {swNavy,swOrange} from '../styles/Colors';
-import{HomeStack,QueryStack, SyncStack} from './stackNav';
+import{HomeStack,QueryStack, WatchListStack} from './stackNav';
+import{SyncStack} from './stackNav';
+import Index from '../views/Index.js';
+import SignUp from "../views/SignUp";
+import Login from '../views/Login'
+
 
 const Tab = createMaterialBottomTabNavigator();
 
 function BottomNav() {
   return (
     <Tab.Navigator
-      initialRouteName="Dashboard"
+      initialRouteName="Home"
       activeColor= {swOrange}
       shifting={false}
       labelStyle={{ fontSize: 11 }}
@@ -44,13 +49,13 @@ function BottomNav() {
             }}>
               <MaterialCommunityIcons name="infinity" color={color} size={30}/>
             </View>
-            
+
           ),
         }}
       />
       <Tab.Screen
       name='WatchList'
-      component={WatchList}
+      component={WatchListStack}
       options={{
         tabBarLabel: "WatchList",
         tabBarIcon: ({ color }) => (
@@ -67,7 +72,7 @@ function BottomNav() {
               <MaterialCommunityIcons name="magnify" color={color} size={26}/>)
         }}
       />
-  
+
     </Tab.Navigator>
   );
 }
