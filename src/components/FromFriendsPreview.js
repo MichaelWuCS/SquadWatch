@@ -5,24 +5,11 @@ export default class FromFriendsPreview extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.text}>FROM FRIENDS</Text>
+                <Text style={styles.text} onPress = {()=>{
+                    this.props.navigation.push('Friends');
+                }}>FROM FRIENDS</Text>
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                    <Text>Movie </Text>
-                    <Text>Movie </Text>
-                    <Text>Movie </Text>
-                    <Text>Movie </Text>
-                    <Text>Movie </Text>
-                    <Text>Movie </Text>
-                    <Text>Movie </Text>
-                    <Text>Movie </Text>
-                    <Text>Movie </Text>
-                    <Text>Movie </Text>
-                    <Text>Movie </Text>
-                    <Text>Movie </Text>
-                    <Text>Movie </Text>
-                    <Text>Movie </Text>
-                    <Text>Movie </Text>
-                    <Text>Movie </Text>
+
                 </ScrollView>
             </View>
         );

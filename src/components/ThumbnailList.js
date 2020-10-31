@@ -111,7 +111,11 @@ export default class ThumbnailList extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.text}>{this.props.listTitle}</Text>
+                <TouchableOpacity onPress = {()=>{
+                    this.props.navigation.push('WatchList');
+                }}>
+                    <Text style={styles.text} >{this.props.listTitle}</Text>
+                </TouchableOpacity>
                 <FlatList horizontal={true} showsHorizontalScrollIndicator={false}
                           data={this.props.movieList}
                           renderItem={renderItem}
