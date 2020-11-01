@@ -48,7 +48,7 @@ export default class Index extends Component{
                         name='md-create' size={40} color={swOrange}
                         />
                     }
-                    onPress={()=> this.props.navigation.navigate('signUp') }
+                    onPress={()=> this.props.navigation.navigate('SignUp') }
                 />
     <Text style={{bottom:25, position:'absolute',color:'rgba(255, 255, 255, 0.25)'}}>SquadWatch Inc. {this.state.date}</Text>
             </SafeAreaView>

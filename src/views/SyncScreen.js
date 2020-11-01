@@ -60,7 +60,7 @@ export class SyncScreen extends Component{
 
     makeid(length) {
         var result           = '';
-        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        var characters       = 'ABCDEFGHIJKLMNPQRSTUVWXYZ123456789';
         var charactersLength = characters.length;
         while(result=='' && !(this.state.data.includes(result))){
             result = '';
@@ -72,14 +72,8 @@ export class SyncScreen extends Component{
     }
 
     componentDidMount(){
-        this.props.addCustomUserToRedux({
-            id:"kcnprYOOyDQzT1FYpyTGpaT322u1",
-            first:"Bhargav",
-            last:"Annigeri",
-            watchlistID: "WiEkX1WL5XmcYp4jODIb"
-        });
         console.log(this.props);
-        this.uid = this.props.customUser.id;
+        this.uid = this.props.customUser.watchListId;
         console.log("currentuser:"+this.uid);
         this.fetchData();
     }
@@ -105,11 +99,13 @@ export class SyncScreen extends Component{
         firestore
         .collection("squadRoom")
         .doc(newRoomID)
-        .set({host: this.uid, members: [], isActive:true});
-        this.props.navigation.push('Room',{
-            id: newRoomID,
-            name: "Room Code: "+newRoomID
+        .set({host: this.uid, members: [], isActive:true}).then(()=>{
+            this.props.navigation.push('Room',{
+                id: newRoomID,
+                name: "Room Code: "+newRoomID
+            });
         });
+
     }
 
     searchButton = () => {

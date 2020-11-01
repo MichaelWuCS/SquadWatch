@@ -42,9 +42,10 @@ export class RoomScreen extends Component {
             .get()
             .then((doc) => {
                 let cur_members = doc.data().members;
-                cur_members.push(this.props.customUser.id);
+                cur_members.push(this.props.customUser.watchListId);
                 let data_store = doc.data();
-                console.log(doc.data());
+                //console.log("we here buddy");
+                //console.log(doc.data());
                 data_store.members = cur_members;
                 firestore
                     .collection("squadRoom")
@@ -53,11 +54,33 @@ export class RoomScreen extends Component {
                 this.setState({
                     data: data_store
                 });
-                for (let i = 0; i < data_store.members.length; i++) {
+                // for (let i = 0; i < data_store.members.length; i++) {
+                //     //console.log("iteration " + i);
+                //     firestore
+                //         .collection("customUser")
+                //         .doc(data_store.members[i])
+                //         .get()
+                //         .then((doc) => {
+                //             this.dataMembers.push(doc.data());
+                //             //console.log(this.dataMembers);
+                //             this.setState({ loading: false });
+                //         });
+                // }
+            }).catch((error) => {
+            this.setState({ error: error, loading: false });
+            console.warn("Error!: " + error);
+        });
+        firestore
+            .collection("squadRoom")
+            .doc(roomID)
+            .onSnapshot(querySnapshot=>{
+                this.setState({loading:true, data:querySnapshot.data()});
+                this.dataMembers = [];
+                for (let i = 0; i < querySnapshot.data().members.length; i++) {
                     console.log("iteration " + i);
                     firestore
                         .collection("customUser")
-                        .doc(data_store.members[i])
+                        .doc(querySnapshot.data().members[i])
                         .get()
                         .then((doc) => {
                             this.dataMembers.push(doc.data());
@@ -65,16 +88,17 @@ export class RoomScreen extends Component {
                             this.setState({ loading: false });
                         });
                 }
-            }).catch((error) => {
-            this.setState({ error: error, loading: false });
-            console.warn("Error!: " + error);
-        });
+            })
     }
 
     renderMember = (memberObj) => {
         console.log(memberObj);
         const cur_lightness = 15 + memberObj.index * 3;
         let member = memberObj.item;
+        let nameStr = member.first + " " + member.last.charAt(0);
+        if(member.watchListID === this.state.data.host){
+            nameStr = nameStr +" (host)";
+        }
         return (
             <View flexDirection={"row"} height={50}
                   justifyContent={"center"}
@@ -82,7 +106,7 @@ export class RoomScreen extends Component {
                   backgroundColor={"hsl(211,53%," + cur_lightness + "%)"}
                   width={450}>
                 <Text style={styles.text}>
-                    {member.first + " " + member.last.charAt(0)}
+                    {nameStr}
                 </Text>
                 <TouchableOpacity style={{ paddingLeft: 50 }}>
                     <MaterialCommunityIcons name={"dots-vertical"} color={"white"} size={20} />
@@ -93,13 +117,17 @@ export class RoomScreen extends Component {
 
     componentWillUnmount() {
         let curIDs = this.state.data.members;
-        const ind_to_rem = curIDs.indexOf(this.props.customUser.id);
+        const ind_to_rem = curIDs.indexOf(this.props.customUser.watchListId);
         curIDs.splice(ind_to_rem,1);
         let now_active = curIDs.length>0;
         firestore
             .collection("squadRoom")
             .doc(this.id)
-            .update({members: curIDs, isActive:now_active});
+            .update({members: curIDs, isActive:now_active})
+            .then((doc)=>{
+                this.setState({data:doc.data()});
+
+            });
     }
 
     render() {
@@ -138,7 +166,7 @@ export class RoomScreen extends Component {
                     </View>
                     <FlatList data={this.dataMembers}
                               renderItem={this.renderMember}
-                              keyExtractor={item => item.watchlistID}>
+                              keyExtractor={item => item.watchListID}>
                     </FlatList>
                 </View>
             </View>);

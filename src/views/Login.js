@@ -4,8 +4,13 @@ import {Button,Input} from "react-native-elements";
 import Icon from 'react-native-vector-icons/Ionicons';
 import {swNavy, swOrange,swWhite} from '../styles/Colors'
 import {signIn} from "../components/Auth.js"
+import { connect } from "react-redux";
+import { RoomScreen } from "./RoomScreen";
+import * as firebase from "firebase";
+import "firebase/firestore";
+import "firebase/auth";
 
-export default class Login extends Component {
+export class Login extends Component {
     constructor(props){
         super(props);
         this.state={
@@ -93,10 +98,25 @@ export default class Login extends Component {
                         try {
                             await(signIn(this.state.email, this.state.password));
                             //if(signInn){
-                            this.props.navigation.reset({
-                                index: 0,
-                                routes: [{ name: 'Dashboard' }],
-                              });
+                            firebase.firestore()
+                                .collection("customUser")
+                                .doc(firebase.auth().currentUser.uid)
+                                .get()
+                                .then(doc=>{
+                                    this.props.addCustomUserToRedux({
+                                        first:doc.data().first,
+                                        last:doc.data().last,
+                                        watchListId:doc.data().watchListID
+                                    });
+                                    this.props.navigation.reset({
+                                        index: 0,
+                                        routes: [{ name: 'Dashboard' }],
+                                    });
+                                })
+                                .catch(error=>{
+                                    console.log(error);
+                                });
+
                             //}
                         } catch (error) {
                             console.log(error);
@@ -114,6 +134,24 @@ export default class Login extends Component {
         );
     }
 }
+
+function mapStateToProps(state){
+    return {
+        customUser: state.customUser
+    }
+
+}
+
+function mapDispatchToProps(dispatch){
+    return {
+        addCustomUserToRedux: (customUser)=> dispatch({
+            type: "ADDCUSTOMUSER",
+            payload: customUser
+        })
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
 
 const styles = StyleSheet.create({
     container: {
