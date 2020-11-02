@@ -3,14 +3,32 @@ import {SafeAreaView, StyleSheet, Text, View, StatusBar,TouchableWithoutFeedback
 import {Button,Input} from "react-native-elements";
 import Icon from 'react-native-vector-icons/Ionicons';
 import {swNavy, swOrange,swWhite} from '../styles/Colors'
-import {signIn} from "../components/Auth.js"
-import { connect } from "react-redux";
-import { RoomScreen } from "./RoomScreen";
-import * as firebase from "firebase";
-import "firebase/firestore";
-import "firebase/auth";
+import {signIn} from "../components/Auth"
+import firebase from 'firebase';
 
-export class Login extends Component {
+
+const firebaseAuth = firebase.auth();
+
+function showEror(error){
+    Alert.alert(
+        'Alert Title',
+        'My Alert Msg',
+        [
+          {
+            text: 'Ask me later',
+            onPress: () => console.log('Ask me later pressed')
+          },
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel'
+          },
+          { text: 'OK', onPress: () => console.log('OK Pressed') }
+        ],
+        { cancelable: false }
+      );
+}
+export default class Login extends Component {
     constructor(props){
         super(props);
         this.state={
@@ -21,7 +39,8 @@ export class Login extends Component {
     async componentDidMount () {
         const year = new Date().getFullYear();
         this.setState({ date:year })
-      }
+    }
+
     render() {
         return (
             <SafeAreaView style={styles.container}>
@@ -79,8 +98,16 @@ export class Login extends Component {
                 />}
                 titleStyle={{color:swWhite, fontWeight:'200', fontSize:15}}
                 leftIcon
-                onPress= {async() => {
-                    await(firebase.auth().sendPasswordResetEmail(this.state.email));}}
+                onPress= {() => {
+                    //(firebaseAuth.sendPasswordResetEmail(this.state.email));
+                    Alert.alert(
+                        'Password reset email has been sent!',
+                        'please wait some minutes',
+                        [
+                          { text: 'OK', onPress: () => console.log('OK Pressed') }
+                        ],
+                        { cancelable: false }
+                      );}}
                 />
                 <View style= {styles.buttonContainer}>
 
@@ -94,64 +121,37 @@ export class Login extends Component {
                         />
                     }
                     titleStyle={{color:swOrange}}
-                    onPress= {async() => {
-                        try {
-                            await(signIn(this.state.email, this.state.password));
-                            //if(signInn){
-                            firebase.firestore()
-                                .collection("customUser")
-                                .doc(firebase.auth().currentUser.uid)
-                                .get()
-                                .then(doc=>{
-                                    this.props.addCustomUserToRedux({
-                                        first:doc.data().first,
-                                        last:doc.data().last,
-                                        watchListId:doc.data().watchListID
-                                    });
-                                    this.props.navigation.reset({
-                                        index: 0,
-                                        routes: [{ name: 'Dashboard' }],
-                                    });
-                                })
-                                .catch(error=>{
-                                    console.log(error);
-                                });
-
-                            //}
-                        } catch (error) {
-                            console.log(error);
-                        }
-
-
-                }}
+                    onPress= {() => {
+                        let valid = (signIn(this.state.email, this.state.password));
+                        valid.then((data) =>{
+                            console.log(data);
+                            if(data == true){
+                                
+                                this.props.navigation.reset({
+                                    index: 0,
+                                    routes: [{ name: 'Dashboard' }],
+                                  });
+                            }
+                            else {
+                                Alert.alert(
+                                    'Error Logging In',
+                                    data,
+                                    [
+                                      { text: 'OK', onPress: () => console.log('OK Pressed') }
+                                    ],
+                                    { cancelable: false }
+                                  );
+                            }
+                        });
+                    }}
                 />
 
             </View>
             <Text style={{bottom:25, position:'absolute',color:'rgba(255, 255, 255, 0.25)',  alignSelf:'center'}}>SquadWatch Inc. {this.state.date}</Text>
             </SafeAreaView>
-
-
         );
     }
 }
-
-function mapStateToProps(state){
-    return {
-        customUser: state.customUser
-    }
-
-}
-
-function mapDispatchToProps(dispatch){
-    return {
-        addCustomUserToRedux: (customUser)=> dispatch({
-            type: "ADDCUSTOMUSER",
-            payload: customUser
-        })
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
 
 const styles = StyleSheet.create({
     container: {

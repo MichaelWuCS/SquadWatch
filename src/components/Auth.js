@@ -122,46 +122,86 @@ const addWatchList = () => {
   });
 }
 
-function signUp(email, password, first, last){
-    
-    firebaseAuth
+async function signUp(email, password, first, last){
+
+    var works;
+    var not = "not";
+    await firebaseAuth
     .createUserWithEmailAndPassword(email, password)
     .then(() => {
       console.log('User account created & signed in!');
       addCustomUser(first, last);
-      
+      works = true;
     })
     .catch(error => {
       if (error.code === 'auth/email-already-in-use') {
         console.log('That email address is already in use!');
+        not = "That email address is already in use!"
       }
 
       if (error.code === 'auth/invalid-email') {
         console.log('That email address is invalid!');
+        not = "That email address is invalid!";   
       }
 
-      console.error(error);
+      if (error.code === 'auth/weak-password') {
+        console.log('The password must be at least 6 characters!');    
+        not = 'The password must be at least 6 characters!';     
+      }
+      works = false;
+      //console.error(error);
     });
+
+    if(works){
+      return works;
+    }
+    else{
+      return not;
+    }
 }
 
-const signIn = (email, password) =>{
-    firebaseAuth
+async function signIn(email, password){
+    var works;
+    var not = "not";
+
+    await firebaseAuth
     .signInWithEmailAndPassword(email, password)
     .then(() => {
       console.log('User account signed in!');
+      works = true;
       //this.setState({signedIn:true});
     })
     .catch(error => {
       if (error.code === 'auth/email-already-in-use') {
         console.log('That email address is already in use!');
+        not = "That email address is already in use!"
       }
 
       if (error.code === 'auth/invalid-email') {
-        console.log('That email address is invalid!');
+        console.log('That email address is invalid!');    
+        not = "That email address is invalid!";     
       }
 
-      console.error(error);
+      if (error.code === 'auth/wrong-password') {
+        console.log('Incorrect password!');    
+        not = "Incorrect password!";     
+      }
+
+      if (error.code === 'auth/weak-password') {
+        console.log('The password must be at least 6 characters!');    
+        not = 'The password must be at least 6 characters!';     
+      }
+      works = false;
+      
     });
+
+    if(works){
+      return works;
+    }
+    else{
+      return not;
+    }
+  
 }
 
 const signOut = ()=>{
