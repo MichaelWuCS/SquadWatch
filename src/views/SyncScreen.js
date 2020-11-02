@@ -99,7 +99,7 @@ export class SyncScreen extends Component{
         firestore
         .collection("squadRoom")
         .doc(newRoomID)
-        .set({host: this.uid, members: [], isActive:true}).then(()=>{
+        .set({host: this.uid, members: [], isActive:true, syncing:false}).then(()=>{
             this.props.navigation.push('Room',{
                 id: newRoomID,
                 name: "Room Code: "+newRoomID

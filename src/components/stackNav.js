@@ -16,6 +16,7 @@ import Login from '../views/Login';
 import Index_page from "../views/Index";
 import BottomNav from './BottomTab';
 import  Icon from  'react-native-vector-icons/Ionicons';
+import SyncRoomAnimation from "../views/SyncRoomAnimation";
 
 
 
@@ -150,6 +151,20 @@ function SyncStack(){
                         fontWeight:'bold',
                     },
                     title: route.params.name
+                })}
+            />
+            <RoomStack.Screen
+                name='SyncAnimation'
+                component={SyncRoomAnimation}
+                options={({route}) => ({
+                    headerStyle:{
+                        backgroundColor:swGrey,
+                    },
+                    headerTitleStyle:{
+                        color:'white',
+                        fontWeight:'bold',
+                    },
+                    title: "Syncing..."
                 })}
             />
         </RoomStack.Navigator>
