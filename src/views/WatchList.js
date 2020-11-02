@@ -9,37 +9,22 @@ class WatchList extends Component {
     constructor(props){
         super(props);
         this.state = {
-            watchListArray: []
+            watchListArray: [{}]
         };
     }
 
-    componentDidMount() {
-        this.getUserWatchList();
-    }
-
-    getUserWatchList = async () => {
-
-        try {
-            //var userIDkey = this.props.customUser.userId;
-            var userWatchList = await getWatchList("WiEkX1WL5XmcYp4jODIb");
-            this.props.updateWatchList(userWatchList);
-
-        } catch (error) {
-            console.log(error);
-        }
-
-    }
 
 
-   movieArray = () => {
-    this.state.watchListArray = this.props.watchList;
-    return this.state.watchListArray.map((movie,index)=>{
-        return(
-        <View key={index}>
-            <MovieElement movie={movie} navigation={this.props.navigation}></MovieElement>
-        </View>
+
+    movieArray = () => {
+        return this.props.watchList.map((movie,index)=>{
+            return(
+            <View key={index}>
+                <MovieElement movie={movie} navigation={this.props.navigation}></MovieElement>
+            </View>
         )})
-    }
+   }
+
 
 
     render() {
