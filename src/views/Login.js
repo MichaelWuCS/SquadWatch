@@ -3,8 +3,31 @@ import {SafeAreaView, StyleSheet, Text, View, StatusBar,TouchableWithoutFeedback
 import {Button,Input} from "react-native-elements";
 import Icon from 'react-native-vector-icons/Ionicons';
 import {swNavy, swOrange,swWhite} from '../styles/Colors'
-import {signIn} from "../components/Auth.js"
+import {signIn} from "../components/Auth"
+import firebase from 'firebase';
 
+
+const firebaseAuth = firebase.auth();
+
+function showEror(error){
+    Alert.alert(
+        'Alert Title',
+        'My Alert Msg',
+        [
+          {
+            text: 'Ask me later',
+            onPress: () => console.log('Ask me later pressed')
+          },
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel'
+          },
+          { text: 'OK', onPress: () => console.log('OK Pressed') }
+        ],
+        { cancelable: false }
+      );
+}
 export default class Login extends Component {
     constructor(props){
         super(props);
@@ -16,7 +39,8 @@ export default class Login extends Component {
     async componentDidMount () {
         const year = new Date().getFullYear();
         this.setState({ date:year })
-      }
+    }
+
     render() {
         return (
             <SafeAreaView style={styles.container}>
@@ -74,8 +98,16 @@ export default class Login extends Component {
                 />}
                 titleStyle={{color:swWhite, fontWeight:'200', fontSize:15}}
                 leftIcon
-                onPress= {async() => {
-                    await(firebase.auth().sendPasswordResetEmail(this.state.email));}}
+                onPress= {() => {
+                    //(firebaseAuth.sendPasswordResetEmail(this.state.email));
+                    Alert.alert(
+                        'Password reset email has been sent!',
+                        'please wait some minutes',
+                        [
+                          { text: 'OK', onPress: () => console.log('OK Pressed') }
+                        ],
+                        { cancelable: false }
+                      );}}
                 />
                 <View style= {styles.buttonContainer}>
 
@@ -89,28 +121,34 @@ export default class Login extends Component {
                         />
                     }
                     titleStyle={{color:swOrange}}
-                    onPress= {async() => {
-                        try {
-                            let  signIn= await(signIn(this.state.email, this.state.password));
-                            if(signIn){
+                    onPress= {() => {
+                        let valid = (signIn(this.state.email, this.state.password));
+                        valid.then((data) =>{
+                            console.log(data);
+                            if(data == true){
+                                
                                 this.props.navigation.reset({
                                     index: 0,
                                     routes: [{ name: 'Dashboard' }],
                                   });
                             }
-                        } catch (error) {
-                            console.log(err);
-                        }
-
-
-                }}
+                            else {
+                                Alert.alert(
+                                    'Error Logging In',
+                                    data,
+                                    [
+                                      { text: 'OK', onPress: () => console.log('OK Pressed') }
+                                    ],
+                                    { cancelable: false }
+                                  );
+                            }
+                        });
+                    }}
                 />
 
             </View>
             <Text style={{bottom:25, position:'absolute',color:'rgba(255, 255, 255, 0.25)',  alignSelf:'center'}}>SquadWatch Inc. {this.state.date}</Text>
             </SafeAreaView>
-
-
         );
     }
 }
