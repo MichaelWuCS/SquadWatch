@@ -9,7 +9,7 @@ class WatchList extends Component {
     constructor(props){
         super(props);
         this.state = {
-            watchList: []
+            watchListArray: []
         };
     }
 
@@ -40,7 +40,7 @@ class WatchList extends Component {
         </View>
         )})
     }
-    
+
 
     render() {
         return (
