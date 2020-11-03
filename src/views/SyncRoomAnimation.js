@@ -9,23 +9,89 @@ import {
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {swOrange, swGrey} from "../styles/Colors";
 import Pulse from '../components/Pulse';
+import firebase from 'firebase';
+import {
+  	FIREBASE_API_KEY,
+  	FIREBASE_AUTH_DOMAIN,
+  	FIREBASE_DB_URL,
+  	FIREBASE_STORAGE_BUCKET,
+  	FIREBASE_PROJECT_ID,
+  	FIREBASE_APP_ID,
+	TMDB_KEY
+} from '@env';
+const firebase_config = {
+    apiKey: FIREBASE_API_KEY,
+    authDomain: FIREBASE_AUTH_DOMAIN,
+    databaseURL: FIREBASE_DB_URL,
+    storageBucket: FIREBASE_STORAGE_BUCKET,
+    projectId: FIREBASE_PROJECT_ID,
+    appId: FIREBASE_APP_ID,
+};
+
+!firebase.apps.length ? firebase.initializeApp(firebase_config) : firebase.app();
+const firestore = firebase.firestore();
+
+const members = ["kcnprYOOyDQzT1FYpyTGpaT322u1", "lN3sv04bsGamBqI9Gc0WbHuvpER2"];
 
 export default class SyncRoomAnimation extends Component{
     constructor(props) {
 		super(props);
 
 		this.state = {
-			circles: []
+			circles: [],
+			loading: false,
+			movie_recommendations: []
 		};
 
 		this.counter = 1;
 		this.setInterval = null;
 		this.anim = new Animated.Value(1);
+		;
 	}
 
 	componentDidMount() {
 		this.setCircleInterval();
+		this.get_recommendations(members);
 	}
+
+	get_recommendations = (members_list) => {
+    	this.setState({loading:true});
+    	var i;
+    	for(i = 0; i < members_list.length; i++){
+    		firestore
+				.collection("watchList")
+				.where("creatorID", "==", members_list[0])
+				.get()
+				.then(results => {
+					var randomMovieID = Math.floor(Math.random() * 100);
+
+					if(!results.empty){
+						randomMovieID = results.movies[Math.floor(Math.random() * results.movies.length)]
+					}
+
+					this.get_and_add_to_recommendations(randomMovieID);
+				})
+
+		}
+    	this.setState({loading:false});
+	}
+
+	get_and_add_to_recommendations = (randomMovieID) =>{
+    	const requestStr = "https://api.themoviedb.org/3/movie/" + randomMovieID + "/recommendations" + "?api_key=" + TMDB_KEY;
+    	fetch(requestStr)
+            .then(res => res.json())
+            .then(results => {
+            	var rec = this.state.movie_recommendations.concat(results);
+                this.setState({
+                    recommendations: rec,
+                });
+            }).catch((error)=> {
+                console.log("Error!: " + error);
+                this.setState({loading: false });
+            })
+	}
+
+
 
 	setCircleInterval() {
 		this.setInterval = setInterval(this.addCircle.bind(this), this.props.interval);
