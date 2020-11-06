@@ -20,8 +20,8 @@ class WatchList extends Component {
     getUserWatchList = async () => {
 
         try {
-            //var userIDkey = this.props.customUser.userId;
-            var userWatchList = await getWatchList("WiEkX1WL5XmcYp4jODIb");
+            var userIDkey = this.props.customUser.watchListId;
+            var userWatchList = await getWatchList(userIDkey);
             this.props.updateWatchList(userWatchList);
 
         } catch (error) {

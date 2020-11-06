@@ -13,6 +13,7 @@ import "firebase/firestore";
 import "firebase/auth";
 import { TMDB_KEY } from "@env";
 import { swBlack, swBlue, swGreen, swGrey, swPink, swPurple, swOrange } from "../styles/Colors";
+import SyncRoomAnimation from "./SyncRoomAnimation";
 
 
 export default class SyncRecsScreen extends Component {
@@ -26,18 +27,22 @@ export default class SyncRecsScreen extends Component {
         };
     }
 
-    componentDidMount() {
-        const results = this.props.route.params.recommendations;
+    // componentDidMount() {
+    //     const results = this.props.route.params.recommendations;
+    //
+    //     this.setState({ data: this.props.route.params.recommendations})
+    // }
+    //
+    // makeRemoteRequest() {
+    //
+    // }
 
-        this.setState({ data: this.props.route.params.recommendations})
-    }
-
-    makeRemoteRequest() {
-
-    }
-
-    renderTopPick = () => {
-
+    renderTopPick = (obj) => {
+        return(
+            <View backgroundColor={"green"}>
+                <Text>{obj.title}</Text>
+            </View>
+        )
     };
 
     renderRec = (obj) => {
@@ -48,7 +53,7 @@ export default class SyncRecsScreen extends Component {
 
     renderList = () => {
         return (
-            <FlatList renderItem={this.renderRec} data={this.state.data} >
+            <FlatList renderItem={this.renderRec} data={this.state.data}>
             </FlatList>
         );
     };
@@ -56,8 +61,8 @@ export default class SyncRecsScreen extends Component {
     render() {
         return (
             <View>
-                {this.renderTopPick()}
-                {this.renderList()}
+                {/*{this.renderTopPick()}*/}
+                {/*{this.renderList()}*/}
             </View>
         );
     }

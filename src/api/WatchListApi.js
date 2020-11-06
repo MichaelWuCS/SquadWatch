@@ -24,11 +24,11 @@ const firebase_config = {
 const firestore = firebase.firestore();
 
 export function addWatchList(watchList, addComplete){
-    
+
     firestore
     .collection("watchList")
     .add({
-        
+
     }).then((data) => addComplete(data))
     .catch((error)=> console.log(error));
 

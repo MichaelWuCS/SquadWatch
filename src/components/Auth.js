@@ -44,7 +44,7 @@ const firebaseAuth = firebase.auth();
 
 //New classes
 class CustomUser{
-    
+
   constructor(first, last, watchListID){
       this.first = first,
       this.last = last
@@ -60,12 +60,12 @@ class WatchList{
   }
 }
 
-// Firestore data converters 
+// Firestore data converters
 var customUserConverter = {
   toFirestore: function(customUser) {
       return {
           first: customUser.first,
-          last: customUser.last, 
+          last: customUser.last,
           watchListID: customUser.watchListID
           }
   },
@@ -95,7 +95,7 @@ const addCustomUser = (firstName, lastName) =>{
       .doc(firebaseAuth.currentUser.uid)
       .set({
         first: firstName,
-        last: lastName, 
+        last: lastName,
         watchListID: firebaseAuth.currentUser.uid
       })
   .then(function() {
@@ -111,8 +111,8 @@ const addWatchList = () => {
   db.collection("watchList").withConverter(watchListConverter)
       .doc(firebaseAuth.currentUser.uid)
       .set({
-        creatorID: firebaseAuth.currentUser.uid, 
-        movies: {}
+        creatorID: firebaseAuth.currentUser.uid,
+        movies: []
       })
   .then(function() {
       console.log("Document successfully written!");
@@ -123,13 +123,13 @@ const addWatchList = () => {
 }
 
 function signUp(email, password, first, last){
-    
+
     firebaseAuth
     .createUserWithEmailAndPassword(email, password)
     .then(() => {
       console.log('User account created & signed in!');
       addCustomUser(first, last);
-      
+
     })
     .catch(error => {
       if (error.code === 'auth/email-already-in-use') {
@@ -189,7 +189,7 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
   return {
      addCustomUserToRedux: (customUser) => dispatch({
-         type: "ADDCUSTOMUSER", 
+         type: "ADDCUSTOMUSER",
          payload: customUser
      })
   }
@@ -214,7 +214,7 @@ export default connect (mapStateToProps, mapDispatchToProps)(Auth)
                 placeholder = 'Enter Password'
                 onChangeText = {(password) => this.setState({password})}
                 secureTextEntry = {true}
-                /> 
+                />
                 <View style = {{marginTop: 50, flexDirection: 'row'}}>
 
                     <Button
@@ -231,7 +231,7 @@ export default connect (mapStateToProps, mapDispatchToProps)(Auth)
                         onPress= {() => signOut()}
                     />
 
-                </View> 
+                </View>
 
             </View>
         );

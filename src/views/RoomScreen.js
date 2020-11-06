@@ -98,7 +98,10 @@ export class RoomScreen extends Component {
                         });
                 }
                 if(querySnapshot.data().syncing){
-                    this.props.navigation.push("SyncAnimation");
+                    console.log(this.state.data);
+                    this.props.navigation.push("SyncAnimation", {
+                        members: this.state.data.members,
+                    });
                 }
             });
     }

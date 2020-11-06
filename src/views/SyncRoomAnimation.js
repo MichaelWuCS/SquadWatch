@@ -19,6 +19,7 @@ import {
   	FIREBASE_APP_ID,
 	TMDB_KEY
 } from '@env';
+import SyncRecsScreen from "./SyncRecsScreen";
 const firebase_config = {
     apiKey: FIREBASE_API_KEY,
     authDomain: FIREBASE_AUTH_DOMAIN,
@@ -42,7 +43,7 @@ export default class SyncRoomAnimation extends Component{
 			loading: false,
 			movie_recommendations: []
 		};
-
+		this.members = [];
 		this.counter = 1;
 		this.setInterval = null;
 		this.anim = new Animated.Value(1);
@@ -50,47 +51,47 @@ export default class SyncRoomAnimation extends Component{
 	}
 
 	componentDidMount() {
+    	this.members = this.props.route.params.members;
 		this.setCircleInterval();
-		this.get_recommendations(members);
+		this.get_recommendations(this.members)
+			.then(()=>{
+				this.setState({loading:false});
+			});
 	}
 
-	get_recommendations = (members_list) => {
+	 async get_recommendations (members_list) {
     	this.setState({loading:true});
     	var i;
     	for(i = 0; i < members_list.length; i++){
-    		firestore
+    		await firestore
 				.collection("watchList")
-				.where("creatorID", "==", members_list[0])
+				.where("creatorID", "==", members_list[i])
 				.get()
 				.then(results => {
 					var randomMovieID = Math.floor(Math.random() * 100);
-
 					if(!results.empty){
 						randomMovieID = results.movies[Math.floor(Math.random() * results.movies.length)]
 					}
-
 					this.get_and_add_to_recommendations(randomMovieID);
 				})
 
 		}
-    	this.setState({loading:false});
 	}
 
-	get_and_add_to_recommendations = (randomMovieID) =>{
+	async get_and_add_to_recommendations(randomMovieID){
     	const requestStr = "https://api.themoviedb.org/3/movie/" + randomMovieID + "/recommendations" + "?api_key=" + TMDB_KEY;
-    	fetch(requestStr)
+    	await fetch(requestStr)
             .then(res => res.json())
             .then(results => {
             	var rec = this.state.movie_recommendations.concat(results);
                 this.setState({
-                    recommendations: rec,
+                    movie_recommendations: rec,
                 });
             }).catch((error)=> {
                 console.log("Error!: " + error);
                 this.setState({loading: false });
             })
 	}
-
 
 
 	setCircleInterval() {
@@ -123,35 +124,39 @@ export default class SyncRoomAnimation extends Component{
 
 	render() {
 		const { size, interval } = this.props;
+		if(this.state.loading) {
+			return (
+				<View style={{
+					flex: 1,
+					backgroundColor: swGrey,
+					justifyContent: 'center',
+					alignItems: 'center',
+				}}>
+					{this.state.circles.map((circle) => (
+						<Pulse
+							key={circle}
+							{...this.props}
+						/>
+					))}
 
-		return (
-			<View style={{
-				flex: 1,
-				backgroundColor: swGrey,
-				justifyContent: 'center',
-				alignItems: 'center',
-			}}>
-				{this.state.circles.map((circle) => (
-					<Pulse
-						key={circle}
-						{...this.props}
-					/>
-				))}
-
-				<TouchableOpacity
-					activeOpacity={1}
-					onPressIn={this.onPressIn.bind(this)}
-					onPressOut={this.onPressOut.bind(this)}
-					style={{
-						transform: [{
-							scale: this.anim
-						}]
-					}}
-				>
-					<MaterialCommunityIcons styles={{justifyContent: 'center', alignItems: 'center'}} name="infinity" size={90} color={'white'}/>
-				</TouchableOpacity>
-			</View>
-		);
+					<TouchableOpacity
+						activeOpacity={1}
+						onPressIn={this.onPressIn.bind(this)}
+						onPressOut={this.onPressOut.bind(this)}
+						style={{
+							transform: [{
+								scale: this.anim
+							}]
+						}}
+					>
+						<MaterialCommunityIcons styles={{ justifyContent: 'center', alignItems: 'center' }}
+												name="infinity" size={90} color={'white'} />
+					</TouchableOpacity>
+				</View>
+			);
+		} else{
+			return SyncRecsScreen
+		}
 	}
 }
 
