@@ -11,9 +11,10 @@ import{Auth} from "../components/Auth.js";
 import {signUp} from "../components/Auth.js"
 import { Button,Input} from "react-native-elements";
 import {connect} from 'react-redux'
+import *  as firebase from 'firebase';
 
 export class SignUp extends Component {
-  
+
     constructor(props){
         super(props);
         this.state = ({
@@ -22,7 +23,8 @@ export class SignUp extends Component {
             first: '',
             last:'',
             password:'',
-            confirmPassword: ''
+            confirmPassword: '',
+            errorMessage: ''
         })
     }
     async componentDidMount () {
@@ -34,9 +36,9 @@ export class SignUp extends Component {
             <SafeAreaView style={styles.container}>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <View>
-                <View
+            <View
                     style={{
-                    height: 50,
+                    height: 20,
                     width: '75%',
                     marginLeft: '12.5%'
                     }}
@@ -47,8 +49,6 @@ export class SignUp extends Component {
                 />
                 <Input
                     inputContainerStyle={styles.input}
-                    onChangeText={email => this.setState({ email:email})}
-                    value={this.state.email}
                     placeholder='email'
                     leftIcon={
                         <Icon
@@ -94,8 +94,6 @@ export class SignUp extends Component {
                 />
                 <Input
                     inputContainerStyle={styles.input}
-                    onChangeText = {password => this.setState({ password:password})}
-                    value={this.state.password}
                     placeholder='password'
                     secureTextEntry={true}
                     leftIcon={
@@ -126,32 +124,57 @@ export class SignUp extends Component {
                     placeholderTextColor={'#d4d4d4'}
                     onChangeText = {(confirmPassword) => this.setState({confirmPassword})}
                 />
-                
+
             </View>
             </TouchableWithoutFeedback>
                 <View>
-                
+
                     <Button
                         type={'clear'}
                         containerStyle= {styles.buttonContainer}
                         title= "REGISTER"
                         titleStyle={{color:swOrange}}
-                        onPress= {async() => {
-                            try {
-                                await(this.props.addCustomUserToRedux({
-                                    first: this.state.first,
-                                    last: this.state.last, 
-                                    watchListId: ""
-                                   }));
-                                await(signUp(this.state.email, this.state.password, this.state.first, this.state.last));
-                                this.props.navigation.reset({
-                                    index: 0,
-                                    routes: [{ name: 'Dashboard' }],
-                                  });
-                            } catch (error) {
-                                console.log(error);
+                        onPress= {() => {
+                            if(this.state.password.localeCompare(this.state.confirmPassword) == 0){
                             }
-                            
+                            else{
+                                Alert.alert(
+                                    'Error Signing Up',
+                                    'passwords must match',
+                                    [
+                                      { text: 'OK', onPress: () => console.log('OK Pressed') }
+                                    ],
+                                    { cancelable: false }
+                                  );
+                                  return;
+                            }
+                            let valid = (signUp(this.state.email, this.state.password, this.state.first, this.state.last));
+                            valid.then((data) =>{
+                                console.log(data);
+                                if(data == true){
+
+                                    this.props.navigation.reset({
+                                        index: 0,
+                                        routes: [{ name: 'Dashboard' }],
+                                      });
+                                }
+                                else {
+                                    Alert.alert(
+                                        'Error Signing Up',
+                                        data,
+                                        [
+                                          { text: 'OK', onPress: () => console.log('OK Pressed') }
+                                        ],
+                                        { cancelable: false }
+                                      );
+                                }
+                            });
+                            (this.props.addCustomUserToRedux({
+                                first: this.state.first,
+                                last: this.state.last,
+                                watchListId: firebase.auth().currentUser.uid
+                               }));
+                            this.props.updateWatchList([]);
                         }}
                     />
                 </View>
@@ -163,16 +186,21 @@ export class SignUp extends Component {
 
 function mapStateToProps(state){
     return {
-        customUser: state.customUser
+        customUser: state.customUser,
+        watchList: state.watchList
     }
 }
 
 function mapDispatchToProps(dispatch){
     return {
        addCustomUserToRedux: (customUser) => dispatch({
-           type: "ADDCUSTOMUSER", 
+           type: "ADDCUSTOMUSER",
            payload: customUser
-       })
+       }),
+        updateWatchList: (watchList) => dispatch({
+            type: "UPDATEWATCHLIST",
+            payload: watchList
+        })
     }
 }
 
@@ -187,7 +215,7 @@ const styles = StyleSheet.create({
         alignSelf:'center',
         backgroundColor: swWhite,
         borderRadius: 30,
-        marginTop:70,
+        marginTop:30,
         width: '40%',
     },
 
@@ -196,8 +224,8 @@ const styles = StyleSheet.create({
         alignSelf:"center",
         fontWeight:"bold",
         fontSize:30,
-        marginTop:"20%",
-        marginBottom:80,
+        marginTop:"10%",
+        marginBottom:40,
     },
     input:{
         alignSelf:'center',

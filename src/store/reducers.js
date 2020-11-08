@@ -9,7 +9,6 @@ const initialState = {
     },
     movieList: {},
     WLcounter: 0,
-    counter: 0
 };
 
 export const mainReducer = (state = initialState, action) => {
