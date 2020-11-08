@@ -58,7 +58,7 @@ function fetch_movie_data(movie_id) {
 
 const MovieData = ({
                        id,
-                       
+
                    }) => {
     return fetch_movie_data(id);
 };

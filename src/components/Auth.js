@@ -44,7 +44,7 @@ const firebaseAuth = firebase.auth();
 
 //New classes
 class CustomUser{
-    
+
   constructor(first, last, watchListID){
       this.first = first,
       this.last = last
@@ -60,12 +60,12 @@ class WatchList{
   }
 }
 
-// Firestore data converters 
+// Firestore data converters
 var customUserConverter = {
   toFirestore: function(customUser) {
       return {
           first: customUser.first,
-          last: customUser.last, 
+          last: customUser.last,
           watchListID: customUser.watchListID
           }
   },
@@ -95,7 +95,7 @@ const addCustomUser = (firstName, lastName) =>{
       .doc(firebaseAuth.currentUser.uid)
       .set({
         first: firstName,
-        last: lastName, 
+        last: lastName,
         watchListID: firebaseAuth.currentUser.uid
       })
   .then(function() {
@@ -111,8 +111,8 @@ const addWatchList = () => {
   db.collection("watchList").withConverter(watchListConverter)
       .doc(firebaseAuth.currentUser.uid)
       .set({
-        creatorID: firebaseAuth.currentUser.uid, 
-        movies: {}
+        creatorID: firebaseAuth.currentUser.uid,
+        movies: []
       })
   .then(function() {
       console.log("Document successfully written!");
@@ -141,12 +141,12 @@ async function signUp(email, password, first, last){
 
       if (error.code === 'auth/invalid-email') {
         console.log('That email address is invalid!');
-        not = "That email address is invalid!";   
+        not = "That email address is invalid!";
       }
 
       if (error.code === 'auth/weak-password') {
-        console.log('The password must be at least 6 characters!');    
-        not = 'The password must be at least 6 characters!';     
+        console.log('The password must be at least 6 characters!');
+        not = 'The password must be at least 6 characters!';
       }
       works = false;
       //console.error(error);
@@ -178,21 +178,21 @@ async function signIn(email, password){
       }
 
       if (error.code === 'auth/invalid-email') {
-        console.log('That email address is invalid!');    
-        not = "That email address is invalid!";     
+        console.log('That email address is invalid!');
+        not = "That email address is invalid!";
       }
 
       if (error.code === 'auth/wrong-password') {
-        console.log('Incorrect password!');    
-        not = "Incorrect password!";     
+        console.log('Incorrect password!');
+        not = "Incorrect password!";
       }
 
       if (error.code === 'auth/weak-password') {
-        console.log('The password must be at least 6 characters!');    
-        not = 'The password must be at least 6 characters!';     
+        console.log('The password must be at least 6 characters!');
+        not = 'The password must be at least 6 characters!';
       }
       works = false;
-      
+
     });
 
     if(works){
@@ -201,7 +201,7 @@ async function signIn(email, password){
     else{
       return not;
     }
-  
+
 }
 
 const signOut = ()=>{
@@ -229,7 +229,7 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
   return {
      addCustomUserToRedux: (customUser) => dispatch({
-         type: "ADDCUSTOMUSER", 
+         type: "ADDCUSTOMUSER",
          payload: customUser
      })
   }
@@ -254,7 +254,7 @@ export default connect (mapStateToProps, mapDispatchToProps)(Auth)
                 placeholder = 'Enter Password'
                 onChangeText = {(password) => this.setState({password})}
                 secureTextEntry = {true}
-                /> 
+                />
                 <View style = {{marginTop: 50, flexDirection: 'row'}}>
 
                     <Button
@@ -271,7 +271,7 @@ export default connect (mapStateToProps, mapDispatchToProps)(Auth)
                         onPress= {() => signOut()}
                     />
 
-                </View> 
+                </View>
 
             </View>
         );
