@@ -152,17 +152,42 @@ class MovieDetails extends Component{
                 name:this.state.data.title,
                 posterPath:this.state.data.poster_path
             }
-            this.props.watchList.push(currentMovie);
+            let temp = [...this.props.watchList]
+            console.log(temp)
+            temp.push(currentMovie)
+            console.log(temp);
+            //this.props.watchList.push(currentMovie);
             // let watchListObject = {
             //     movies: userWatchList,
             //     creatorID: this.props.customUser.watchListId
             // }
             //updateWatchList(this.props.customUser.watchListId, watchListObject);
-            this.props.updateWatchList(this.props.watchList);
+            this.props.updateWatchList(temp);
+            console.log("===========");
+            console.log(this.props.watchList);
             firebase.firestore()
                 .collection("watchList")
                 .doc(this.props.customUser.watchListId)
-                .update({movies:this.props.watchList})
+                .update({movies:temp})
+                .then(()=>{
+                    //console.log("~~~~~~~~~~~~~~~~~~~~~~")
+                    // firebase.firestore()
+                    //     .collection("watchList")
+                    //     .doc(this.props.customUser.watchListID)
+                    //     .get()
+                    //     .then((wldoc) => {
+                    //         console.log(wldoc.data());
+                    //         this.props.updateWatchList(wldoc.data().movies);
+                    //         console.log("----");
+                    //         console.log(this.props.watchList);
+                    //         console.log("----");
+                    //     })
+                    //     .catch(error =>{
+                    //         console.log(error);
+                    //     });
+                    // console.log(this.props.watchList);
+                    // console.log("~~~~~~~~~~~~~~~~~~~~~~")
+                })
                 .catch(error=>{
                     console.warn(error);
                 });
