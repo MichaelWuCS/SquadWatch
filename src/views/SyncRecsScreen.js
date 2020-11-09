@@ -27,12 +27,12 @@ export default class SyncRecsScreen extends Component {
         };
     }
 
-    // componentDidMount() {
-    //     const results = this.props.route.params.recommendations;
-    //
-    //     this.setState({ data: this.props.route.params.recommendations})
-    // }
-    //
+    componentDidMount() {
+        const results = this.props.route.params.recommendations;
+        console.log(results);
+        this.setState({ data: this.props.route.params.recommendations})
+    }
+
     // makeRemoteRequest() {
     //
     // }
@@ -59,10 +59,11 @@ export default class SyncRecsScreen extends Component {
     };
 
     render() {
+        console.log("sync recs");
         return (
-            <View>
+            <View backgroundColor={swBlue}>
                 {/*{this.renderTopPick()}*/}
-                {/*{this.renderList()}*/}
+                {this.renderList()}
             </View>
         );
     }
