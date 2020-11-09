@@ -13,8 +13,6 @@ import "firebase/firestore";
 import "firebase/auth";
 import { TMDB_KEY } from "@env";
 import { swBlack, swBlue, swGreen, swGrey, swPink, swPurple, swOrange } from "../styles/Colors";
-import SyncRoomAnimation from "./SyncRoomAnimation";
-
 
 export default class SyncRecsScreen extends Component {
 

@@ -73,7 +73,9 @@ export default class SyncRoomAnimation extends Component{
 						randomMovieID = results.movies[Math.floor(Math.random() * results.movies.length)]
 					}
 					this.get_and_add_to_recommendations(randomMovieID);
-				})
+				}).catch((error)=>{
+					console.log("Error!: " + error);
+			})
 
 		}
 	}

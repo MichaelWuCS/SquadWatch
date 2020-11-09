@@ -119,7 +119,7 @@ export default class ThumbnailList extends Component {
                 <FlatList horizontal={true} showsHorizontalScrollIndicator={false}
                           data={this.props.movieList}
                           renderItem={renderItem}
-                          keyExtractor={item => item.id}
+                          keyExtractor={item => item.id.toString()}
                 />
             </View>
         );
