@@ -47,7 +47,7 @@ export default class SyncRoomAnimation extends Component{
 		this.counter = 1;
 		this.setInterval = null;
 		this.anim = new Animated.Value(1);
-		;
+		this.timeoutHandle = null;
 	}
 
 	componentDidMount() {
@@ -55,9 +55,15 @@ export default class SyncRoomAnimation extends Component{
 		this.setCircleInterval();
 		this.get_recommendations(this.members)
 			.then(()=>{
-				this.setState({loading:false});
+				this.timeoutHandle = setTimeout(()=>{
+					this.setState({loading:false});
+         		}, 8000);
 			});
 	}
+
+	componentWillUnmount() {
+    	clearTimeout(this.timeoutHandle);
+  	}
 
 	 async get_recommendations (members_list) {
     	this.setState({loading:true});
@@ -157,7 +163,7 @@ export default class SyncRoomAnimation extends Component{
 				</View>
 			);
 		} else{
-			return SyncRecsScreen
+			return <SyncRecsScreen/> // this needs to be a component not a function to fix "functions are not a valid react child
 		}
 	}
 }
