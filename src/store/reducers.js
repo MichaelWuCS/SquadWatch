@@ -28,11 +28,11 @@ export const mainReducer = (state = initialState, action) => {
                 movieList: action.payload
             };
         case UPDATEWATCHLIST:
-            state.watchList = action.payload;
-            return state;
-            // return {
-            //     watchList: action.payload
-            // };
+            return {
+                customUser: state.customUser,
+                movieList: state.movieList,
+                watchList: action.payload
+            };
         default:
             return state;
     }

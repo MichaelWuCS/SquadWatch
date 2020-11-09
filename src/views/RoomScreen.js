@@ -97,6 +97,16 @@ export class RoomScreen extends Component {
                             this.setState({ loading: false });
                         });
                 }
+                if(!querySnapshot.data().members.includes(querySnapshot.data().host) && querySnapshot.data().members.length !== 0){
+                    let newHost = querySnapshot.data().members[0];
+                    firestore
+                        .collection("squadRoom")
+                        .doc(roomID)
+                        .update({host:newHost})
+                        .catch(e=>{
+                            console.warn(e);
+                        });
+                }
                 if(querySnapshot.data().syncing){
                     console.log(this.state.data);
                     this.props.navigation.push("SyncAnimation", {
@@ -139,10 +149,9 @@ export class RoomScreen extends Component {
             .collection("squadRoom")
             .doc(this.id)
             .update({members: curIDs, isActive:now_active})
-            .then((doc)=>{
-                this.setState({data:doc.data()});
-
-            });
+            .catch(e=>{
+                console.warn(e);
+            })
     }
 
     render() {
