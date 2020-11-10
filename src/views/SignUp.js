@@ -11,9 +11,10 @@ import{Auth} from "../components/Auth.js";
 import {signUp} from "../components/Auth.js"
 import { Button,Input} from "react-native-elements";
 import {connect} from 'react-redux'
+import *  as firebase from 'firebase';
 
 export class SignUp extends Component {
-  
+
     constructor(props){
         super(props);
         this.state = ({
@@ -22,7 +23,7 @@ export class SignUp extends Component {
             first: '',
             last:'',
             password:'',
-            confirmPassword: '', 
+            confirmPassword: '',
             errorMessage: ''
         })
     }
@@ -123,11 +124,11 @@ export class SignUp extends Component {
                     placeholderTextColor={'#d4d4d4'}
                     onChangeText = {(confirmPassword) => this.setState({confirmPassword})}
                 />
-                
+
             </View>
             </TouchableWithoutFeedback>
                 <View>
-                
+
                     <Button
                         type={'clear'}
                         containerStyle= {styles.buttonContainer}
@@ -151,7 +152,7 @@ export class SignUp extends Component {
                             valid.then((data) =>{
                                 console.log(data);
                                 if(data == true){
-                                    
+
                                     this.props.navigation.reset({
                                         index: 0,
                                         routes: [{ name: 'Dashboard' }],
@@ -170,9 +171,10 @@ export class SignUp extends Component {
                             });
                             (this.props.addCustomUserToRedux({
                                 first: this.state.first,
-                                last: this.state.last, 
-                                watchListId: ""
+                                last: this.state.last,
+                                watchListId: firebase.auth().currentUser.uid
                                }));
+                            this.props.updateWatchList([]);
                         }}
                     />
                 </View>
@@ -184,16 +186,21 @@ export class SignUp extends Component {
 
 function mapStateToProps(state){
     return {
-        customUser: state.customUser
+        customUser: state.customUser,
+        watchList: state.watchList
     }
 }
 
-function mapDispatchToProps(dispatch){
+function mapDispatchToProps(dispatch) {
     return {
        addCustomUserToRedux: (customUser) => dispatch({
-           type: "ADDCUSTOMUSER", 
+           type: "ADDCUSTOMUSER",
            payload: customUser
-       })
+       }),
+        updateWatchList: (watchList) => dispatch({
+            type: "UPDATEWATCHLIST",
+            payload: watchList
+        })
     }
 }
 

@@ -3,32 +3,14 @@ import {SafeAreaView, StyleSheet, Text, View, StatusBar,TouchableWithoutFeedback
 import {Button,Input} from "react-native-elements";
 import Icon from 'react-native-vector-icons/Ionicons';
 import {swNavy, swOrange,swWhite} from '../styles/Colors'
-import {signIn} from "../components/Auth"
-import firebase from 'firebase';
+import {signIn} from "../components/Auth.js"
+import { connect } from "react-redux";
+import { RoomScreen } from "./RoomScreen";
+import * as firebase from "firebase";
+import "firebase/firestore";
+import "firebase/auth";
 
-
-const firebaseAuth = firebase.auth();
-
-function showEror(error){
-    Alert.alert(
-        'Alert Title',
-        'My Alert Msg',
-        [
-          {
-            text: 'Ask me later',
-            onPress: () => console.log('Ask me later pressed')
-          },
-          {
-            text: 'Cancel',
-            onPress: () => console.log('Cancel Pressed'),
-            style: 'cancel'
-          },
-          { text: 'OK', onPress: () => console.log('OK Pressed') }
-        ],
-        { cancelable: false }
-      );
-}
-export default class Login extends Component {
+export class Login extends Component {
     constructor(props){
         super(props);
         this.state={
@@ -38,7 +20,7 @@ export default class Login extends Component {
     }
     async componentDidMount () {
         const year = new Date().getFullYear();
-        this.setState({ date:year })
+        this.setState({ date: year });
     }
 
     render() {
@@ -99,7 +81,7 @@ export default class Login extends Component {
                 titleStyle={{color:swWhite, fontWeight:'200', fontSize:15}}
                 leftIcon
                 onPress= {() => {
-                    //(firebaseAuth.sendPasswordResetEmail(this.state.email));
+                    (firebase.auth().sendPasswordResetEmail(this.state.email));
                     Alert.alert(
                         'Password reset email has been sent!',
                         'please wait some minutes',
@@ -126,11 +108,40 @@ export default class Login extends Component {
                         valid.then((data) =>{
                             console.log(data);
                             if(data == true){
-                                
-                                this.props.navigation.reset({
-                                    index: 0,
-                                    routes: [{ name: 'Dashboard' }],
-                                  });
+
+                                firebase.firestore()
+                                    .collection("customUser")
+                                    .doc(firebase.auth().currentUser.uid)
+                                    .get()
+                                    .then(doc => {
+                                        this.props.addCustomUserToRedux({
+                                            first: doc.data().first,
+                                            last: doc.data().last,
+                                            watchListId: doc.data().watchListID
+                                        });
+                                        console.log(this.props.customUser);
+                                        firebase.firestore()
+                                            .collection("watchList")
+                                            .doc(doc.data().watchListID)
+                                            .get()
+                                            .then((wldoc) => {
+                                                console.log(wldoc.data());
+                                                this.props.updateWatchList(wldoc.data().movies);
+                                                console.log("----");
+                                                //console.log(this.props.watchList);
+                                                console.log("----");
+                                                this.props.navigation.reset({
+                                                    index: 0,
+                                                    routes: [{ name: "Dashboard" }]
+                                                });
+                                            })
+                                            .catch(error =>{
+                                                console.log(error);
+                                            });
+                                    })
+                                    .catch(error => {
+                                        console.log(error);
+                                    });
                             }
                             else {
                                 Alert.alert(
@@ -149,9 +160,34 @@ export default class Login extends Component {
             </View>
             <Text style={{bottom:25, position:'absolute',color:'rgba(255, 255, 255, 0.25)',  alignSelf:'center'}}>SquadWatch Inc. {this.state.date}</Text>
             </SafeAreaView>
+
+
         );
     }
 }
+
+function mapStateToProps(state) {
+    return {
+        customUser: state.customUser,
+        watchList: state.watchList
+    };
+
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        addCustomUserToRedux: (customUser) => dispatch({
+            type: "ADDCUSTOMUSER",
+            payload: customUser
+        }),
+        updateWatchList: (watchList) => dispatch({
+            type: "UPDATEWATCHLIST",
+            payload: watchList
+        })
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
 
 const styles = StyleSheet.create({
     container: {

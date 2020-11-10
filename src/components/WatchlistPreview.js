@@ -22,6 +22,7 @@ import {connect} from 'react-redux';
 
 class WatchlistPreview extends Component {
     render() {
+        console.log(this.props.watchList);
         return (
             <ThumbnailList listTitle={"MY WATCHLIST"}
             navigation={this.props.navigation}
@@ -42,7 +43,7 @@ function mapDispatchToProps(dispatch){
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(WatchlistPreview)
+export default connect(mapStateToProps, null)(WatchlistPreview)
 
 
 const styles = StyleSheet.create({

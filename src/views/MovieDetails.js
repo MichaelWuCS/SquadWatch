@@ -18,14 +18,6 @@ import LinearGradient from "expo-linear-gradient";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { swGrey } from "../styles/Colors";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import {
-    FIREBASE_API_KEY,
-    FIREBASE_AUTH_DOMAIN,
-    FIREBASE_DB_URL,
-    FIREBASE_STORAGE_BUCKET,
-    FIREBASE_PROJECT_ID,
-    FIREBASE_APP_ID
-} from '@env';
 import * as firebase from "firebase";
 import "firebase/firestore";
 import "firebase/auth";
@@ -36,10 +28,10 @@ class MovieDetails extends Component{
 
     constructor(props){
         super(props);
-        this.id; 
+        this.id;
         this.state = {
-            loading: false,      
-            data: [],      
+            loading: false,
+            data: [],
             error: null,
             genres: "",
             year:"",
@@ -58,8 +50,8 @@ class MovieDetails extends Component{
 
     getWatchlistInfo = async() =>{
         try {
-            //var userIDkey = this.props.customUser.userId;
-            var userWatchList = await getWatchList("WiEkX1WL5XmcYp4jODIb");
+            var userIDkey = this.props.customUser.watchListId;
+            var userWatchList = await getWatchList(userIDkey);
             userWatchList.forEach((movie)=>{
                 var i;
                 for(i = 0; i<userWatchList.length; i++){
@@ -91,7 +83,7 @@ class MovieDetails extends Component{
             }
             this.setState({
                 loading:false,
-                data:res, 
+                data:res,
                 genres:temp.join(" • "),
                 year:res.release_date.substring(0,4)
             });
@@ -113,51 +105,99 @@ class MovieDetails extends Component{
         }
     }
 
-    removeMovieFromWatchList = async ()=>{
+    removeMovieFromWatchList = ()=>{
         try {
-            //var userIDkey = this.props.customUser.userId;
-            var userWatchList = await getWatchList("WiEkX1WL5XmcYp4jODIb");
-            userWatchList = userWatchList.filter((movie) => {
-                if (movie.id == this.id){
-                    return false;
-                }
-                return true;
-            })
-            watchListObject = {
-                movies: userWatchList,
-                creatorID: "5UOPtbbQM03QIVUzwNFn"
-            }
-            updateWatchList("WiEkX1WL5XmcYp4jODIb", watchListObject);
-            this.props.updateWatchList(userWatchList);
-            console.log(watchListObject);
+            let tempWatchList = this.props.watchList.filter((movie) =>{
+                console.log(this.id);
+                console.log(movie.id);
+                console.log(movie.id !== this.id);
+                console.log("=======");
+                return (movie.id !== this.id)
+            });
+            console.log("~~~~~:~~~~~~")
+            console.log(tempWatchList);
+            //var userIDkey = this.props.customUser.watchListId;
+            //var userWatchList = await getWatchList(userIDkey);
+            // userWatchList = userWatchList.filter((movie) => {
+            //     if (movie.id == this.id){
+            //         return false;
+            //     }
+            //     return true;
+            // })
+            // let watchListObject = {
+            //     movies: this.props.watchList,
+            //     creatorID: firebase.auth().currentUser.uid
+            // }
+            // updateWatchList(userIDkey, watchListObject);
+            this.props.updateWatchList(tempWatchList);
+            firebase.firestore()
+                .collection("watchList")
+                .doc(this.props.customUser.watchListId)
+                .update({movies:tempWatchList})
+                .catch(error=>{
+                    console.warn(error);
+                })
+            //console.log(watchListObject);
         } catch (error) {
             console.log(error)
         }
     }
 
-    addMovieToWatchList = async ()=>{
+    addMovieToWatchList = ()=>{
         try {
-            var userWatchList = await getWatchList("WiEkX1WL5XmcYp4jODIb");
+            //var userWatchList = await getWatchList(this.props.customUser.watchListId);
             var currentMovie = {
                 description:this.state.data.overview,
                 id:this.id,
                 name:this.state.data.title,
                 posterPath:this.state.data.poster_path
             }
-            userWatchList.push(currentMovie);
-            watchListObject = {
-                movies: userWatchList,
-                creatorID: "5UOPtbbQM03QIVUzwNFn"
-            }
-            updateWatchList("WiEkX1WL5XmcYp4jODIb", watchListObject);
-            this.props.updateWatchList(userWatchList);
-            console.log(watchListObject);
+            let temp = [...this.props.watchList]
+            console.log(temp)
+            temp.push(currentMovie)
+            console.log(temp);
+            //this.props.watchList.push(currentMovie);
+            // let watchListObject = {
+            //     movies: userWatchList,
+            //     creatorID: this.props.customUser.watchListId
+            // }
+            //updateWatchList(this.props.customUser.watchListId, watchListObject);
+            this.props.updateWatchList(temp);
+            console.log("===========");
+            console.log(this.props.watchList);
+            firebase.firestore()
+                .collection("watchList")
+                .doc(this.props.customUser.watchListId)
+                .update({movies:temp})
+                .then(()=>{
+                    //console.log("~~~~~~~~~~~~~~~~~~~~~~")
+                    // firebase.firestore()
+                    //     .collection("watchList")
+                    //     .doc(this.props.customUser.watchListID)
+                    //     .get()
+                    //     .then((wldoc) => {
+                    //         console.log(wldoc.data());
+                    //         this.props.updateWatchList(wldoc.data().movies);
+                    //         console.log("----");
+                    //         console.log(this.props.watchList);
+                    //         console.log("----");
+                    //     })
+                    //     .catch(error =>{
+                    //         console.log(error);
+                    //     });
+                    // console.log(this.props.watchList);
+                    // console.log("~~~~~~~~~~~~~~~~~~~~~~")
+                })
+                .catch(error=>{
+                    console.warn(error);
+                });
+            //console.log(watchListObject);
 
         } catch (error) {
             console.log(error)
         }
     }
-    
+
 
     render(){
         if(this.state.loading){
@@ -182,7 +222,7 @@ class MovieDetails extends Component{
                             </View>
                         </View>
                         <View style={styles.buttonRow}>
-                                <TouchableOpacity style={{alignContent:"center",paddingLeft:"20%" , paddingBottom:"90%"}} 
+                                <TouchableOpacity style={{alignContent:"center",paddingLeft:"20%" , paddingBottom:"90%"}}
                                     onPress={() => {
                                         this.setState({
                                             inWatchlist:!this.state.inWatchlist
@@ -200,14 +240,14 @@ class MovieDetails extends Component{
                         </View>
                     </ImageBackground>
                     <View>
-                        
+
                     </View>
                     </ScrollView>
                 </SafeAreaView>
             );
         }
     }
-    
+
 }
 
 function mapStateToProps(state){

@@ -50,10 +50,15 @@ export class RoomScreen extends Component {
                 firestore
                     .collection("squadRoom")
                     .doc(roomID)
-                    .update({ members: cur_members });
+                    .update({ members: cur_members })
+                    .catch((error)=>{
+                        this.setState({error:error, loading:false})
+                });
                 this.setState({
                     data: data_store
                 });
+                //this.setState({loading:false});
+                this.initListener(roomID);
                 // for (let i = 0; i < data_store.members.length; i++) {
                 //     //console.log("iteration " + i);
                 //     firestore
@@ -70,10 +75,14 @@ export class RoomScreen extends Component {
             this.setState({ error: error, loading: false });
             console.warn("Error!: " + error);
         });
+    }
+
+    initListener(roomID){
         firestore
             .collection("squadRoom")
             .doc(roomID)
             .onSnapshot(querySnapshot=>{
+                console.log(querySnapshot.data());
                 this.setState({loading:true, data:querySnapshot.data()});
                 this.dataMembers = [];
                 for (let i = 0; i < querySnapshot.data().members.length; i++) {
@@ -88,7 +97,23 @@ export class RoomScreen extends Component {
                             this.setState({ loading: false });
                         });
                 }
-            })
+                if(!querySnapshot.data().members.includes(querySnapshot.data().host) && querySnapshot.data().members.length !== 0){
+                    let newHost = querySnapshot.data().members[0];
+                    firestore
+                        .collection("squadRoom")
+                        .doc(roomID)
+                        .update({host:newHost})
+                        .catch(e=>{
+                            console.warn(e);
+                        });
+                }
+                if(querySnapshot.data().syncing){
+                    console.log(this.state.data);
+                    this.props.navigation.push("SyncAnimation", {
+                        members: this.state.data.members,
+                    });
+                }
+            });
     }
 
     renderMember = (memberObj) => {
@@ -104,11 +129,11 @@ export class RoomScreen extends Component {
                   justifyContent={"center"}
                   alignItems={"center"}
                   backgroundColor={"hsl(211,53%," + cur_lightness + "%)"}
-                  width={450}>
+                  width={400}>
                 <Text style={styles.text}>
                     {nameStr}
                 </Text>
-                <TouchableOpacity style={{ paddingLeft: 50 }}>
+                <TouchableOpacity style={{ paddingRight: 5 }}>
                     <MaterialCommunityIcons name={"dots-vertical"} color={"white"} size={20} />
                 </TouchableOpacity>
             </View>
@@ -124,10 +149,9 @@ export class RoomScreen extends Component {
             .collection("squadRoom")
             .doc(this.id)
             .update({members: curIDs, isActive:now_active})
-            .then((doc)=>{
-                this.setState({data:doc.data()});
-
-            });
+            .catch(e=>{
+                console.warn(e);
+            })
     }
 
     render() {
@@ -145,9 +169,14 @@ export class RoomScreen extends Component {
             return (<View backgroundColor={swGrey}>
 
                 <TouchableOpacity width={10}
-                                  // onPress={() => {
-                                  //     this.props.navigation.push("Recommendations")
-                                  // }}
+                                  onPress={() => {
+                                      firestore
+                                          .collection("squadRoom")
+                                          .doc(this.id)
+                                          .update({syncing:true})
+                                          .catch((error)=>{this.setState({error:true})});
+
+                                  }}
                 >
                     <View style={{ alignSelf: "center", justifyContent: "center", borderRadius: 2 }}>
                         <MaterialCommunityIcons style={{ alignSelf: "center" }} name="infinity" color={swOrange}
@@ -166,7 +195,7 @@ export class RoomScreen extends Component {
                     </View>
                     <FlatList data={this.dataMembers}
                               renderItem={this.renderMember}
-                              keyExtractor={item => item.watchListID}>
+                              keyExtractor={item => item.watchListID} height={"100%"}>
                     </FlatList>
                 </View>
             </View>);

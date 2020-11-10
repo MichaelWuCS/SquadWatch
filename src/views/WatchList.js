@@ -13,7 +13,22 @@ class WatchList extends Component {
         };
     }
 
+    componentDidMount() {
+        this.getUserWatchList();
+    }
 
+    getUserWatchList = async () => {
+
+        try {
+            var userIDkey = this.props.customUser.watchListId;
+            var userWatchList = await getWatchList(userIDkey);
+            this.props.updateWatchList(userWatchList);
+
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
 
 
     movieArray = () => {
@@ -24,7 +39,6 @@ class WatchList extends Component {
             </View>
         )})
    }
-
 
 
     render() {
