@@ -11,8 +11,9 @@ export default class MovieElement extends Component {
 
     render() {
         return (
+            <View style = {styles.overlay}>
                 <ImageBackground source={{uri: "https://image.tmdb.org/t/p/w1280" + this.props.movie.posterPath}} style={styles.image} imageStyle={styles.imageStyle}>
-                    <Text style={styles.movieTitle} onPress={ ()=>{
+                    <Text style={styles.movieTitle}  numberOfLines={2} ellipsizeMode="tail" numberonPress={ ()=>{
                         const movieId = this.props.movie.id;
                         const movieName = this.props.movie.name;
                         this.props.navigation.push('Movie', {
@@ -20,8 +21,10 @@ export default class MovieElement extends Component {
                             name:movieName
                         })
                     }}>{this.props.movie.name}</Text>
-                    <Text style={styles.description}>{this.props.movie.description}</Text>
+                    <Text style={styles.description} numberOfLines={3} ellipsizeMode="tail">  {this.props.movie.description}</Text>
                 </ImageBackground>
+            </View>
+
         );
     }
 }
@@ -38,22 +41,30 @@ const styles = StyleSheet.create({
         textShadowColor: "black"
     },
     description: {
-        color: "black",
+        color: "white",
         fontSize: 12,
+        textShadowRadius: 3,
+        textShadowColor: "black"
     },
     image: {
         flex: 1,
         padding: 10,
         resizeMode: "cover",
         borderRadius: 30,
-        minHeight: 100,
+        minHeight: 115,
         marginTop: 15,
         marginLeft: 15,
-        marginRight: 15
+        marginRight: 15,
+        justifyContent: "center",
+        overlayColor: "black"    
 
     },
     imageStyle: {
-        borderRadius: 30
+        borderRadius: 30,
+
+    },
+    overlay: {
     }
+
 
 });

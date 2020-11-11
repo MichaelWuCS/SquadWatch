@@ -75,7 +75,6 @@ class MovieDetails extends Component{
         fetch(url)
         .then(res => res.json())
         .then(res => {
-            //console.log(res);
             let temp = [];
             res.genres.forEach(element => temp.push(element.name));
             while(temp.length>4){
@@ -87,7 +86,6 @@ class MovieDetails extends Component{
                 genres:temp.join(" • "),
                 year:res.release_date.substring(0,4)
             });
-            console.log(this.state.genres);
         })
         .catch(error =>{
             this.setState({
@@ -108,27 +106,8 @@ class MovieDetails extends Component{
     removeMovieFromWatchList = ()=>{
         try {
             let tempWatchList = this.props.watchList.filter((movie) =>{
-                console.log(this.id);
-                console.log(movie.id);
-                console.log(movie.id !== this.id);
-                console.log("=======");
                 return (movie.id !== this.id)
             });
-            console.log("~~~~~:~~~~~~")
-            console.log(tempWatchList);
-            //var userIDkey = this.props.customUser.watchListId;
-            //var userWatchList = await getWatchList(userIDkey);
-            // userWatchList = userWatchList.filter((movie) => {
-            //     if (movie.id == this.id){
-            //         return false;
-            //     }
-            //     return true;
-            // })
-            // let watchListObject = {
-            //     movies: this.props.watchList,
-            //     creatorID: firebase.auth().currentUser.uid
-            // }
-            // updateWatchList(userIDkey, watchListObject);
             this.props.updateWatchList(tempWatchList);
             firebase.firestore()
                 .collection("watchList")
@@ -137,7 +116,6 @@ class MovieDetails extends Component{
                 .catch(error=>{
                     console.warn(error);
                 })
-            //console.log(watchListObject);
         } catch (error) {
             console.log(error)
         }
@@ -145,7 +123,6 @@ class MovieDetails extends Component{
 
     addMovieToWatchList = ()=>{
         try {
-            //var userWatchList = await getWatchList(this.props.customUser.watchListId);
             var currentMovie = {
                 description:this.state.data.overview,
                 id:this.id,
@@ -153,45 +130,16 @@ class MovieDetails extends Component{
                 posterPath:this.state.data.poster_path
             }
             let temp = [...this.props.watchList]
-            console.log(temp)
             temp.push(currentMovie)
-            console.log(temp);
-            //this.props.watchList.push(currentMovie);
-            // let watchListObject = {
-            //     movies: userWatchList,
-            //     creatorID: this.props.customUser.watchListId
-            // }
-            //updateWatchList(this.props.customUser.watchListId, watchListObject);
+
             this.props.updateWatchList(temp);
-            console.log("===========");
-            console.log(this.props.watchList);
             firebase.firestore()
                 .collection("watchList")
                 .doc(this.props.customUser.watchListId)
                 .update({movies:temp})
-                .then(()=>{
-                    //console.log("~~~~~~~~~~~~~~~~~~~~~~")
-                    // firebase.firestore()
-                    //     .collection("watchList")
-                    //     .doc(this.props.customUser.watchListID)
-                    //     .get()
-                    //     .then((wldoc) => {
-                    //         console.log(wldoc.data());
-                    //         this.props.updateWatchList(wldoc.data().movies);
-                    //         console.log("----");
-                    //         console.log(this.props.watchList);
-                    //         console.log("----");
-                    //     })
-                    //     .catch(error =>{
-                    //         console.log(error);
-                    //     });
-                    // console.log(this.props.watchList);
-                    // console.log("~~~~~~~~~~~~~~~~~~~~~~")
-                })
                 .catch(error=>{
                     console.warn(error);
                 });
-            //console.log(watchListObject);
 
         } catch (error) {
             console.log(error)
@@ -212,16 +160,21 @@ class MovieDetails extends Component{
                     <ScrollView height="100%" backgroundColor={swGrey}>
                     <ImageBackground opacity={1} source={{uri:"https://image.tmdb.org/t/p/w1280"+this.state.data.poster_path}}
                     style={{ width: '100%', height: undefined, aspectRatio:2/3}}>
+
+
+                    </ImageBackground>
+                    <View style={styles.informationBlock}>
                         <View style={styles.container}>
                             <Text style={styles.title}>{this.state.data.title + " (" + this.state.year + ")"}</Text>
-                            <Text numberOfLines={3} style={styles.description}>{this.state.data.overview}</Text>
+                            <Text style={styles.description}>{this.state.data.overview}</Text>
                             <View style = {{flexDirection:'row'}}>
                                 <Text style={styles.detail}>{this.state.genres}</Text>
                                 <Text style={styles.detail}>|</Text>
                                 <Text style={styles.detail}>{""+Math.floor(this.state.data.runtime/60)+"h "+this.state.data.runtime%60+"m"}</Text>
                             </View>
                         </View>
-                        <View style={styles.buttonRow}>
+                    </View>
+                    <View style={styles.buttonRow}>
                                 <TouchableOpacity style={{alignContent:"center",paddingLeft:"20%" , paddingBottom:"90%"}}
                                     onPress={() => {
                                         this.setState({
@@ -237,11 +190,8 @@ class MovieDetails extends Component{
                                     />
                                     <Text style={styles.buttonLabel}>{(this.state.inWatchlist)?"Remove from Watchlist":"Add to Watchlist"}</Text>
                                 </TouchableOpacity>
-                        </View>
-                    </ImageBackground>
-                    <View>
-
                     </View>
+
                     </ScrollView>
                 </SafeAreaView>
             );
@@ -286,7 +236,6 @@ const styles = StyleSheet.create({
         textAlign: "left",
         color:"#ffffff",
         fontSize:35,
-        marginTop:"50%",
         paddingLeft:"7.5%",
         paddingRight:"7.5%"
     },
@@ -322,4 +271,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
     },
+    informationBlock: {
+        backgroundColor: 'red',
+    }
 });
