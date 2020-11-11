@@ -23,6 +23,7 @@ import "firebase/firestore";
 import "firebase/auth";
 import {connect} from "react-redux"
 import {getWatchList, updateWatchList} from "../api/WatchListApi.js"
+import Rating from "../components/Ratings.js"
 
 class MovieDetails extends Component{
 
@@ -191,6 +192,8 @@ class MovieDetails extends Component{
                                     <Text style={styles.buttonLabel}>{(this.state.inWatchlist)?"Remove from Watchlist":"Add to Watchlist"}</Text>
                                 </TouchableOpacity>
                     </View>
+
+                    <Rating></Rating>
 
                     </ScrollView>
                 </SafeAreaView>
