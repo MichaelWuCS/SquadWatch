@@ -2,12 +2,16 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View, TouchableOpacity} from "react-native";
 import { Entypo } from '@expo/vector-icons';
 import { getRatings, updateRatings} from "../api/RatingsApi.js";
+import {connect} from "react-redux"
 
 
-export default class Rating extends Component {
+class Ratings extends Component {
     constructor(props){
         super(props);
-        this.state = {rating: 0};
+        this.state = {
+            rating: 0,
+            ratingsList: {}
+        };
     }
 
     componentDidMount(){
@@ -16,8 +20,29 @@ export default class Rating extends Component {
 
     handleCreated = async () =>{
         var ratings = await getRatings("6ysMu58HyzNj6ZD8ODCL");
-        console.log("RATINGS")
-        console.log(ratings);
+        this.setState({
+            ratingsList: ratings
+        })
+        var ratingKey = "id" + this.props.id;
+        if(ratings[ratingKey]!=undefined){
+            this.setState({
+                rating: ratings[ratingKey]
+            })
+        }
+
+    }
+
+    changeRating = async (newRating) =>{
+        try {
+            // Make firebase request
+            var ratingKey = "id" + this.props.id;
+            var clone = {...this.state.ratingsList};
+            clone[ratingKey] = newRating;
+            console.log(clone);
+            updateRatings("6ysMu58HyzNj6ZD8ODCL", clone);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     ratingSystem = () =>{
@@ -80,17 +105,6 @@ export default class Rating extends Component {
         );
     }
 
-    changeRating = async (newRating) =>{
-        try {
-            // Make firebase request
-            console.log(newRating);
-            var ratingsList = {500: 1};
-            updateRatings("6ysMu58HyzNj6ZD8ODCL",ratingsList);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
     render(){
         return (
             <View>
@@ -101,6 +115,24 @@ export default class Rating extends Component {
 
 }
 
+
+function mapStateToProps(state){
+    return {
+        customUser: state.customUser,
+        watchList: state.watchList
+    }
+}
+
+function mapDispatchToProps(dispatch){
+    return{
+        updateWatchList: (watchList)=> dispatch({
+            type:"UPDATEWATCHLIST",
+            payload: watchList
+        })
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Ratings)
 
 const styles = StyleSheet.create({
     ratings: {

@@ -45,7 +45,7 @@ export async function updateRatings(key, ratinglist){
 
     firestore.collection("ratings")
     .doc(key)
-    .update(ratinglist)
+    .update({ratings: ratinglist})
     .catch((error)=> console.log(error));
 
 

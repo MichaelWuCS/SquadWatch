@@ -168,7 +168,7 @@ class MovieDetails extends Component{
                         <View style={styles.informationBlock}>
                             <View style={styles.container}>
                                 <Text style={styles.title}>{this.state.data.title + " (" + this.state.year + ")"}</Text>
-                                <Rating></Rating>
+                                <Rating id={this.id}></Rating>
                                 <View style = {{flexDirection:'row'}}>
                                     <Text style={styles.detail}>{this.state.genres}</Text>
                                     <Text style={styles.detail}> | </Text>
