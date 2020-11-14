@@ -11,7 +11,6 @@ export default class MovieElement extends Component {
 
     render() {
         return (
-            <View style = {styles.overlay}>
                 <ImageBackground source={{uri: "https://image.tmdb.org/t/p/w1280" + this.props.movie.posterPath}} style={styles.image} imageStyle={styles.imageStyle}>
                     <Text style={styles.movieTitle}  numberOfLines={2} ellipsizeMode="tail" numberonPress={ ()=>{
                         const movieId = this.props.movie.id;
@@ -20,10 +19,10 @@ export default class MovieElement extends Component {
                             id:movieId,
                             name:movieName
                         })
+                        console.log("SUNWO SIMP")
                     }}>{this.props.movie.name}</Text>
                     <Text style={styles.description} numberOfLines={3} ellipsizeMode="tail">  {this.props.movie.description}</Text>
                 </ImageBackground>
-            </View>
 
         );
     }
@@ -63,8 +62,7 @@ const styles = StyleSheet.create({
         borderRadius: 30,
 
     },
-    overlay: {
-    }
+
 
 
 });

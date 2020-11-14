@@ -1,12 +1,23 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View, TouchableOpacity} from "react-native";
 import { Entypo } from '@expo/vector-icons';
+import { getRatings, updateRatings} from "../api/RatingsApi.js";
 
 
 export default class Rating extends Component {
     constructor(props){
         super(props);
         this.state = {rating: 0};
+    }
+
+    componentDidMount(){
+        this.handleCreated();
+    }
+
+    handleCreated = async () =>{
+        var ratings = await getRatings("6ysMu58HyzNj6ZD8ODCL");
+        console.log("RATINGS")
+        console.log(ratings);
     }
 
     ratingSystem = () =>{

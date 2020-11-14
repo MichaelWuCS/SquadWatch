@@ -159,41 +159,48 @@ class MovieDetails extends Component{
             return (
                 <SafeAreaView>
                     <ScrollView height="100%" backgroundColor={swGrey}>
-                    <ImageBackground opacity={1} source={{uri:"https://image.tmdb.org/t/p/w1280"+this.state.data.poster_path}}
-                    style={{ width: '100%', height: undefined, aspectRatio:2/3}}>
 
+                        <ImageBackground
+                        opacity={1}
+                        source={{uri:"https://image.tmdb.org/t/p/w1280"+this.state.data.poster_path}}
+                        style={styles.moviePoster} />
 
-                    </ImageBackground>
-                    <View style={styles.informationBlock}>
-                        <View style={styles.container}>
-                            <Text style={styles.title}>{this.state.data.title + " (" + this.state.year + ")"}</Text>
-                            <Text style={styles.description}>{this.state.data.overview}</Text>
-                            <View style = {{flexDirection:'row'}}>
-                                <Text style={styles.detail}>{this.state.genres}</Text>
-                                <Text style={styles.detail}>|</Text>
-                                <Text style={styles.detail}>{""+Math.floor(this.state.data.runtime/60)+"h "+this.state.data.runtime%60+"m"}</Text>
+                        <View style={styles.informationBlock}>
+                            <View style={styles.container}>
+                                <Text style={styles.title}>{this.state.data.title + " (" + this.state.year + ")"}</Text>
+                                <Rating></Rating>
+                                <View style = {{flexDirection:'row'}}>
+                                    <Text style={styles.detail}>{this.state.genres}</Text>
+                                    <Text style={styles.detail}> | </Text>
+                                    <Text style={styles.detail}>{""+Math.floor(this.state.data.runtime/60)+"h "+this.state.data.runtime%60+"m"}</Text>
+                                </View>
+                                <Text style={styles.description}>{this.state.data.overview}</Text>
                             </View>
                         </View>
-                    </View>
-                    <View style={styles.buttonRow}>
-                                <TouchableOpacity style={{alignContent:"center",paddingLeft:"20%" , paddingBottom:"90%"}}
-                                    onPress={() => {
-                                        this.setState({
-                                            inWatchlist:!this.state.inWatchlist
-                                        })
-                                        this.toggleInWatchlistRequest();
-                                    }
-                                }>
-                                    <MaterialCommunityIcons
-                                    style={styles.buttonIcon}
-                                    name= {(this.state.inWatchlist)? "playlist-check":"playlist-plus"}
-                                    color="#ffffff" size ={32}
-                                    />
-                                    <Text style={styles.buttonLabel}>{(this.state.inWatchlist)?"Remove from Watchlist":"Add to Watchlist"}</Text>
-                                </TouchableOpacity>
-                    </View>
 
-                    <Rating></Rating>
+                        <View style={styles.padding}></View>
+
+                        <View style={styles.buttonRow} >
+
+                            <TouchableOpacity 
+                            onPress={() => {
+                                this.setState({
+                                    inWatchlist:!this.state.inWatchlist
+                                })
+                                this.toggleInWatchlistRequest();
+                            }}>
+                                <MaterialCommunityIcons
+                                style={styles.buttonIcon}
+                                name= {(this.state.inWatchlist)? "playlist-check":"playlist-plus"}
+                                color="#ffffff" size ={32}
+                                />
+                                <Text style={styles.buttonLabel}>{(this.state.inWatchlist)?"Remove from Watchlist":"Add to Watchlist"}</Text>
+                            </TouchableOpacity>
+
+
+                        </View>
+
+                        <View style={styles.padding}></View>
 
                     </ScrollView>
                 </SafeAreaView>
@@ -227,6 +234,9 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
         justifyContent: "center",
+        paddingTop: "5%",
+        paddingLeft: "3%",
+        paddingRight: "3%",
     },
     linearGradient: {
         flex: 1,
@@ -238,29 +248,23 @@ const styles = StyleSheet.create({
         fontWeight:"700",
         textAlign: "left",
         color:"#ffffff",
-        fontSize:35,
-        paddingLeft:"7.5%",
-        paddingRight:"7.5%"
+        fontSize:25,
+
     },
     description: {
         textAlign: "left",
         color:"#ffffff",
-        fontSize:11,
+        fontSize:14,
         marginTop:"1%",
-        paddingLeft:"5%",
-        paddingRight:"25%"
     },
     detail: {
         textAlign: "left",
-        color:"#ffffff",
+        color:"#D85600",
         fontWeight:'500',
-        fontSize:13,
+        fontSize:14,
         marginTop:"1%",
-        paddingLeft:"4%",
     },
     buttonLabel: {
-        textAlign: "center",
-        width:"45%",
         color:"#ffffff",
         fontWeight:'500',
         fontSize:11,
@@ -271,10 +275,21 @@ const styles = StyleSheet.create({
         paddingLeft:"4.8%",
     },
     buttonRow: {
+        backgroundColor: "black",
         flexDirection: "row",
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        paddingLeft: "5%"
     },
     informationBlock: {
-        backgroundColor: 'red',
-    }
+        backgroundColor: 'black',
+    },
+    moviePoster: {
+        width: '100%',
+        height: undefined,
+        aspectRatio: 2/3
+    },
+    padding: {
+        paddingBottom: "5%",
+        backgroundColor: "black"
+    },
+
 });
