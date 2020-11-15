@@ -22,7 +22,7 @@ class Dashboard extends Component {
                     <TheatrePreview navigation={this.props.navigation}></TheatrePreview>
                     <WatchlistPreview navigation={this.props.navigation}> </WatchlistPreview>
                     <RecommendationsPreview navigation={this.props.navigation}></RecommendationsPreview>
-                    <FromFriendsPreview navigation={this.props.navigation}></FromFriendsPreview>
+                    {/*<FromFriendsPreview navigation={this.props.navigation}></FromFriendsPreview>*/}
                 </ScrollView>
             </SafeAreaView>
         );

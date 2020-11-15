@@ -64,29 +64,29 @@ const MovieData = ({
 };
 
 
-const Thumbnail = ({id, title, posterPath}) => {
+const Thumbnail = ({id, title, posterPath, navigation}) => {
     const [modalVisible, setModalVisible] = useState(false);
     return (
         <View>
-            <Modal animationType="slide" transparent={true}
-                   visible={modalVisible} onRequestClose={() => {
-                Alert.alert("Modal view closed");
-            }}>
-                <View style={styles.container} marginTop={300} justifyContent={"center"} backgroundColor={"dodgerblue"}
-                      opacity={0.94}>
-                    <TouchableHighlight
-                        onPress={() => {
-                            setModalVisible(!modalVisible)
-                        }}>
-                        <ScrollView>
+            {/*<Modal animationType="slide" transparent={true}*/}
+            {/*       visible={modalVisible} onRequestClose={() => {*/}
+            {/*    Alert.alert("Modal view closed");*/}
+            {/*}}>*/}
+            {/*    <View style={styles.container} marginTop={300} justifyContent={"center"} backgroundColor={"dodgerblue"}*/}
+            {/*          opacity={0.94}>*/}
+            {/*        <TouchableHighlight*/}
+            {/*            onPress={() => {*/}
+            {/*                setModalVisible(!modalVisible)*/}
+            {/*            }}>*/}
+            {/*            <ScrollView>*/}
 
-                            <MovieData id={id}/>
-                        </ScrollView>
-                    </TouchableHighlight>
-                </View>
-            </Modal>
+            {/*                <MovieData id={id}/>*/}
+            {/*            </ScrollView>*/}
+            {/*        </TouchableHighlight>*/}
+            {/*    </View>*/}
+            {/*</Modal>*/}
             <TouchableOpacity onPress={() => {
-                setModalVisible(true);
+                navigation.push("Movie",{id:id, name:title})
             }}>
                 <Image source={{uri: ("https://image.tmdb.org/t/p/w1280" + posterPath)}}
                        style={{width: 70, height: 105}}>
@@ -97,9 +97,7 @@ const Thumbnail = ({id, title, posterPath}) => {
     );
 };
 
-const renderItem = ({item}) => (
-    <Thumbnail id={item.id} title={item.name} posterPath={item.posterPath}/>
-);
+
 
 export default class ThumbnailList extends Component {
     /**
@@ -107,6 +105,18 @@ export default class ThumbnailList extends Component {
      */
     listTitle;
     movieList;
+
+    constructor(props){
+        super(props);
+    }
+
+    renderItem = ({item}) => (
+        <Thumbnail id={item.id} title={item.name} posterPath={item.posterPath} navigation={this.props.navigation}/>
+    );
+
+    renderSeparator = () => {
+        return <View width={"1%"}></View>
+    }
 
     render() {
         return (
@@ -118,8 +128,9 @@ export default class ThumbnailList extends Component {
                 </TouchableOpacity>
                 <FlatList horizontal={true} showsHorizontalScrollIndicator={false}
                           data={this.props.movieList}
-                          renderItem={renderItem}
+                          renderItem={this.renderItem}
                           keyExtractor={item => item.id}
+                          ItemSeparatorComponent={this.renderSeparator}
                 />
             </View>
         );
