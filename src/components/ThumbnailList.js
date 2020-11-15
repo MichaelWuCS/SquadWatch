@@ -12,7 +12,7 @@ import {
     View
 } from "react-native";
 import {TMDB_KEY} from "@env";
-import {swGreen} from '../styles/Colors'
+import {swGreen, swNavy, swOrange, swBlack, swGrey} from '../styles/Colors'
 
 
 
@@ -65,26 +65,8 @@ const MovieData = ({
 
 
 const Thumbnail = ({id, title, posterPath, navigation}) => {
-    const [modalVisible, setModalVisible] = useState(false);
     return (
         <View>
-            {/*<Modal animationType="slide" transparent={true}*/}
-            {/*       visible={modalVisible} onRequestClose={() => {*/}
-            {/*    Alert.alert("Modal view closed");*/}
-            {/*}}>*/}
-            {/*    <View style={styles.container} marginTop={300} justifyContent={"center"} backgroundColor={"dodgerblue"}*/}
-            {/*          opacity={0.94}>*/}
-            {/*        <TouchableHighlight*/}
-            {/*            onPress={() => {*/}
-            {/*                setModalVisible(!modalVisible)*/}
-            {/*            }}>*/}
-            {/*            <ScrollView>*/}
-
-            {/*                <MovieData id={id}/>*/}
-            {/*            </ScrollView>*/}
-            {/*        </TouchableHighlight>*/}
-            {/*    </View>*/}
-            {/*</Modal>*/}
             <TouchableOpacity onPress={() => {
                 navigation.push("Movie",{id:id, name:title})
             }}>
@@ -144,7 +126,7 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         padding: 10,
         borderRadius: 20,
-        backgroundColor: swGreen,
+        backgroundColor: swOrange,
         height: 150,
     },
     text: {
