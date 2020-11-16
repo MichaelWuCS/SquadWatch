@@ -35,7 +35,7 @@ class WatchList extends Component {
         return this.props.watchList.map((movie,index)=>{
             return(
             <View key={index}>
-                <MovieElement movie={movie} navigation={this.props.navigation}></MovieElement>
+                <MovieElement movie={movie} navigation={this.props.navigation} ></MovieElement>
             </View>
         )})
    }
@@ -44,9 +44,7 @@ class WatchList extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style={styles.header}>
-                    <Text style={styles.headerText}>WATCHLIST</Text>
-                </View>
+
                 <ScrollView styles={styles.scrollView}>
                     <View>{this.movieArray()}</View>
                 </ScrollView>
@@ -79,7 +77,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(WatchList)
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#181b3d",
+        //backgroundColor: "#181b3d",
+        backgroundColor: 'rgba(8, 31, 38, 1)',
+
     },
     header: {
         backgroundColor: "#00B465",
