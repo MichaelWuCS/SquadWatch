@@ -60,6 +60,14 @@ class WatchList{
   }
 }
 
+class RecList{
+
+  constructor(creatorID, movies){
+      this.creatorID = creatorID;
+      this.movies = movies;
+  }
+}
+
 // Firestore data converters
 var customUserConverter = {
   toFirestore: function(customUser) {
@@ -88,6 +96,19 @@ var watchListConverter = {
   }
 }
 
+var recListConverter = {
+  toFirestore: function(recList) {
+      return {
+          creatorID: recList.creatorID,
+          movies: recList.movies
+          }
+  },
+  fromFirestore: function(snapshot, options){
+      const data = snapshot.data(options);
+      return new RecList(data.creatorID, data.movies);
+  }
+}
+
 
 //functions
 const addCustomUser = (firstName, lastName) =>{
@@ -100,6 +121,7 @@ const addCustomUser = (firstName, lastName) =>{
       })
   .then(function() {
       addWatchList();
+      addRecList();
       console.log("Document successfully written!");
   })
   .catch(function(error) {
@@ -109,6 +131,21 @@ const addCustomUser = (firstName, lastName) =>{
 
 const addWatchList = () => {
   db.collection("watchList").withConverter(watchListConverter)
+      .doc(firebaseAuth.currentUser.uid)
+      .set({
+        creatorID: firebaseAuth.currentUser.uid,
+        movies: []
+      })
+  .then(function() {
+      console.log("Document successfully written!");
+  })
+  .catch(function(error) {
+      console.error("Error writing document: ", error);
+  });
+}
+
+const addRecList = () => {
+  db.collection("recommendations").withConverter(recListConverter)
       .doc(firebaseAuth.currentUser.uid)
       .set({
         creatorID: firebaseAuth.currentUser.uid,

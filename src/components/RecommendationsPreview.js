@@ -99,7 +99,10 @@ class RecommendationsPreviewList extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.text}>{this.props.listTitle}</Text>
+                <Text onPress = {() => this.props.navigation.push("Recommendations")} style={styles.text}>
+                    {this.props.listTitle}
+                    
+                    </Text>
                 <FlatList horizontal={true} showsHorizontalScrollIndicator={false}
                           data = {this.props.recommendations}
                           renderItem={renderItem}
@@ -162,7 +165,7 @@ export default class RecommendationsPreview extends Component {
             return <ActivityIndicator/>
         }
         else{
-            return <RecommendationsPreviewList listTitle={"RECOMMENDATIONS"} recommendations={this.state.recommendations.results}/>
+            return <RecommendationsPreviewList navigation = {this.props.navigation} listTitle={"RECOMMENDATIONS"} recommendations={this.state.recommendations.results}/>
         }
     }
 }
