@@ -1,7 +1,7 @@
-import { ADDCUSTOMUSER, UPDATEMOVIELIST, UPDATEWATCHLIST } from "./actionTypes.js";
+import { ADDCUSTOMUSER, UPDATERECLIST, UPDATEWATCHLIST } from "./actionTypes.js";
 
-export const updateMovieList = () => ({
-    type: UPDATEMOVIELIST,
+export const updateRecList = () => ({
+    type: UPDATERECLIST,
 });
 
 export const updateWatchList = () => ({
