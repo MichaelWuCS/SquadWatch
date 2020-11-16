@@ -19,10 +19,10 @@ class Dashboard extends Component {
                     barStyle='light-content'
                 />
                 <ScrollView>
-                    <TheatrePreview navigation={this.props.navigation}></TheatrePreview>
+                    <TheatrePreview navigation={this.props.navigation}/>
                     <WatchlistPreview navigation={this.props.navigation}> </WatchlistPreview>
-                    <RecommendationsPreview navigation={this.props.navigation}></RecommendationsPreview>
-                    <FromFriendsPreview navigation={this.props.navigation}></FromFriendsPreview>
+                    <RecommendationsPreview navigation={this.props.navigation} watchlist={this.watchList}/>
+                    {/*<FromFriendsPreview navigation={this.props.navigation}></FromFriendsPreview>*/}
                 </ScrollView>
             </SafeAreaView>
         );

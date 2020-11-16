@@ -12,7 +12,7 @@ import {
     TouchableOpacity,
     Image, SafeAreaView
 } from "react-native";
-import {swPurple} from '../styles/Colors'
+import {swPurple, swBlue, swOrange, swNavy, swBlack} from '../styles/Colors'
 import {TMDB_KEY} from "@env";
 
 const test_watchlist = {
@@ -41,42 +41,13 @@ const test_watchlist = {
     ]
 };
 
-
-const Thumbnail = ({title, backdrop_path, overview}) => {
-    const [modalVisible, setModalVisible] = useState(false);
+const Thumbnail = ({title, id, poster_path, overview, navigation}) => {
     return (
         <View>
-            <Modal animationType="slide" transparent={true}
-                   visible={modalVisible} onRequestClose={() => {
-                Alert.alert("Modal view closed");
-            }}>
-                <View style={styles.container} marginTop={300} justifyContent={"center"} backgroundColor={"dodgerblue"}
-                      opacity={0.94}>
-                    <TouchableHighlight
-                        onPress={() => {
-                            setModalVisible(!modalVisible)
-                        }}>
-                        <ScrollView>
-                            <Text>
-                                <Text style={{
-                                    color: "white",
-                                    textAlign: "center",
-                                    fontWeight:"bold",
-                                    textDecorationLine:"underline"
-                                }}>{title+"\n"}</Text>
-                                <Text style={{
-                                    color: "white",
-                                    fontSize:12
-                                }}>{"\n"+ overview}</Text>
-                            </Text>
-                        </ScrollView>
-                    </TouchableHighlight>
-                </View>
-            </Modal>
             <TouchableOpacity onPress={() => {
-                setModalVisible(true);
+                navigation.push("Movie",{id:id, name:title})
             }}>
-                <Image source={{uri: ("https://image.tmdb.org/t/p/w1280" + backdrop_path)}}
+                <Image source={{uri: ("https://image.tmdb.org/t/p/w1280" + poster_path)}}
                        style={{width: 70, height: 105}}>
                 </Image>
             </TouchableOpacity>
@@ -84,9 +55,7 @@ const Thumbnail = ({title, backdrop_path, overview}) => {
     );
 };
 
-const renderItem = ({item}) => (
-    <Thumbnail title={item.original_title} backdrop_path={item.backdrop_path} overview={item.overview}/>
-);
+
 
 
 class RecommendationsPreviewList extends Component {
@@ -96,17 +65,24 @@ class RecommendationsPreviewList extends Component {
     listTitle;
     recommendations;
 
+    renderItem = ({item}) => (
+        <Thumbnail title={item.original_title} id={item.id} poster_path={item.poster_path} overview={item.overview}
+        navigation={this.props.navigation}/>
+    );
+
+    renderSeparator = () => {
+        return <View width={"0.25%"}/>
+    }
+
     render() {
         return (
             <View style={styles.container}>
-                <Text onPress = {() => this.props.navigation.push("Recommendations")} style={styles.text}>
-                    {this.props.listTitle}
-                    
-                    </Text>
+                <Text style={styles.text}>{this.props.listTitle}</Text>
                 <FlatList horizontal={true} showsHorizontalScrollIndicator={false}
                           data = {this.props.recommendations}
-                          renderItem={renderItem}
+                          renderItem={this.renderItem}
                           keyExtractor={item => item.id.toString()}
+                          ItemSeparatorComponent={this.renderSeparator}
                 />
             </View>
         );
@@ -120,7 +96,7 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         padding: 10,
         borderRadius: 20,
-        backgroundColor: swPurple,
+        backgroundColor: swOrange,
         height: 150,
     },
     text: {
@@ -165,7 +141,8 @@ export default class RecommendationsPreview extends Component {
             return <ActivityIndicator/>
         }
         else{
-            return <RecommendationsPreviewList navigation = {this.props.navigation} listTitle={"RECOMMENDATIONS"} recommendations={this.state.recommendations.results}/>
+            return <RecommendationsPreviewList listTitle={"RECOMMENDATIONS"} recommendations={this.state.recommendations.results}
+            navigation={this.props.navigation}/>
         }
     }
 }
