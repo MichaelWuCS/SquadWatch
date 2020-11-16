@@ -30,6 +30,7 @@ class Ratings extends Component {
             })
         }
 
+    
     }
 
     changeRating = async (newRating) =>{
