@@ -1,6 +1,6 @@
 import React, { Component} from "react";
 import Carousel, { ParallaxImage }  from 'react-native-snap-carousel'
-import { StyleSheet, Text, View,Dimensions,Platform,TouchableHighlight, Alert } from "react-native";
+import { StyleSheet, Text, View,Dimensions,Platform, TouchableOpacity,} from "react-native";
 import {TMDB_KEY} from "@env";
 import {swOrange,swGrey,swWhite} from '../styles/Colors';
 import {useNavigation} from "@react-navigation/native"
@@ -15,6 +15,8 @@ export default class TheatrePreview extends Component {
             movieList:[],
             loading: true
         }
+        this._renderItem = this._renderItem.bind(this);
+        this.navigation = this.props.navigation;
     }
 
    async componentDidMount(){
@@ -27,6 +29,7 @@ export default class TheatrePreview extends Component {
     }
 };
     componentWillUnmount() {
+        console.log(this)
         this.setState = (state,callback)=>{
             return;
         };
@@ -38,22 +41,9 @@ export default class TheatrePreview extends Component {
         }
         return false;
     }
-    
+
     _renderItem ({item,index}, parallaxProps) {
-       
-        const movieId = item.id;
-        const movieName = item.title;
-        return (
-            <TouchableHighlight
-            underlayColor={false}
-            onPress={ ()=>{
-                 this.props.navigation.navigate('Movie', {
-                    id:movieId,
-                    name:movieName
-                })
-               
-            }}
-            >
+        return (<TouchableOpacity onPress={()=>{this.props.navigation.push("Movie",{id:item.id, name:item.title})}}>
             <View style={styles.item}>
                 
                 <ParallaxImage
@@ -63,7 +53,6 @@ export default class TheatrePreview extends Component {
                     parallaxFactor={0.2}
                     spinnerColor={swOrange}
                     {...parallaxProps}
-                    
                 />
             
                 
@@ -71,7 +60,7 @@ export default class TheatrePreview extends Component {
                     { item.title }
                 </Text> */}
             </View>
-            </TouchableHighlight>
+            </TouchableOpacity>
         );
     }
     render() {
@@ -89,7 +78,7 @@ export default class TheatrePreview extends Component {
                 autoplay={true}
                 autoplayInterval={5000}
                 loop={true}
-                
+
             />
             
         );

@@ -17,7 +17,7 @@ import Index_page from "../views/Index";
 import BottomNav from './BottomTab';
 import  Icon from  'react-native-vector-icons/Ionicons';
 import SyncRoomAnimation from "../views/SyncRoomAnimation";
-
+import Recommendations from "../views/Recommendations";
 
 
 
@@ -90,8 +90,8 @@ function HomeStack({navigation}){
                     }}
                 />
                 <DashStack.Screen
-                    name='Friends'
-                    component={Friends}
+                    name='Recommendations'
+                    component={Recommendations}
                     options={{
                         headerStyle:{
                             backgroundColor:swGrey,
@@ -246,6 +246,7 @@ function WatchListStack() {
                 }
             }}
             />
+            
             <SearchStack.Screen
             name={'Movie'}
             title='Movie Details'

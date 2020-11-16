@@ -1,4 +1,4 @@
-import { ADDCUSTOMUSER, UPDATEMOVIELIST, UPDATEWATCHLIST } from "./actionTypes.js";
+import { ADDCUSTOMUSER, UPDATERECLIST, UPDATEWATCHLIST } from "./actionTypes.js";
 
 const initialState = {
     watchList: [],
@@ -7,8 +7,7 @@ const initialState = {
         last: "",
         watchListId: ""
     },
-    movieList: {},
-    WLcounter: 0,
+    recList: []
 };
 
 export const mainReducer = (state = initialState, action) => {
@@ -20,18 +19,18 @@ export const mainReducer = (state = initialState, action) => {
                 last : action.payload.last,
                 watchListId: action.payload.watchListId,
             }
-            state.WLcounter= state.WLcounter+1
             return state;
-            //};
-        case UPDATEMOVIELIST:
-            return {
-                movieList: action.payload
-            };
         case UPDATEWATCHLIST:
             return {
                 customUser: state.customUser,
-                movieList: state.movieList,
+                recList: state.recList,
                 watchList: action.payload
+            };
+        case UPDATERECLIST:
+            return {
+                customUser: state.customUser,
+                watchList: state.movieList,
+                recList: action.payload
             };
         default:
             return state;
