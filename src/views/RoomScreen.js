@@ -160,19 +160,19 @@ export class RoomScreen extends Component {
         );
     };
 
-    // componentWillUnmount() {
-    //     let curIDs = this.state.data.members;
-    //     const ind_to_rem = curIDs.indexOf(this.props.customUser.watchListId);
-    //     curIDs.splice(ind_to_rem,1);
-    //     let now_active = curIDs.length>0;
-    //     firestore
-    //         .collection("squadRoom")
-    //         .doc(this.id)
-    //         .update({members: curIDs, isActive:now_active})
-    //         .catch(e=>{
-    //             console.warn(e);
-    //         })
-    // }
+    componentWillUnmount() {
+        let curIDs = this.state.data.members;
+        const ind_to_rem = curIDs.indexOf(this.props.customUser.watchListId);
+        curIDs.splice(ind_to_rem,1);
+        let now_active = curIDs.length>0;
+        firestore
+            .collection("squadRoom")
+            .doc(this.id)
+            .update({members: curIDs, isActive:now_active})
+            .catch(e=>{
+                console.warn(e);
+            })
+    }
 
     render() {
         if (this.state.loading) {
