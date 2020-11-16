@@ -122,8 +122,6 @@ const addWatchList = () => {
   });
 }
 
-
-
 async function signUp(email, password, first, last){
 
     var works;
