@@ -39,23 +39,32 @@ export default class SyncRoomAnimation extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            circles: [],
-            loading: false,
-            movie_recommendations: []
-        };
-        this.members = [];
-        this.counter = 1;
-        this.setInterval = null;
-        this.anim = new Animated.Value(1);
-        ;
-    }
+		this.state = {
+			circles: [],
+			loading: false,
+			movie_recommendations: []
+		};
+		this.members = [];
+		this.counter = 1;
+		this.setInterval = null;
+		this.anim = new Animated.Value(1);
+		this.timeoutHandle = null;
+	}
 
-    componentDidMount() {
-        this.members = this.props.route.params.members;
-        this.setCircleInterval();
-        this.get_recommendations(this.members);
-    }
+	componentDidMount() {
+    	this.members = this.props.route.params.members;
+		this.setCircleInterval();
+		this.get_recommendations(this.members)
+			.then(()=>{
+				this.timeoutHandle = setTimeout(()=>{
+					this.setState({loading:false});
+         		}, 8000);
+			});
+	}
+
+	componentWillUnmount() {
+    	clearTimeout(this.timeoutHandle);
+  	}
 
     async get_recommendations(members_list) {
         console.log(members_list);
@@ -94,7 +103,7 @@ export default class SyncRoomAnimation extends Component {
 
     async get_and_add_to_recommendations(randomMovieID) {
         const requestStr = "https://api.themoviedb.org/3/movie/" + randomMovieID + "/recommendations" + "?api_key=" + TMDB_KEY;
-        console.log(requestStr);
+        //console.log(requestStr);
         await fetch(requestStr)
             .then(res => res.json())
             .then(results => {
@@ -102,8 +111,8 @@ export default class SyncRoomAnimation extends Component {
                 this.setState({
                     movie_recommendations: rec
                 });
-                console.log("current recs: ");
-                console.log(rec);
+                //console.log("current recs: ");
+                //console.log(rec);
             }).catch((error) => {
                 console.log("Error!: " + error);
                 this.setState({ loading: false });
@@ -156,25 +165,25 @@ export default class SyncRoomAnimation extends Component {
                         />
                     ))}
 
-                    <TouchableOpacity
-                        activeOpacity={1}
-                        onPressIn={this.onPressIn.bind(this)}
-                        onPressOut={this.onPressOut.bind(this)}
-                        style={{
-                            transform: [{
-                                scale: this.anim
-                            }]
-                        }}
-                    >
-                        <MaterialCommunityIcons styles={{ justifyContent: "center", alignItems: "center" }}
-                                                name="infinity" size={90} color={"white"} />
-                    </TouchableOpacity>
-                </View>
-            );
-        } else {
-            return SyncRecsScreen;
-        }
-    }
+					<TouchableOpacity
+						activeOpacity={1}
+						onPressIn={this.onPressIn.bind(this)}
+						onPressOut={this.onPressOut.bind(this)}
+						style={{
+							transform: [{
+								scale: this.anim
+							}]
+						}}
+					>
+						<MaterialCommunityIcons styles={{ justifyContent: 'center', alignItems: 'center' }}
+												name="infinity" size={90} color={'white'} />
+					</TouchableOpacity>
+				</View>
+			);
+		} else{
+			return <SyncRecsScreen/> // this needs to be a component not a function to fix "functions are not a valid react child
+		}
+	}
 }
 
 SyncRoomAnimation.propTypes = {
