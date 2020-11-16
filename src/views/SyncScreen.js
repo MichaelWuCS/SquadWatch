@@ -1,20 +1,15 @@
 import React, { Component, useEffect, useState } from "react";
 import {
     Text,
-    Button,
     View,
     StyleSheet,
-    FlatList,
-    ActivityIndicator, NativeEventEmitter,
-    SafeAreaView,
-    ImageBackground,
-    ScrollView,
-    Image,
+    ActivityIndicator,
     TouchableOpacity,
     Modal,
     TextInput
 } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons,Ionicons } from "@expo/vector-icons";
+import  {Button,Input}  from 'react-native-elements';
 import { TMDB_KEY } from "@env";
 import {
     FIREBASE_API_KEY,
@@ -27,10 +22,9 @@ import {
 import * as firebase from "firebase";
 import "firebase/firestore";
 import "firebase/auth";
-import { ListItem, SearchBar, Avatar } from "react-native-elements";
-import { swBlue, swGreen, swGrey, swPink, swPurple } from "../styles/Colors";
+import { swWhite,swBlue, swGreen, swGrey,swNavy,swOrange} from "../styles/Colors";
 import { connect } from "react-redux";
-import { TouchableHighlight } from "react-native-gesture-handler";
+
 
 // const firebase_config = {
 //     apiKey: FIREBASE_API_KEY,
@@ -45,7 +39,6 @@ import { TouchableHighlight } from "react-native-gesture-handler";
 !firebase.apps.length ? firebase.initializeApp(firebase_config) : firebase.app();
 const firestore = firebase.firestore();
 const auth = firebase.auth();
-
 export class SyncScreen extends Component {
     constructor(props) {
         super(props);
@@ -53,7 +46,9 @@ export class SyncScreen extends Component {
             loading: false,
             data: [], //Data here is a list of roomIDs in use
             searching: false,
-            roomFind: ""
+            roomFind: "",
+            modalVisible: false,
+            roomError:'',
         };
         this.uid;
     }
@@ -107,90 +102,136 @@ export class SyncScreen extends Component {
         });
 
     }
-
+    setModalVisible = (visible) => {
+        this.setState({ modalVisible: visible });
+      }
     searchButton = () => {
-        if (this.state.searching) {
             return (
-                <View style={styles.input} backgroundColor={swBlue} flexDirection={"row"}>
-                    <View borderBottomWidth={1} width="30%" borderColor={"#fff"}>
-                        <TextInput styles={styles.textIn}
-                                   color="#fff"
-                                   placeholder={"Enter Room ID here"}
-                                   autoCapitalize="characters"
-                                   onChangeText={(text) => {
-                                       this.setState({ roomFind: text });
-                                   }}
-                        />
-                    </View>
-                    <View flexDirection={"column"} paddingLeft="15%" paddingRight="1%">
-                        <TouchableOpacity onPress={() => {
-                            this.setState({ searching: false });
-                        }}>
-                            <MaterialCommunityIcons
-                                name="close"
-                                alignSelf="center"
-                                color={"#ffffff"}
-                                size={30}
+                <View 
+                style={{
+                    justifyContent: 'center'
+                }}
+                >
+                    <Modal
+                animationType="fade"
+                transparent={true}
+                visible={this.state.modalVisible}
+                onDismiss={() => {
+                    this.setState({roomError:''})
+                  }}
+                
+                >
+                    <View style={{
+                                    marginTop: '80%',
+                                    backgroundColor:swNavy,
+                                    alignSelf:'center',
+                                    borderRadius: 20,
+                                    padding: 20,
+                                    shadowColor:swOrange,
+                                    shadowOffset: {
+                                    width: 0,
+                                    height: 2
+                                    },
+                                    shadowOpacity: 0.40,
+                                    shadowRadius: '100%',
+                                    elevation: 5,
+                                    width:'60%',
+                                    height:'20%'
+                                }}>
+                        <View style>
+                            <Input
+                            placeholder="Room number"
+                            autoCapitalize='characters'
+                            autoCorrect={false}
+                            inputStyle={{color:swWhite}}
+                            containerStyle={{
+                                alignSelf:'center',
+                                width:'70%',
+                                borderBottomColor:swWhite,
+                            }}
+                            errorMessage={this.state.roomError}
+                            onChangeText={(text) => {
+                                this.setState({ roomFind: text });
+                            }}
                             />
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => {
-                            this.props.navigation.push("Room", {
-                                id: this.state.roomFind,
-                                name: "Room Code: " + this.state.roomFind
-                            });
-                        }}>
-                            <MaterialCommunityIcons
-                                name="location-enter"
-                                alignSelf="center"
-                                color={"#ffffff"}
-                                size={30}
+                            <View style={{flexDirection:'row', marginTop:'10%'}}>
+                            <Button title='Cancel'  buttonStyle={{borderRadius:10,backgroundColor:'red',  marginRight:'20%'}}
+                            onPress={()=>{
+                                this.setModalVisible(false);
+                            }}
                             />
-                        </TouchableOpacity>
+
+                            <Button title='Join' buttonStyle={{borderRadius:10,backgroundColor:swBlue,  marginLeft:'20%'}}
+                            onPress={() => {       
+                                console.log(this.state.roomFind);
+                                if(this.state.roomFind.length<6){
+                                    this.setState({roomError:'Invalid Room'})
+                                }else{
+                                    this.props.navigation.push("Room", {
+                                        id: this.state.roomFind,
+                                        name: "Room Code: " + this.state.roomFind
+                                    });
+                                    this.setModalVisible(false);
+                                }      
+                                    
+                            }}
+                            />
+                            </View>
+                        </View>
+                        
                     </View>
+                </Modal>
+                <Button
+                type={'clear'}
+                containerStyle={{alignSelf:"center",
+                backgroundColor:swBlue,
+                justifyContent:'center', 
+                height:100, 
+                width:100,
+                borderRadius:20,
+                
+                }}
+                buttonStyle={{alignSelf:'center'}}
+                icon={ <Ionicons name='md-add-circle'  color='white' size={50} /> }
+                onPress={()=>{
+                    this.setModalVisible(true);
+                }}
+                />
+                <Text  style={{color:swWhite,fontWeight:'600', alignSelf:'center',marginTop:'2%'}}>Join Room</Text>
                 </View>
+                
             );
-        } else {
-            return (
-                <TouchableOpacity onPress={() => {
-                    this.setState({ searching: true });
-                }}>
-                    <View style={styles.button} backgroundColor={swBlue}>
-                        <Text style={styles.buttonText}>
-                            Join Room
-                        </Text>
-                        <MaterialCommunityIcons
-                            name="magnify"
-                            color={"white"}
-                            size={70} />
-                    </View>
-                </TouchableOpacity>
-            );
-        }
+   
     };
 
     render() {
         !firebase.apps.length ? firebase.initializeApp(firebase_config) : firebase.app();
-        //console.log(this.props);
         if (this.state.loading) {
             return <ActivityIndicator />;
         } else {
             return (
-                <View style={{ backgroundColor: swGrey, height: "100%", width: "100%", flex: 1 }}>
-                    <View height="25%" />
-                    <TouchableOpacity onPress={() => {
-                        this.createNewRoom();
+                <View style={{ backgroundColor: swGrey, height: "100%", width: "100%"}}>
+                    <View style={{
+                        marginTop:'30%',
+                        marginBottom:'30%'
                     }}>
-                        <View style={styles.button} backgroundColor={swGreen}>
-                            <Text style={styles.buttonText}>
-                                Create Room
-                            </Text>
-                            <MaterialCommunityIcons
-                                alignSelf="center"
-                                name="arrow-right-bold-box-outline"
-                                color={"white"}
-                                size={60} />
-                        </View>
-                    </TouchableOpacity>
+                    <Button
+                    type={'clear'}
+                    containerStyle={{alignSelf:"center",
+                    backgroundColor:swGreen,
+                    justifyContent:'center', 
+                    height:100, 
+                    width:100,
+                    borderRadius:20,
+                    
+                    }}
+                    buttonStyle={{alignSelf:'center'}}
+                    icon={ <Ionicons name='md-film'  color='white' size={50} /> }
+                    onPress={()=>{this.createNewRoom()}}
+                    />
+                    <Text  style={{color:swWhite,fontWeight:'600', alignSelf:'center',marginTop:'2%'}}>Create Room</Text>
+                    </View>
+                    
                     {this.searchButton()}
                 </View>
             );
@@ -205,14 +246,6 @@ function mapStateToProps(state) {
 
 }
 
-// function mapDispatchToProps(dispatch) {
-//     return {
-//         addCustomUserToRedux: (customUser) => dispatch({
-//             type: "ADDCUSTOMUSER",
-//             payload: customUser
-//         })
-//     };
-// }
 
 export default connect(mapStateToProps, null)(SyncScreen);
 

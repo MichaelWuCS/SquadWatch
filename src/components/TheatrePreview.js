@@ -1,8 +1,10 @@
 import React, { Component} from "react";
 import Carousel, { ParallaxImage }  from 'react-native-snap-carousel'
-import { StyleSheet, Text, View,Dimensions,Platform, } from "react-native";
+import { StyleSheet, Text, View,Dimensions,Platform,TouchableHighlight, Alert } from "react-native";
 import {TMDB_KEY} from "@env";
-import {swOrange,swGrey,swWhite} from '../styles/Colors'
+import {swOrange,swGrey,swWhite} from '../styles/Colors';
+import {useNavigation} from "@react-navigation/native"
+
 const {width: screenWidth} = Dimensions.get('window');
 
 
@@ -38,8 +40,22 @@ export default class TheatrePreview extends Component {
     }
     
     _renderItem ({item,index}, parallaxProps) {
+       
+        const movieId = item.id;
+        const movieName = item.title;
         return (
+            <TouchableHighlight
+            underlayColor={false}
+            onPress={ ()=>{
+                 this.props.navigation.navigate('Movie', {
+                    id:movieId,
+                    name:movieName
+                })
+               
+            }}
+            >
             <View style={styles.item}>
+                
                 <ParallaxImage
                     source={{ uri: `https://image.tmdb.org/t/p/w780/${item.poster_path}` }}
                     containerStyle={styles.imageContainer}
@@ -49,14 +65,18 @@ export default class TheatrePreview extends Component {
                     {...parallaxProps}
                     
                 />
+            
+                
                 {/* <Text style={styles.title} numberOfLines={2}>
                     { item.title }
                 </Text> */}
             </View>
+            </TouchableHighlight>
         );
     }
     render() {
         return (
+            
             <Carousel
                 sliderWidth={screenWidth}
                 sliderHeight={screenWidth}
@@ -71,6 +91,7 @@ export default class TheatrePreview extends Component {
                 loop={true}
                 
             />
+            
         );
     }
 }

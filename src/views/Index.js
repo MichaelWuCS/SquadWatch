@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
         },
 
         loginbtn:{
-            marginTop:"10%",
+            marginTop:"30%",
             backgroundColor:"rgba(214, 86, 0, 0.35)",
             width:"30%",
             fontSize:23,

@@ -11,8 +11,13 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as firebase from "firebase";
 import "firebase/firestore";
 import "firebase/auth";
-import { swBlack, swBlue, swGreen, swGrey, swPink, swPurple, swOrange } from "../styles/Colors";
+import {  swWhite, swGrey, swPink, swPurple, swOrange } from "../styles/Colors";
 import { connect } from "react-redux";
+import {Avatar} from "react-native-elements"
+import Avatars from '@dicebear/avatars';
+import sprites from '@dicebear/avatars-initials-sprites';
+
+const avatar = new Avatars(sprites);
 
 const firestore = firebase.firestore();
 
@@ -129,7 +134,22 @@ export class RoomScreen extends Component {
                   justifyContent={"center"}
                   alignItems={"center"}
                   backgroundColor={"hsl(211,53%," + cur_lightness + "%)"}
-                  width={400}>
+                  width={"80%"}
+                  marginBottom={'5%'}
+                  borderRadius={20}
+                  >
+                <Avatar
+                rounded
+                containerStyle={{alignSelf:"center",paddingTop:-20}}
+                size="small"
+                title='KT'
+                source={{
+                    showAccessory:true,
+                    uri:'http://identicon-1132.appspot.com/random?/s=1'
+
+                }}
+                containerStyle={{alignSelf:'center', backgroundColor:swWhite, marginRight:'5%'}}
+                />
                 <Text style={styles.text}>
                     {nameStr}
                 </Text>
@@ -140,34 +160,56 @@ export class RoomScreen extends Component {
         );
     };
 
-    componentWillUnmount() {
-        let curIDs = this.state.data.members;
-        const ind_to_rem = curIDs.indexOf(this.props.customUser.watchListId);
-        curIDs.splice(ind_to_rem,1);
-        let now_active = curIDs.length>0;
-        firestore
-            .collection("squadRoom")
-            .doc(this.id)
-            .update({members: curIDs, isActive:now_active})
-            .catch(e=>{
-                console.warn(e);
-            })
-    }
+    // componentWillUnmount() {
+    //     let curIDs = this.state.data.members;
+    //     const ind_to_rem = curIDs.indexOf(this.props.customUser.watchListId);
+    //     curIDs.splice(ind_to_rem,1);
+    //     let now_active = curIDs.length>0;
+    //     firestore
+    //         .collection("squadRoom")
+    //         .doc(this.id)
+    //         .update({members: curIDs, isActive:now_active})
+    //         .catch(e=>{
+    //             console.warn(e);
+    //         })
+    // }
 
     render() {
         if (this.state.loading) {
             return <ActivityIndicator />;
         } else if (this.state.error) {
             return (
-                <View style={styles.container} backgroundColor={"red"}>
+                <View style={styles.container}>
                     <Text
                         style={styles.text}>{"An error has occurred. Make sure you entered the name correctly."}</Text>
                 </View>
             );
         } else {
             // LOADED ROOM VIEW
-            return (<View backgroundColor={swGrey}>
+            return (
+            <View backgroundColor={swGrey}>
 
+            
+                <View style={styles.container}>
+                    <View style={{marginTop:'10%', marginBottom:'10%'}}>
+                        <Text style={{fontSize: 25,
+                                        fontWeight: "bold",
+                                        color:swOrange,}}>
+                            Members
+                        </Text>
+                    </View>
+                    <View style={{width:'100%',justifyContent:"center",alignSelf:'center'}}>
+                    <FlatList 
+                                style={{alignSelf:'center'}}
+                              data={this.dataMembers}
+                              renderItem={this.renderMember}
+                              keyExtractor={item => item.watchListID} 
+                              height={"100%"}
+                              >
+                    </FlatList>
+                    </View>
+                    
+                </View>
                 <TouchableOpacity width={10}
                                   onPress={() => {
                                       firestore
@@ -183,22 +225,8 @@ export class RoomScreen extends Component {
                                                 size={50} />
                     </View>
                 </TouchableOpacity>
-                <View style={styles.container}>
-                    <View style={styles.container}
-                          width={"22%"}
-                          borderBottomColor={"white"}
-                          borderBottomWidth={2}
-                          marginBottom={10}>
-                        <Text style={styles.text}>
-                            Members
-                        </Text>
-                    </View>
-                    <FlatList data={this.dataMembers}
-                              renderItem={this.renderMember}
-                              keyExtractor={item => item.watchListID} height={"100%"}>
-                    </FlatList>
-                </View>
-            </View>);
+            </View>
+            );
         }
     }
 }
@@ -223,15 +251,15 @@ export default connect(mapStateToProps, mapDispatchToProps)(RoomScreen);
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: swBlue,
+        backgroundColor: swGrey,
         width: "100%",
-        height: undefined,
+        height: '100%',
         alignContent: "center",
         alignItems: "center"
     },
     text: {
         fontSize: 20,
-        fontWeight: "bold",
-        color: "white"
+        fontWeight: '300',
+        color: "white",
     }
 });

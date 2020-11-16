@@ -1,27 +1,33 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View,SafeAreaView } from "react-native";
+import { StyleSheet, Text, View,SafeAreaView,TouchableOpacity } from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
-import { Menu } from 'react-native-paper';
 import  { swGrey,swWhite } from "../styles/Colors";
 import firebase from 'firebase';
 import { signOut } from "../components/Auth";
 
-export default class settings extends Component {
-    // constructor(props){
-    //     super(props);
-    //     this.state={
-    //         navigator:Navigator
-    //     }
-    // }
+export default class Settings extends Component {
     render() {
+       
         return (
-            <SafeAreaView style={styles.container}>
-                <Menu.Item titleStyle={styles.text} onPress={() => {}} title="Edit Profile" />
-                <Menu.Item titleStyle={styles.text} onPress={() => {}} title="Privacy" />
-                <Menu.Item titleStyle={styles.text} onPress={() => {}} title="Get Help" />
-                <Menu.Item  titleStyle={styles.logout} onPress={async() => {
+            <SafeAreaView style={{backgroundColor:swGrey,flex:1}}>
+                <View style={styles.container}>
+                <TouchableOpacity style={{flexDirection:'row'}} onPress={() => this.props.navigation.navigate('Profile')} >
+                    <Icon  name='ios-brush' color={swWhite} size={30}/>
+                    <Text style={styles.text}>Edit Profile</Text>
+                    </TouchableOpacity>
+                <TouchableOpacity style={{flexDirection:'row'}}>
+                <Icon  name='ios-finger-print' color={swWhite} size={30}/>
+                    <Text style={styles.text}>Privacy</Text>
+                    </TouchableOpacity>
+                <TouchableOpacity style={{flexDirection:'row'}}>
+                <Icon  name='ios-help-buoy' color={swWhite} size={30}/>
+                    <Text style={styles.text}>Get Help</Text>
+                    </TouchableOpacity>
+                <TouchableOpacity
+                style={{flexDirection:'row'}} 
+                onPress={async() => {
                         try {
-                            let logout= await(signOut());
+                            await(signOut());
                             
                                 this.props.navigation.reset({
                                     index: 0,
@@ -33,10 +39,10 @@ export default class settings extends Component {
                         }
                         
                         
-                }} title="Logout" />
-
-                
-            
+                }}>
+                    <Icon  name='md-log-out' color={'red'} size={30}/>
+                    <Text style={styles.logout}>Logout</Text></TouchableOpacity>
+                </View>
             </SafeAreaView>
         );
     }
@@ -44,27 +50,26 @@ export default class settings extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor:swGrey,
         alignItems: "flex-start",
-        justifyContent: "center",
+        width:'100%',
+        height:'100%',
+        marginTop:'40%',
+        padding:10,
+        paddingLeft:20,
+
     },
     text:{
-        fontSize:24,
+        fontSize:25,
         color:swWhite,
+        marginBottom:'10%',
+        marginLeft:'5%'
+     
     },
     logout:{
         fontSize:24,
         color:'red',
+        marginLeft:'5%'
+   
     },
-    card:{
-        backgroundColor:swGrey,
-        borderColor:'transparent',
-        width:"90%",
-       
-    },
-    cardDivider:{
-        marginBottom:0,
-    }
 
 });

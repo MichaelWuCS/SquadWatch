@@ -8,6 +8,9 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@dicebear/avatars": "^4.4.0",
+    "@dicebear/avatars-identicon-sprites": "^4.4.0",
+    "@dicebear/avatars-initials-sprites": "^4.4.0",
     "@react-native-community/masked-view": "0.1.10",
     "@react-navigation/drawer": "^5.9.2",
     "@react-navigation/material-bottom-tabs": "^5.2.19",
@@ -16,6 +19,7 @@
     "and": "0.0.3",
     "ci": "^1.0.0",
     "expo": "~38.0.8",
+    "expo-font": "~8.2.1",
     "expo-linear-gradient": "^8.3.1",
     "expo-status-bar": "^1.0.2",
     "firebase": "7.9.0",
@@ -30,16 +34,16 @@
     "react-native-image-colors": "^1.2.4",
     "react-native-image-slider-box": "^1.0.12",
     "react-native-linear-gradient": "^2.5.6",
-    "react-native-paper": "^4.2.0",
+    "react-native-paper": "^4.4.0",
     "react-native-reanimated": "~1.9.0",
     "react-native-safe-area-context": "~3.0.7",
     "react-native-screens": "~2.9.0",
     "react-native-snap-carousel": "^3.9.1",
+    "react-native-swipeout": "^2.3.6",
     "react-native-web": "~0.11.7",
     "react-redux": "^7.2.1",
     "react-router-native": "^5.2.0",
-    "redux": "^4.0.5",
-    "expo-font": "~8.2.1"
+    "redux": "^4.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",

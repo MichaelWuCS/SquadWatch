@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View, ScrollView, Button } from "react-native";
 import MovieElement from "../components/MovieElement.js";
 import {connect} from "react-redux";
-import {getWatchList} from "../api/WatchListApi.js"
+import {getWatchList} from "../api/WatchListApi.js";
+import {swGrey} from "../styles/Colors";
 
 
 class WatchList extends Component {
@@ -44,9 +45,6 @@ class WatchList extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style={styles.header}>
-                    <Text style={styles.headerText}>WATCHLIST</Text>
-                </View>
                 <ScrollView styles={styles.scrollView}>
                     <View>{this.movieArray()}</View>
                 </ScrollView>
@@ -79,7 +77,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(WatchList)
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#181b3d",
+        backgroundColor:swGrey,
     },
     header: {
         backgroundColor: "#00B465",

@@ -1,16 +1,16 @@
 import * as React from 'react';
 import { createStackNavigator, Header, HeaderTitle } from '@react-navigation/stack';
 import Dashboard from '../views/Dashboard';
-import{swOrange,swGrey,swBlack,swWhite} from '../styles/Colors';
+import{swOrange,swGrey,swGreen,swWhite,swNavy} from '../styles/Colors';
 import WatchList from '../views/WatchList';
 import Search from '../views/Search';
 import MovieDetails from '../views/MovieDetails';
-import Settings from '../views/settings';
+import Settings from "../views/Settings"
 import Friends from '../views/Friends';
 import SyncScreen from "../views/SyncScreen";
+import Profile from '../views/Profile'
 import RoomScreen from "../views/RoomScreen";
 import {Button} from "react-native-elements";
-import { StackActions } from "@react-navigation/routers";
 import SignUp  from '../views/SignUp';
 import Login from '../views/Login';
 import Index_page from "../views/Index";
@@ -61,7 +61,7 @@ function HomeStack({navigation}){
                 }}
                 />
                 <DashStack.Screen
-                    name={'Settings'}
+                    name='Settings'
                     component={Settings}
                     options={{
                         headerStyle:{
@@ -103,7 +103,7 @@ function HomeStack({navigation}){
                     }}
                 />
                 <DashStack.Screen
-                    name={'Movie'}
+                    name='Movie'
                     title='Movie Details'
                     component={MovieDetails}
                     options={({route}) => ({
@@ -116,6 +116,18 @@ function HomeStack({navigation}){
                         },
                         title: route.params.name
                     })}
+                />
+                <DashStack.Screen
+                    name='Profile'
+                    title='Edit Profile'
+                    component={Profile}
+                    options={{
+                        headerStyle:{backgroundColor:swGrey},
+                        headerTitleStyle:{
+                            color:swWhite,
+                            fontWeight:'bold',
+                        },
+                    }}
                 />
             </DashStack.Navigator>
         );
@@ -144,7 +156,10 @@ function SyncStack(){
                 component={RoomScreen}
                 options={({route}) => ({
                     headerStyle:{
-                        backgroundColor:swGrey,
+                        backgroundColor:swNavy,
+                        borderBottomWidth:0,
+                        elevation:0,
+                        shadowOpacity:0,
                     },
                     headerTitleStyle:{
                         color:'white',
@@ -220,7 +235,7 @@ function WatchListStack() {
             component={WatchList}
             options={{
                 headerStyle:{
-                    backgroundColor:swGrey,
+                    backgroundColor:swGreen,
                     borderBottomWidth:0,
                     elevation:0,
                     shadowOpacity:0,

@@ -22,17 +22,17 @@ class  Profile extends Component{
         return(
             <SafeAreaView style={{backgroundColor:swOrange}}>
                 
-                <View  style={{backgroundColor:swOrange, height:'100%', width:'100%'}}>
+                <View  style={{backgroundColor:'swOrange', height:'100%', width:'100%'}}>
                 <Avatar
                 rounded
                 size="large"
                 title='JD'
                 source={{
                     showAccessory:true,
-                    uri:'https://images.unsplash.com/photo-1592073572267-8204bad8d0b2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2100&q=80'
+                    uri:'http://identicon-1132.appspot.com/random?/p=7'
 
                 }}
-                containerStyle={{alignSelf:'center', marginTop:70,marginBottom:10}}
+                containerStyle={{alignSelf:'center', marginTop:70,marginBottom:10, backgroundColor:swWhite}}
                 />
                 <Text style={{alignSelf:'center', color:swWhite, fontSize:18, fontWeight:'700'}}>{this.props.customUser.first} {this.props.customUser.last}</Text>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
