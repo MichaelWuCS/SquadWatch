@@ -208,9 +208,7 @@ export class RoomScreen extends Component {
                               >
                     </FlatList>
                     </View>
-                    
-                </View>
-                <TouchableOpacity width={10}
+                    <TouchableOpacity width={10}
                                   onPress={() => {
                                       firestore
                                           .collection("squadRoom")
@@ -225,6 +223,8 @@ export class RoomScreen extends Component {
                                                 size={50} />
                     </View>
                 </TouchableOpacity>
+                </View>
+                
             </View>
             );
         }
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
         width: "100%",
         height: '100%',
         alignContent: "center",
-        alignItems: "center"
+        alignItems: "center",
     },
     text: {
         fontSize: 20,
