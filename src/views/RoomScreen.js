@@ -126,23 +126,25 @@ export class RoomScreen extends Component {
         const cur_lightness = 15 + memberObj.index * 3;
         let member = memberObj.item;
         let nameStr = member.first + " " + member.last.charAt(0);
+        let initials = nameStr.split(" ").map((n)=>n[0]).join("");
         if(member.watchListID === this.state.data.host){
             nameStr = nameStr +" (host)";
         }
         return (
             <View flexDirection={"row"} height={50}
                   justifyContent={"center"}
+                  alignSelf={'center'}
                   alignItems={"center"}
                   backgroundColor={"hsl(211,53%," + cur_lightness + "%)"}
-                  width={"80%"}
+                  width={"90%"}
                   marginBottom={'5%'}
                   borderRadius={20}
                   >
                 <Avatar
                 rounded
-                containerStyle={{alignSelf:"center",paddingTop:-20}}
+                containerStyle={{alignSelf:"center"}}
                 size="small"
-                title='KT'
+                title={initials}
                 source={{
                     showAccessory:true,
                     uri:'http://identicon-1132.appspot.com/random?/s=1'
@@ -153,26 +155,26 @@ export class RoomScreen extends Component {
                 <Text style={styles.text}>
                     {nameStr}
                 </Text>
-                <TouchableOpacity style={{ paddingRight: 5 }}>
+                <TouchableOpacity style={{ paddingLeft: '20%' }}>
                     <MaterialCommunityIcons name={"dots-vertical"} color={"white"} size={20} />
                 </TouchableOpacity>
             </View>
         );
     };
 
-    componentWillUnmount() {
-        let curIDs = this.state.data.members;
-        const ind_to_rem = curIDs.indexOf(this.props.customUser.watchListId);
-        curIDs.splice(ind_to_rem,1);
-        let now_active = curIDs.length>0;
-        firestore
-            .collection("squadRoom")
-            .doc(this.id)
-            .update({members: curIDs, isActive:now_active})
-            .catch(e=>{
-                console.warn(e);
-            })
-    }
+    // componentWillUnmount() {
+    //     let curIDs = this.state.data.members;
+    //     const ind_to_rem = curIDs.indexOf(this.props.customUser.watchListId);
+    //     curIDs.splice(ind_to_rem,1);
+    //     let now_active = curIDs.length>0;
+    //     firestore
+    //         .collection("squadRoom")
+    //         .doc(this.id)
+    //         .update({members: curIDs, isActive:now_active})
+    //         .catch(e=>{
+    //             console.warn(e);
+    //         })
+    // }
 
     render() {
         if (this.state.loading) {
@@ -198,9 +200,9 @@ export class RoomScreen extends Component {
                             Members
                         </Text>
                     </View>
-                    <View style={{width:'100%',justifyContent:"center",alignSelf:'center'}}>
+                    <View style={{width:'100%',justifyContent:"center",alignSelf:'center', height:'70%'}}>
                     <FlatList 
-                                style={{alignSelf:'center'}}
+                              style={{alignSelf:'center'}}
                               data={this.dataMembers}
                               renderItem={this.renderMember}
                               keyExtractor={item => item.watchListID} 
@@ -218,8 +220,8 @@ export class RoomScreen extends Component {
 
                                   }}
                 >
-                    <View style={{ alignSelf: "center", justifyContent: "center", borderRadius: 2 }}>
-                        <MaterialCommunityIcons style={{ alignSelf: "center" }} name="infinity" color={swOrange}
+                    <View style={styles.sync_btn}>
+                        <MaterialCommunityIcons style={{ alignSelf: "center" }} name="infinity" color={swWhite}
                                                 size={50} />
                     </View>
                 </TouchableOpacity>
@@ -261,5 +263,21 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: '300',
         color: "white",
+    },
+    sync_btn:{
+        width:60, 
+        height:60, 
+        alignSelf: "center", 
+        justifyContent: "center", 
+        borderRadius:60,  
+        marginTop:'5%',
+        backgroundColor:swOrange,
+        shadowColor:'black',
+        shadowOffset: {
+            width: 0,
+            height: 8,
+        },
+        shadowOpacity: 0.44,
+        shadowRadius: 2.32,
     }
 });
