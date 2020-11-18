@@ -246,7 +246,7 @@ function WatchListStack() {
                 }
             }}
             />
-            
+
             <SearchStack.Screen
             name={'Movie'}
             title='Movie Details'

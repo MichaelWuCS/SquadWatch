@@ -114,6 +114,9 @@ export class RoomScreen extends Component {
                 }
                 if(querySnapshot.data().syncing){
                     console.log(this.state.data);
+                    console.log("===>>>===>>>")
+                    console.log(this.props.navigation);
+                    console.log("<<<===<<<===")
                     this.props.navigation.push("SyncAnimation", {
                         members: this.state.data.members,
                     });
@@ -191,7 +194,7 @@ export class RoomScreen extends Component {
             return (
             <View backgroundColor={swGrey}>
 
-            
+
                 <View style={styles.container}>
                     <View style={{marginTop:'10%', marginBottom:'10%'}}>
                         <Text style={{fontSize: 25,
@@ -201,11 +204,11 @@ export class RoomScreen extends Component {
                         </Text>
                     </View>
                     <View style={{width:'100%',justifyContent:"center",alignSelf:'center', height:'70%'}}>
-                    <FlatList 
+                    <FlatList
                               style={{alignSelf:'center'}}
                               data={this.dataMembers}
                               renderItem={this.renderMember}
-                              keyExtractor={item => item.watchListID} 
+                              keyExtractor={item => item.watchListID}
                               height={"100%"}
                               >
                     </FlatList>
@@ -226,7 +229,7 @@ export class RoomScreen extends Component {
                     </View>
                 </TouchableOpacity>
                 </View>
-                
+
             </View>
             );
         }
@@ -265,11 +268,11 @@ const styles = StyleSheet.create({
         color: "white",
     },
     sync_btn:{
-        width:60, 
-        height:60, 
-        alignSelf: "center", 
-        justifyContent: "center", 
-        borderRadius:60,  
+        width:60,
+        height:60,
+        alignSelf: "center",
+        justifyContent: "center",
+        borderRadius:60,
         marginTop:'5%',
         backgroundColor:swOrange,
         shadowColor:'black',

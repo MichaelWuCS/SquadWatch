@@ -4,7 +4,8 @@ import {
     View,
     TouchableOpacity,
     Animated,
-    Easing
+    Easing,
+    Text, FlatList
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { swOrange, swGrey } from "../styles/Colors";
@@ -38,7 +39,6 @@ const members = ["kcnprYOOyDQzT1FYpyTGpaT322u1", "lN3sv04bsGamBqI9Gc0WbHuvpER2"]
 export default class SyncRoomAnimation extends Component {
     constructor(props) {
         super(props);
-
 		this.state = {
 			circles: [],
 			loading: false,
@@ -52,6 +52,8 @@ export default class SyncRoomAnimation extends Component {
 	}
 
 	componentDidMount() {
+        console.log(this.props.route)
+        console.log("==============_=========")
     	this.members = this.props.route.params.members;
 		this.setCircleInterval();
 		this.get_recommendations(this.members)
@@ -84,20 +86,21 @@ export default class SyncRoomAnimation extends Component {
                         console.log(randomMovieID);
                     }
                     this.get_and_add_to_recommendations(randomMovieID)
-                        .then(()=>{
-                            console.log("we made it");
-                            console.log(i);
-                            console.log(members_list.length);
-                            if(i === members_list.length-1){
-                                console.log("yeeeeeee haw");
-                                this.setState({loading:false});
-                            }
+                        .catch((error)=>{
+                            // console.log("we made it");
+                            // console.log(i);
+                            // console.log(members_list.length);
+                            // if(i === members_list.length-1){
+                            //     console.log("yeeeeeee haw");
+                            console.warn(error);
+                            this.setState({loading:false});
+                            // }
                         });
                 });
         }
         console.log("recommendations: ");
         console.log(this.state.movie_recommendations);
-        this.setState({loading:false})
+        //this.setState({loading:false})
         console.log("recs generated!");
     }
 
@@ -107,7 +110,7 @@ export default class SyncRoomAnimation extends Component {
         await fetch(requestStr)
             .then(res => res.json())
             .then(results => {
-                var rec = this.state.movie_recommendations.concat(results);
+                var rec = this.state.movie_recommendations.concat(results.results);
                 this.setState({
                     movie_recommendations: rec
                 });
@@ -148,6 +151,12 @@ export default class SyncRoomAnimation extends Component {
         }).start(this.setCircleInterval.bind(this));
     }
 
+    renderRec = (item) => {
+        console.log("yerrrrlllll: ");
+        console.log(item);
+        return <Text> {item.item.original_title} </Text>
+    }
+
     render() {
         const { size, interval } = this.props;
         if (this.state.loading) {
@@ -181,8 +190,12 @@ export default class SyncRoomAnimation extends Component {
 				</View>
 			);
 		} else{
-			return <SyncRecsScreen/> // this needs to be a component not a function to fix "functions are not a valid react child
-		}
+            this.props.navigation.setOptions({ title: 'Recommendations' })
+            return (<View>
+                        <FlatList data={this.state.movie_recommendations} renderItem={this.renderRec} />
+                    </View>
+            )
+        }
 	}
 }
 
