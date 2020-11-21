@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View, ScrollView, Button, ImageBackground,TouchableHighlight } from "react-native";
-import {Tile} from "react-native-elements";
 import{swWhite} from "../styles/Colors"
 import Swipeable from 'react-native-gesture-handler/Swipeable';
  
@@ -14,7 +13,7 @@ export default class MovieElement extends Component {
     render() {
         return (
             <TouchableHighlight
-           underlayColor={false}
+            underlayColor={false}
             onPress={ ()=>{
                 const movieId = this.props.movie.id;
                 const movieName = this.props.movie.name;
@@ -28,9 +27,7 @@ export default class MovieElement extends Component {
                 friction={2}
                 >
                 <ImageBackground source={{uri: "https://image.tmdb.org/t/p/w500" + this.props.movie.posterPath}}  style={styles.image} imageStyle={styles.imageStyle}>
-                    <Text style={styles.movieTitle} 
-    >{this.props.movie.name}</Text>
-                    
+                    <Text style={styles.movieTitle} >{this.props.movie.name}</Text>
                     <Text numberOfLines={3} ellipsizeMode='tail' style={styles.description}>{this.props.movie.description}</Text>
                 </ImageBackground>
                 </Swipeable>
