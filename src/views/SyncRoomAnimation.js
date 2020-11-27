@@ -66,6 +66,7 @@ export default class SyncRoomAnimation extends Component {
 	}
 
 	componentWillUnmount() {
+        //console.log("unmounted");``
     	clearTimeout(this.timeoutHandle);
   	}
 
@@ -154,7 +155,8 @@ export default class SyncRoomAnimation extends Component {
 
     renderRec = (item) => {
         //console.log("yerrrrlllll: ");
-        console.log(item.item);
+        //console.log("boy "+item.index);
+        //console.log(item.item);
         let bgCol = (item.index===0)? 'rgba(130,61,0,0.6)' : 'rgba(0,87,49,0.6)';
         let imagePath = "https://image.tmdb.org/t/p/w1280"+item.item.poster_path;
         return (
@@ -178,6 +180,7 @@ export default class SyncRoomAnimation extends Component {
     }
 
     render() {
+        //console.log("loading state: "+this.state.loading);
         const { size, interval } = this.props;
         if (this.state.loading) {
             return (
@@ -210,6 +213,7 @@ export default class SyncRoomAnimation extends Component {
 				</View>
 			);
 		} else{
+            this.anim.stopAnimation()
             this.props.navigation.setOptions({ title: 'Recommendations' })
             return (<View style={styles.container}>
                         <FlatList data={this.state.movie_recommendations}
