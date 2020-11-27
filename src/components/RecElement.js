@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View, Animated, ImageBackground,TouchableHighlight,TouchableOpacity, Alert } from "react-native";
-import {Tile} from "react-native-elements";
-import{swWhite} from "../styles/Colors";
+import{swWhite,swGreen} from "../styles/Colors";
 import {TMDB_KEY} from "@env";
-import {Button} from 'react-native-elements';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import Rating from "../components/Ratings.js";
 import * as firebase from "firebase";
@@ -42,26 +42,46 @@ class MovieElement extends Component {
           console.log(error)
       })
   }
-  removeMovieFromWatchList = ()=>{
-    
-    try {
-        let tempWatchList = this.props.watchList.filter((movie) =>{
-            return (movie.id !== this.props.movie.id)
-        });
-        this.props.updateWatchList(tempWatchList);
-        updateWatchList(tempWatchList);
-        firebase.firestore()
-            .collection("watchList")
-            .doc(this.props.userId)
-            .update({movies:tempWatchList})
-            .catch(error=>{
-                console.warn(error);
-            })
-    } catch (error) {
-        console.log(error)
-    }
+  get_recommendations = (watch_list) => {
+    const randomMovie = watch_list[Math.floor(Math.random() * watch_list.length)];
+    const requestStr = "https://api.themoviedb.org/3/movie/" + randomMovie.id + "/recommendations" + "?api_key=" + TMDB_KEY;
+    fetch(requestStr)
+        .then(res => res.json())
+        .then(results => {
+            this.setState({
+                recommendations: results,
+                loading: false
+            });
+        }).catch((error)=> {
+            console.log("Error!: " + error);
+            this.setState({loading: false });
+        })
 }
 
+addMovieToWatchList = ()=>{
+        try {
+            var currentMovie = {
+                description:this.props.movie.description,
+                id:this.props.movie.id,
+                name:this.props.movie.name,
+                posterPath:this.props.movie.posterPath
+            }
+            let temp = [...this.props.watchList]
+            temp.push(currentMovie);
+            firebase.firestore()
+                .collection("watchList")
+                .doc(this.props.customUser.watchListId)
+                .update({movies:temp})
+                .catch(error=>{
+                    console.warn(error);
+                });
+                this.props.updateWatchList(temp);
+                this.props.update(currentMovie.id);
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
     
     renderRightActions = (progress, dragX) => {
         const trans = dragX.interpolate({
@@ -71,7 +91,7 @@ class MovieElement extends Component {
         })
         return (
           
-          <TouchableOpacity style={styles.rightAction} onPress={this.removeMovieFromWatchList}>
+          <TouchableOpacity style={styles.rightAction} onPress={this.addMovieToWatchList}>
             <Animated.Text
               style={[
                 styles.actionText,
@@ -79,7 +99,11 @@ class MovieElement extends Component {
                   transform: [{ translateX: trans }],
                 },
               ]}>
-              Delete
+              <MaterialCommunityIcons
+                                style={styles.buttonIcon}
+                                name= {(this.state.inWatchlist)? "playlist-check":"playlist-plus"}
+                                color="#ffffff" size ={32}
+                                />
             </Animated.Text>
           </TouchableOpacity>
         );
@@ -108,7 +132,7 @@ class MovieElement extends Component {
                     
                     <ImageBackground source={{uri: "https://image.tmdb.org/t/p/w500" + this.props.movie.posterPath}} style={styles.image} imageStyle={styles.imageStyle} >
                     <Text style={styles.movieTitle} 
-    >{this.props.movie.name} ({this.state.year})</Text>
+    >{this.props.movie.name} {"("+this.state.year+')'}</Text>
                     <Rating id={this.props.movie.id}></Rating>
                     <Text style={styles.detail}>{this.state.genres}</Text>
                     <Text numberOfLines={3} ellipsizeMode='tail' style={styles.description}>{this.props.movie.description}</Text>
@@ -165,14 +189,14 @@ const styles = StyleSheet.create({
         // marginBottom:15,
         borderRadius: 15,
         padding:10,
-        backgroundColor: 'red',
+        backgroundColor: swGreen,
         justifyContent: 'center',
         alignItems: 'flex-end',
       },
       actionText:{
         color:swWhite,
         fontWeight:'600',
-        paddingRight:20,
+        alignSelf:'center',
         fontSize:18,
       },
       detail: {

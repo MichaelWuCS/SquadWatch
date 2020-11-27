@@ -76,6 +76,7 @@ class RecommendationsPreviewList extends Component {
 
     render() {
         return (
+            <TouchableHighlight style={{borderRadius: 20,height:150, marginTop:15,marginRight: 10,marginLeft: 10,}}  onPress={()=>this.props.navigation.navigate('Recommendations')}>
             <View style={styles.container}>
                 <Text style={styles.text}>{this.props.listTitle}</Text>
                 <FlatList horizontal={true} showsHorizontalScrollIndicator={false}
@@ -85,15 +86,15 @@ class RecommendationsPreviewList extends Component {
                           ItemSeparatorComponent={this.renderSeparator}
                 />
             </View>
+            </TouchableHighlight>
         );
     }
 }
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 15,
-        marginRight: 10,
-        marginLeft: 10,
+        
+        
         padding: 10,
         borderRadius: 20,
         backgroundColor: swOrange,

@@ -77,6 +77,7 @@ class MovieDetails extends Component{
         .then(res => res.json())
         .then(res => {
             let temp = [];
+            console.log(res);
             res.genres.forEach(element => temp.push(element.name));
             while(temp.length>4){
                 temp.pop();

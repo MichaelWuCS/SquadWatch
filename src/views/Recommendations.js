@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View, ScrollView, Button, ActivityIndicator } from "react-native";
-import MovieElement from "../components/MovieElement.js";
+import RecElement from "../components/RecElement";
 import {connect} from "react-redux";
 import {getUserWatchList} from "../views/WatchList";
 import {getWatchList} from "../api/WatchListApi.js"
@@ -65,19 +65,12 @@ class Recommendations extends Component {
             })
     }
 
-
-    /*getUserRecList = async () => {
-
-        try {
-            var userIDkey = this.props.customUser.watchListId;
-            //maybe run Nana Algorithm here 
-            var userRecList = await getRecList(userIDkey);
-            this.props.updateRecList(userRecList);
-
-        } catch (error) {
-            console.log(error);
-        }
-    }*/
+    updateRecList = (element)=>{
+       newList = this.state.recommendations.filter((movie)=>{
+            return (movie.id!=element);
+        })
+        this.setState({recommendations:newList})
+    }
 
     movieArray = (rec) => {
         return rec.map((movie,index)=>{
@@ -89,7 +82,7 @@ class Recommendations extends Component {
             }
             return(
             <View key={index}>
-                <MovieElement movie={clone} navigation={this.props.navigation}></MovieElement>
+                <RecElement movie={clone} navigation={this.props.navigation} recList={this.state.recommendations} update={this.updateRecList}></RecElement>
                 <Text>{movie.title}</Text>
             </View>
         )})
@@ -104,9 +97,6 @@ class Recommendations extends Component {
         else{
         return (
             <View style={styles.container}>
-                <View style={styles.header}>
-                    <Text style={styles.headerText}>RECLIST</Text>
-                </View>
                 <ScrollView styles={styles.scrollView}>
                     <View>{this.movieArray(this.state.recommendations.results)}</View>
                 </ScrollView>

@@ -94,7 +94,10 @@ function HomeStack({navigation}){
                     component={Recommendations}
                     options={{
                         headerStyle:{
-                            backgroundColor:swGrey,
+                            backgroundColor:swOrange,
+                            borderBottomWidth:0,
+                            elevation:0,
+                            shadowOpacity:0,
                         },
                         headerTitleStyle:{
                             color:'white',

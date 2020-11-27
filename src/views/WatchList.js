@@ -36,7 +36,7 @@ class WatchList extends Component {
         return this.props.watchList.map((movie,index)=>{
             return(
             <View key={index}>
-                <MovieElement movie={movie} navigation={this.props.navigation} ></MovieElement>
+                <MovieElement movie={movie} navigation={this.props.navigation} watchList={this.props.watchList} userId={this.props.customUser.watchListId}></MovieElement>
             </View>
         )})
    }
