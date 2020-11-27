@@ -117,7 +117,7 @@ export default class RecommendationsPreview extends Component {
     }
 
     componentDidMount() {
-        this.get_recommendations(test_watchlist);
+        this.get_recommendations({movies:this.props.watchlist});
     }
 
     get_recommendations = (watch_list) => {
