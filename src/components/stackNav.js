@@ -185,6 +185,20 @@ function SyncStack(){
                     title: "Syncing..."
                 })}
             />
+            <RoomStack.Screen
+                name='Movie'
+                component={MovieDetails}
+                options={({route}) => ({
+                    headerStyle:{
+                        backgroundColor:swGrey,
+                    },
+                    headerTitleStyle:{
+                        color:'white',
+                        fontWeight:'bold',
+                    },
+                    title: route.params.name
+                })}
+            />
         </RoomStack.Navigator>
     )
 }
@@ -249,7 +263,7 @@ function WatchListStack() {
                 }
             }}
             />
-            
+
             <SearchStack.Screen
             name={'Movie'}
             title='Movie Details'

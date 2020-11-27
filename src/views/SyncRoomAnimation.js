@@ -4,10 +4,11 @@ import {
     View,
     TouchableOpacity,
     Animated,
-    Easing
+    Easing,
+    Text, FlatList, StyleSheet, Image, ImageBackground
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { swOrange, swGrey } from "../styles/Colors";
+import { swOrange, swGrey, swGreen } from "../styles/Colors";
 import Pulse from "../components/Pulse";
 import firebase from "firebase";
 import {
@@ -20,6 +21,7 @@ import {
     TMDB_KEY
 } from "@env";
 import SyncRecsScreen from "./SyncRecsScreen";
+import MovieElement from "../components/MovieElement";
 
 const firebase_config = {
     apiKey: FIREBASE_API_KEY,
@@ -38,7 +40,6 @@ const members = ["kcnprYOOyDQzT1FYpyTGpaT322u1", "lN3sv04bsGamBqI9Gc0WbHuvpER2"]
 export default class SyncRoomAnimation extends Component {
     constructor(props) {
         super(props);
-
 		this.state = {
 			circles: [],
 			loading: false,
@@ -52,6 +53,8 @@ export default class SyncRoomAnimation extends Component {
 	}
 
 	componentDidMount() {
+        console.log(this.props.route)
+        console.log("==============_=========")
     	this.members = this.props.route.params.members;
 		this.setCircleInterval();
 		this.get_recommendations(this.members)
@@ -63,6 +66,7 @@ export default class SyncRoomAnimation extends Component {
 	}
 
 	componentWillUnmount() {
+        //console.log("unmounted");``
     	clearTimeout(this.timeoutHandle);
   	}
 
@@ -84,20 +88,21 @@ export default class SyncRoomAnimation extends Component {
                         console.log(randomMovieID);
                     }
                     this.get_and_add_to_recommendations(randomMovieID)
-                        .then(()=>{
-                            console.log("we made it");
-                            console.log(i);
-                            console.log(members_list.length);
-                            if(i === members_list.length-1){
-                                console.log("yeeeeeee haw");
-                                this.setState({loading:false});
-                            }
+                        .catch((error)=>{
+                            // console.log("we made it");
+                            // console.log(i);
+                            // console.log(members_list.length);
+                            // if(i === members_list.length-1){
+                            //     console.log("yeeeeeee haw");
+                            console.warn(error);
+                            this.setState({loading:false});
+                            // }
                         });
                 });
         }
         console.log("recommendations: ");
         console.log(this.state.movie_recommendations);
-        this.setState({loading:false})
+        //this.setState({loading:false})
         console.log("recs generated!");
     }
 
@@ -107,7 +112,7 @@ export default class SyncRoomAnimation extends Component {
         await fetch(requestStr)
             .then(res => res.json())
             .then(results => {
-                var rec = this.state.movie_recommendations.concat(results);
+                var rec = this.state.movie_recommendations.concat(results.results);
                 this.setState({
                     movie_recommendations: rec
                 });
@@ -148,7 +153,34 @@ export default class SyncRoomAnimation extends Component {
         }).start(this.setCircleInterval.bind(this));
     }
 
+    renderRec = (item) => {
+        //console.log("yerrrrlllll: ");
+        //console.log("boy "+item.index);
+        //console.log(item.item);
+        let bgCol = (item.index===0)? 'rgba(130,61,0,0.6)' : 'rgba(0,87,49,0.6)';
+        let imagePath = "https://image.tmdb.org/t/p/w1280"+item.item.poster_path;
+        return (
+            <TouchableOpacity style={styles.tile} onPress={()=>{this.props.navigation.push("Movie",{id:item.item.id, name:item.item.title})}}>
+                <View style={styles.tile} backgroundColor={bgCol}>
+                    <ImageBackground source={{uri:imagePath}}
+                                     style={{width: "100%", height: "100%", borderRadius:10}}
+                                     imageStyle={{borderRadius:10}}>
+                        <View style={styles.tile} backgroundColor={bgCol}>
+                        <Text style={styles.title}> {item.item.title + " ("+ item.item.release_date.substring(0,4) +")"}  </Text>
+                        <Text style={styles.body} numberOfLines={3}> {item.item.overview} </Text>
+                        </View>
+                    </ImageBackground>
+                </View>
+            </TouchableOpacity>
+        )
+    }
+
+    renderSeparator = () => {
+        return <View height={"10%"}/>
+    }
+
     render() {
+        //console.log("loading state: "+this.state.loading);
         const { size, interval } = this.props;
         if (this.state.loading) {
             return (
@@ -181,8 +213,16 @@ export default class SyncRoomAnimation extends Component {
 				</View>
 			);
 		} else{
-			return <SyncRecsScreen/> // this needs to be a component not a function to fix "functions are not a valid react child
-		}
+            this.anim.stopAnimation()
+            this.props.navigation.setOptions({ title: 'Recommendations' })
+            return (<View style={styles.container}>
+                        <FlatList data={this.state.movie_recommendations}
+                                  renderItem={this.renderRec}
+                                  ItemSeparatorComponent={this.renderSeparator}
+                        />
+                    </View>
+            )
+        }
 	}
 }
 
@@ -209,5 +249,35 @@ SyncRoomAnimation.defaultProps = {
     backgroundColor: swOrange,
     getStyle: undefined
 };
+
+const styles = StyleSheet.create({
+    container: {
+        backgroundColor: swGrey,
+        width: "100%",
+        height: undefined,
+        alignContent: "center",
+        alignItems: "center"
+    },
+    tile:{
+        borderRadius:10,
+        flex:1,
+        width: "100%",
+        height: "10%",
+        alignContent: "center",
+        alignItems: "center"
+    },
+    title: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: "white",
+        textAlign:"left"
+    },
+    body: {
+        fontSize: 15,
+        fontWeight: '300',
+        color: "white",
+        textAlignVertical:"bottom"
+    },
+});
 
 
