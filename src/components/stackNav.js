@@ -18,6 +18,7 @@ import BottomNav from './BottomTab';
 import  Icon from  'react-native-vector-icons/Ionicons';
 import SyncRoomAnimation from "../views/SyncRoomAnimation";
 import Recommendations from "../views/Recommendations";
+import SyncedRecs from "../views/SyncedRecs";
 
 
 
@@ -194,6 +195,20 @@ function SyncStack(){
                         fontWeight:'bold',
                     },
                     title: route.params.name
+                })}
+            />
+            <RoomStack.Screen
+                name='Recs'
+                component={SyncedRecs}
+                options={({route}) =>({
+                    headerStyle:{
+                        backgroundColor:swGrey,
+                    },
+                    headerTitleStyle:{
+                        color:"white",
+                        fontWeight:'bold',
+                    },
+                    title:"Recommendations"
                 })}
             />
         </RoomStack.Navigator>
