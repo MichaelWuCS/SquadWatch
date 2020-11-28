@@ -1,5 +1,5 @@
 import React from "react";
-import {StyleSheet, StatusBar} from "react-native";
+import {StyleSheet, StatusBar,YellowBox} from "react-native";
 import {NativeRouter, Switch, Route, Router, Link} from "react-router-native";
 import { NavigationContainer } from '@react-navigation/native';
 import BottomNav from "./src/components/BottomTab.js";
@@ -21,7 +21,6 @@ import "firebase/auth";
 import SignUp from "./src/views/SignUp.js";
 import {Provider} from "react-redux";
 import {store} from "./src/store/store.js"
-import { YellowBox } from 'react-native';
 import _ from 'lodash';
 
 YellowBox.ignoreWarnings(['Setting a timer']);
@@ -51,6 +50,7 @@ const firestore = firebase.firestore();
 const firebaseAuth = firebase.auth();
 
 export default function App() {
+    console.disableYellowBox = true;
     return (
         <Provider store={store}>
             <NavigationContainer>
