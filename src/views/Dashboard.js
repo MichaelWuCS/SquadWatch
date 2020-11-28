@@ -17,7 +17,7 @@ class Dashboard extends Component {
                 <ScrollView>
                     <TheatrePreview navigation={this.props.navigation}/>
                     <WatchlistPreview navigation={this.props.navigation}> </WatchlistPreview>
-                    <RecommendationsPreview navigation={this.props.navigation} watchlist={this.watchList}/>
+                    <RecommendationsPreview navigation={this.props.navigation} watchlist={this.props.watchList}/>
                 </ScrollView>
             </SafeAreaView>
         );

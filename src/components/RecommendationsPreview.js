@@ -68,8 +68,8 @@ class RecommendationsPreviewList extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        
-        
+
+
         padding: 10,
         borderRadius: 20,
         backgroundColor: swOrange,
@@ -93,11 +93,14 @@ export default class RecommendationsPreview extends Component {
     }
 
     componentDidMount() {
-        this.get_recommendations({ movies: this.props.watchlist });
+        console.log("========")
+        console.log(this.props.watchlist)
+        console.log("========")
+        this.get_recommendations(this.props.watchlist);
     }
 
     get_recommendations = (watch_list) => {
-        const randomMovie = watch_list.movies[Math.floor(Math.random() * watch_list.movies.length)];
+        const randomMovie = watch_list[Math.floor(Math.random() * watch_list.length)];
         const requestStr = "https://api.themoviedb.org/3/movie/" + randomMovie.id + "/recommendations" + "?api_key=" + TMDB_KEY;
         fetch(requestStr)
             .then(res => res.json())

@@ -23,7 +23,7 @@ class Recommendations extends Component {
 
         this.get_recommendations(this.props.watchList);
     }
-    
+
     get_recommendations = (watch_list) => {
         const randomMovie = watch_list[Math.floor(Math.random() * watch_list.length)];
         const requestStr = "https://api.themoviedb.org/3/movie/" + randomMovie.id + "/recommendations" + "?api_key=" + TMDB_KEY;
@@ -55,19 +55,27 @@ class Recommendations extends Component {
 
     movieArray = (rec) => {
         return rec.map((movie,index)=>{
+            console.log(movie)
+            let temp = [];
+            //movie.genres.forEach(element => temp.push(element.name));
+            while(temp.length>4){
+                temp.pop();
+            }
             var clone = {
-                name: movie.title, 
-                id: movie.id, 
-                description: movie.overview, 
-                posterPath: movie.poster_path
+                name: movie.title,
+                id: movie.id,
+                description: movie.overview,
+                posterPath: movie.poster_path,
+                releaseDate: movie.release_date.substring(0,4),
+                genres: temp.join(" • ")
             }
             return(
             <View key={index}>
                 <RecElement  index={index} movie={clone} navigation={this.props.navigation} recList={this.state.recommendations} update={this.updateRecList.bind(this)}></RecElement>
-            
+
             </View>
         )})
-        
+
    }
 
 
@@ -77,7 +85,7 @@ class Recommendations extends Component {
         }
         else{
         return (
-           
+
             <View style={styles.container}>
                 <ScrollView styles={styles.scrollView}>
                     <View>{this.movieArray(this.state.recommendations.results)}</View>

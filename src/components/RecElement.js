@@ -22,7 +22,7 @@ class MovieElement extends Component {
           newWatchlist:''
         };
     }
-    
+
 
     makeRemoteRequest = () => {
       const url = "https://api.themoviedb.org/3/movie/"+this.props.movie.id+"?api_key="+TMDB_KEY;
@@ -95,7 +95,7 @@ addMovieToWatchList = ()=>{
           extrapolate:'clamp'
         })
         return (
-          
+
           <TouchableOpacity style={styles.rightAction} onPress={this.addMovieToWatchList}>
             <Animated.Text
               style={[
@@ -121,7 +121,7 @@ addMovieToWatchList = ()=>{
                 onSwipeableOpen={this.closeRow(this.props.index)}
                 friction={2}
                 renderRightActions={this.renderRightActions}
-                
+
                 >
 
             <TouchableHighlight
@@ -135,21 +135,21 @@ addMovieToWatchList = ()=>{
                 })
             }}
             >
-          
-                    
+
+
                     <ImageBackground source={{uri: "https://image.tmdb.org/t/p/w500" + this.props.movie.posterPath}} style={styles.image} imageStyle={styles.imageStyle} >
-                    <Text style={styles.movieTitle} 
-    >{this.props.movie.name} {"("+this.state.year+')'}</Text>
-                    <Rating id={this.props.movie.id}></Rating>
-                    <Text style={styles.detail}>{this.state.genres}</Text>
+                    <Text numberOfLines={2} style={styles.movieTitle}
+    >{this.props.movie.name} {"("+this.props.movie.releaseDate+')'}</Text>
+                    {/*<Rating id={this.props.movie.id}></Rating>*/}
+                    <Text style={styles.detail}>{this.props.movie.genres}</Text>
                     <Text numberOfLines={3} ellipsizeMode='tail' style={styles.description}>{this.props.movie.description}</Text>
                 </ImageBackground>
-               
-    
+
+
             </TouchableHighlight>
-           
-            </Swipeable> 
-            
+
+            </Swipeable>
+
         );
     }
 }
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
         color: "white",
         fontWeight: "800",
         width:"70%",
-        height:"30%",
+        // height:"30%",
         fontSize: 28
     },
     description: {
@@ -212,8 +212,8 @@ const styles = StyleSheet.create({
         fontWeight:'500',
         fontSize:14,
         marginTop:"1%",
-    } 
-      
+    }
+
 });
 
 function mapStateToProps(state){
