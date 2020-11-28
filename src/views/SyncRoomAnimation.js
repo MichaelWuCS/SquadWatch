@@ -5,6 +5,7 @@ import {
     TouchableOpacity,
     Animated,
     Easing,
+    ScrollView,
     Text, FlatList, StyleSheet, Image, ImageBackground, ActivityIndicator
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -22,6 +23,7 @@ import {
 } from "@env";
 import SyncRecsScreen from "./SyncRecsScreen";
 import MovieElement from "../components/MovieElement";
+import RecommendationElement from "./RecommendationElement";
 
 const firebase_config = {
     apiKey: FIREBASE_API_KEY,
@@ -62,6 +64,7 @@ export default class SyncRoomAnimation extends Component {
 				this.timeoutHandle = setTimeout(()=>{
 					this.setState({loading:false});
 					clearInterval(this.setInterval)
+                    clearTimeout(this.timeoutHandle);
          		}, 8000);
 			});
 	}
@@ -181,6 +184,24 @@ export default class SyncRoomAnimation extends Component {
         return <View height={"10%"}/>
     }
 
+    movieArray = (rec) => {
+        return rec.map((movie,index)=>{
+            var clone = {
+                index: index,
+                name: movie.title,
+                id: movie.id,
+                description: movie.overview,
+                posterPath: movie.poster_path,
+                release_date: movie.release_date
+            }
+            return(
+                <View key={index}>
+                    <RecommendationElement movie={clone} navigation={this.props.navigation}/>
+                </View>
+            )})
+
+    }
+
     render() {
         console.log("loading state: "+this.state.loading);
         const { size, interval } = this.props;
@@ -220,10 +241,18 @@ export default class SyncRoomAnimation extends Component {
                 this.anim
             ).stop();
             return (<View style={styles.container}>
-                        <FlatList data={this.state.movie_recommendations}
-                                  renderItem={this.renderRec}
-                                  ItemSeparatorComponent={this.renderSeparator}
-                        />
+                        <ScrollView styles={styles.scrollView}>
+                            <View>{this.movieArray(this.state.movie_recommendations)}</View>
+                        </ScrollView>
+
+                        {/*<FlatList data={this.state.movie_recommendations}*/}
+                        {/*          renderItem={this.renderRec}*/}
+                        {/*          ItemSeparatorComponent={this.renderSeparator}*/}
+                        {/*          keyExtractor={(item) =>{*/}
+                        {/*              console.log(item);*/}
+                        {/*              return item.id;*/}
+                        {/*          }}*/}
+                        {/*/>*/}
                     </View>
             )
         }
@@ -266,7 +295,7 @@ const styles = StyleSheet.create({
         borderRadius:10,
         flex:1,
         width: "100%",
-        height: 50,
+        height: 10,
         alignContent: "center",
         alignItems: "center"
     },
@@ -281,6 +310,13 @@ const styles = StyleSheet.create({
         fontWeight: '300',
         color: "white",
         textAlignVertical:"bottom"
+    },
+    scrollView: {
+        backgroundColor: "#181b3d",
+        minHeight: 300,
+        width:"100%",
+        alignItems: "center",
+        justifyContent: "center",
     },
 });
 
