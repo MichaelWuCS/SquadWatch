@@ -1,29 +1,23 @@
-import React, {Component, useEffect, useState} from "react";
+import React, {Component} from "react";
 import {
     Text,
-    Button,
     View,
     StyleSheet,
-    FlatList,
-    ActivityIndicator, NativeEventEmitter,
+    ActivityIndicator,
     SafeAreaView,
     ImageBackground,
     ScrollView,
-    Image,
-    SectionList
 } from "react-native";
 import {TMDB_KEY} from "@env";
-import { ListItem, SearchBar, Avatar } from 'react-native-elements';
-import LinearGradient from "expo-linear-gradient";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { swGrey } from "../styles/Colors";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import * as firebase from "firebase";
 import "firebase/firestore";
 import "firebase/auth";
 import {connect} from "react-redux"
-import {getWatchList, updateWatchList} from "../api/WatchListApi.js"
+import {getWatchList} from "../api/WatchListApi.js"
 import Rating from "../components/Ratings.js"
+import SimilarMovies from "../components/SimilarMovies.js"
 
 class MovieDetails extends Component{
 
@@ -41,10 +35,7 @@ class MovieDetails extends Component{
     }
 
     componentDidMount(){
-        //console.log(this.props);
-        console.log("name: "+this.props.route.params.name+"=========");
         this.id = this.props.route.params.id;
-        console.log(this.id);
         this.getWatchlistInfo()
         this.makeRemoteRequest();
     }
@@ -72,7 +63,6 @@ class MovieDetails extends Component{
     makeRemoteRequest = () => {
         this.setState({ loading: true});
         const url = "https://api.themoviedb.org/3/movie/"+this.id+"?api_key="+TMDB_KEY;
-        console.log(url);
         fetch(url)
         .then(res => res.json())
         .then(res => {
@@ -159,7 +149,7 @@ class MovieDetails extends Component{
         }else{
             return (
                 <SafeAreaView>
-                    <ScrollView height="100%" backgroundColor={swGrey}>
+                    <ScrollView height="100%" backgroundColor={"black"}>
 
                         <ImageBackground
                         opacity={1}
@@ -181,8 +171,11 @@ class MovieDetails extends Component{
 
                         <View style={styles.padding}></View>
 
-                        <View style={styles.buttonRow} >
+                        <SimilarMovies style= {styles.similarMovies} id={this.id} ></SimilarMovies>
 
+                        <View style={styles.padding}></View>
+
+                        <View style={styles.buttonRow} >
                             <TouchableOpacity 
                             onPress={() => {
                                 this.setState({
@@ -193,12 +186,11 @@ class MovieDetails extends Component{
                                 <MaterialCommunityIcons
                                 style={styles.buttonIcon}
                                 name= {(this.state.inWatchlist)? "playlist-check":"playlist-plus"}
-                                color="#ffffff" size ={32}
+                                color="#ffffff" 
+                                size ={32}
                                 />
                                 <Text style={styles.buttonLabel}>{(this.state.inWatchlist)?"Remove from Watchlist":"Add to Watchlist"}</Text>
                             </TouchableOpacity>
-
-
                         </View>
 
                         <View style={styles.padding}></View>
@@ -292,5 +284,10 @@ const styles = StyleSheet.create({
         paddingBottom: "5%",
         backgroundColor: "black"
     },
+    similarMovies: {
+        paddingTop: "5%",
+        paddingLeft: "3%",
+        paddingRight: "3%",
+    }
 
 });
