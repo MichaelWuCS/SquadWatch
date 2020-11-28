@@ -10,6 +10,8 @@ import * as firebase from "firebase";
 import {connect} from "react-redux"
 import {updateWatchList} from "../api/WatchListApi.js"
 
+let row = [];
+let prevOpenedRow;
 
 class MovieElement extends Component {
     constructor(props){
@@ -61,7 +63,14 @@ class MovieElement extends Component {
         console.log(error)
     }
 }
+    
 
+    closeRow(index) {
+      if (prevOpenedRow && prevOpenedRow !== row[index]) {
+      prevOpenedRow.close();
+      }
+      prevOpenedRow = row[index];
+    }
     
     renderRightActions = (progress, dragX) => {
         const trans = dragX.interpolate({
@@ -88,8 +97,10 @@ class MovieElement extends Component {
     render() {
         return (
             <Swipeable
-                friction={2}
+                friction={1}
                 renderRightActions={this.renderRightActions}
+                ref={ref => row[this.props.index] = ref}
+                onSwipeableOpen={this.closeRow(this.props.index)}
                 
                 >
 

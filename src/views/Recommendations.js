@@ -9,31 +9,6 @@ import firebase from 'firebase';
 import {TMDB_KEY} from "@env";
 
 const firebaseAuth = firebase.auth();
-const test_watchlist = {
-    creatorID: "5UOPtbbQM03QIVUzwNFn",
-    movies: [
-        {
-            id: "500",
-            name: "Reservoir Dogs",
-            posterPath: "/AjTtJNumZyUDz33VtMlF1K8JPsE.jpg"
-        },
-        {
-            id: "600",
-            name: "Full Metal Jacket",
-            posterPath: "/kMKyx1k8hWWscYFnPbnxxN4Eqo4.jpg"
-        },
-        {
-            id: "601",
-            name: "E.T. the Extra-Terrestrial",
-            posterPath: "/pEKStszBzTZCvR0H4tosjqxmE7X.jpg"
-        },
-        {
-            id: "346",
-            name: "Seven Samurai",
-            posterPath: "/1wCRVLGI7SoTOoDRzWlbt2dMDuy.jpg"
-        },
-    ]
-};
 
 class Recommendations extends Component {
     constructor(props){
@@ -66,10 +41,16 @@ class Recommendations extends Component {
     }
 
     updateRecList = (element)=>{
-       newList = this.state.recommendations.filter((movie)=>{
-            return (movie.id!=element);
-        })
+       let newList = {...this.state.recommendations}
+        let newRec = []
+        newList.results.map((movie)=>{
+            if(movie.id!=element){
+                newRec.push(movie)
+            }
+        });
+        newList.results=newRec
         this.setState({recommendations:newList})
+        console.log(newList.results==this.state.recommendations.results)
     }
 
     movieArray = (rec) => {
@@ -82,8 +63,8 @@ class Recommendations extends Component {
             }
             return(
             <View key={index}>
-                <RecElement movie={clone} navigation={this.props.navigation} recList={this.state.recommendations} update={this.updateRecList}></RecElement>
-                <Text>{movie.title}</Text>
+                <RecElement  index={index} movie={clone} navigation={this.props.navigation} recList={this.state.recommendations} update={this.updateRecList.bind(this)}></RecElement>
+            
             </View>
         )})
         
@@ -96,6 +77,7 @@ class Recommendations extends Component {
         }
         else{
         return (
+           
             <View style={styles.container}>
                 <ScrollView styles={styles.scrollView}>
                     <View>{this.movieArray(this.state.recommendations.results)}</View>
