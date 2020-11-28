@@ -5,7 +5,8 @@ import {
     TouchableOpacity,
     Animated,
     Easing,
-    Text, FlatList, StyleSheet, Image, ImageBackground
+    ScrollView,
+    Text, FlatList, StyleSheet, Image, ImageBackground, ActivityIndicator
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { swOrange, swGrey, swGreen } from "../styles/Colors";
@@ -22,6 +23,7 @@ import {
 } from "@env";
 import SyncRecsScreen from "./SyncRecsScreen";
 import MovieElement from "../components/MovieElement";
+import RecommendationElement from "./RecommendationElement";
 
 const firebase_config = {
     apiKey: FIREBASE_API_KEY,
@@ -61,6 +63,8 @@ export default class SyncRoomAnimation extends Component {
 			.then(()=>{
 				this.timeoutHandle = setTimeout(()=>{
 					this.setState({loading:false});
+					clearInterval(this.setInterval)
+                    clearTimeout(this.timeoutHandle);
          		}, 8000);
 			});
 	}
@@ -100,10 +104,10 @@ export default class SyncRoomAnimation extends Component {
                         });
                 });
         }
-        console.log("recommendations: ");
-        console.log(this.state.movie_recommendations);
+        //console.log("recommendations: ");
+        //console.log(this.state.movie_recommendations);
         //this.setState({loading:false})
-        console.log("recs generated!");
+        //console.log("recs generated!");
     }
 
     async get_and_add_to_recommendations(randomMovieID) {
@@ -155,15 +159,16 @@ export default class SyncRoomAnimation extends Component {
 
     renderRec = (item) => {
         //console.log("yerrrrlllll: ");
-        //console.log("boy "+item.index);
+        console.log("boy "+item.index);
         //console.log(item.item);
         let bgCol = (item.index===0)? 'rgba(130,61,0,0.6)' : 'rgba(0,87,49,0.6)';
         let imagePath = "https://image.tmdb.org/t/p/w1280"+item.item.poster_path;
+        console.log("ting")
         return (
-            <TouchableOpacity style={styles.tile} onPress={()=>{this.props.navigation.push("Movie",{id:item.item.id, name:item.item.title})}}>
+            <TouchableOpacity style = {styles.tile} onPress={()=>{this.props.navigation.push("Movie",{id:item.item.id, name:item.item.title})}}>
                 <View style={styles.tile} backgroundColor={bgCol}>
                     <ImageBackground source={{uri:imagePath}}
-                                     style={{width: "100%", height: "100%", borderRadius:10}}
+                                     style={{width: "100%", height:"100%",}}
                                      imageStyle={{borderRadius:10}}>
                         <View style={styles.tile} backgroundColor={bgCol}>
                         <Text style={styles.title}> {item.item.title + " ("+ item.item.release_date.substring(0,4) +")"}  </Text>
@@ -179,8 +184,26 @@ export default class SyncRoomAnimation extends Component {
         return <View height={"10%"}/>
     }
 
+    movieArray = (rec) => {
+        return rec.map((movie,index)=>{
+            var clone = {
+                index: index,
+                name: movie.title,
+                id: movie.id,
+                description: movie.overview,
+                posterPath: movie.poster_path,
+                release_date: movie.release_date
+            }
+            return(
+                <View key={index}>
+                    <RecommendationElement movie={clone} navigation={this.props.navigation}/>
+                </View>
+            )})
+
+    }
+
     render() {
-        //console.log("loading state: "+this.state.loading);
+        console.log("loading state: "+this.state.loading);
         const { size, interval } = this.props;
         if (this.state.loading) {
             return (
@@ -213,13 +236,23 @@ export default class SyncRoomAnimation extends Component {
 				</View>
 			);
 		} else{
-            this.anim.stopAnimation()
             this.props.navigation.setOptions({ title: 'Recommendations' })
+            Animated.timing(
+                this.anim
+            ).stop();
             return (<View style={styles.container}>
-                        <FlatList data={this.state.movie_recommendations}
-                                  renderItem={this.renderRec}
-                                  ItemSeparatorComponent={this.renderSeparator}
-                        />
+                        <ScrollView styles={styles.scrollView}>
+                            <View>{this.movieArray(this.state.movie_recommendations)}</View>
+                        </ScrollView>
+
+                        {/*<FlatList data={this.state.movie_recommendations}*/}
+                        {/*          renderItem={this.renderRec}*/}
+                        {/*          ItemSeparatorComponent={this.renderSeparator}*/}
+                        {/*          keyExtractor={(item) =>{*/}
+                        {/*              console.log(item);*/}
+                        {/*              return item.id;*/}
+                        {/*          }}*/}
+                        {/*/>*/}
                     </View>
             )
         }
@@ -254,7 +287,7 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: swGrey,
         width: "100%",
-        height: undefined,
+        height: "100%",
         alignContent: "center",
         alignItems: "center"
     },
@@ -262,7 +295,7 @@ const styles = StyleSheet.create({
         borderRadius:10,
         flex:1,
         width: "100%",
-        height: "10%",
+        height: 10,
         alignContent: "center",
         alignItems: "center"
     },
@@ -277,6 +310,13 @@ const styles = StyleSheet.create({
         fontWeight: '300',
         color: "white",
         textAlignVertical:"bottom"
+    },
+    scrollView: {
+        backgroundColor: "#181b3d",
+        minHeight: 300,
+        width:"100%",
+        alignItems: "center",
+        justifyContent: "center",
     },
 });
 
