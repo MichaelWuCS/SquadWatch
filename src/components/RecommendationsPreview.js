@@ -96,7 +96,11 @@ export default class RecommendationsPreview extends Component {
         console.log("========")
         console.log(this.props.watchlist)
         console.log("========")
-        this.get_recommendations(this.props.watchlist);
+        if(this.props.watchlist.length>0) {
+            this.get_recommendations(this.props.watchlist);
+        }else{
+            this.setState({loading:false})
+        }
     }
 
     get_recommendations = (watch_list) => {
