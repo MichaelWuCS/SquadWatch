@@ -121,11 +121,11 @@ const addCustomUser = (firstName, lastName) =>{
       })
   .then(function() {
       addWatchList();
-      addRecList();
+      //addRecList();
       console.log("Document successfully written!");
   })
   .catch(function(error) {
-      console.error("Error writing document: ", error);
+      console.error("Error writing user document: ", error);
   });
 }
 
@@ -140,7 +140,7 @@ const addWatchList = () => {
       console.log("Document successfully written!");
   })
   .catch(function(error) {
-      console.error("Error writing document: ", error);
+      console.error("Error writing watchlist document: ", error);
   });
 }
 
