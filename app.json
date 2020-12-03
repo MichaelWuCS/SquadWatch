@@ -4,11 +4,11 @@
     "slug": "squadwatch",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/swLogo.png",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#181b3d"
+      "resizeMode": "cover",
+      "backgroundColor": "#181b3d",
+      "image":"./assets/swSplash.png"
     },
     "updates": {
       "fallbackToCacheTimeout": 0

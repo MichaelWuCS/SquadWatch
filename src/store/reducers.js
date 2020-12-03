@@ -1,17 +1,37 @@
-import { ADDCUSTOMUSER, UPDATEMOVIELIST } from "./actionTypes.js";
+import { ADDCUSTOMUSER, UPDATERECLIST, UPDATEWATCHLIST } from "./actionTypes.js";
 
 const initialState = {
-    customUser: {},
-    movieList: {},
-    counter: 0
+    watchList: [],
+    customUser: {
+        first:  "",
+        last: "",
+        watchListId: ""
+    },
+    recList: []
 };
 
 export const mainReducer = (state = initialState, action) => {
     switch (action.type) {
         case ADDCUSTOMUSER:
-            return {counter: state.counter+1};
-        case UPDATEMOVIELIST:
-            return {counter: state.counter+1};
+            //return {
+            state.customUser={
+                first :  action.payload.first,
+                last : action.payload.last,
+                watchListId: action.payload.watchListId,
+            }
+            return state;
+        case UPDATEWATCHLIST:
+            return {
+                customUser: state.customUser,
+                recList: state.recList,
+                watchList: action.payload
+            };
+        case UPDATERECLIST:
+            return {
+                customUser: state.customUser,
+                watchList: state.movieList,
+                recList: action.payload
+            };
         default:
             return state;
     }

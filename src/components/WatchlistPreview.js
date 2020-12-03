@@ -15,40 +15,36 @@ import {
 import * as firebase from "firebase";
 import "firebase/firestore";
 import ThumbnailList from "./ThumbnailList";
-import {swGreen} from '../styles/Colors'
-const test_watchlist = {
-    creatorID: "5UOPtbbQM03QIVUzwNFn",
-    movies: [
-        {
-            id: "500",
-            name: "Reservoir Dogs",
-            posterPath: "/AjTtJNumZyUDz33VtMlF1K8JPsE.jpg"
-        },
-        {
-            id: "600",
-            name: "Full Metal Jacket",
-            posterPath: "/kMKyx1k8hWWscYFnPbnxxN4Eqo4.jpg"
-        },
-        {
-            id: "601",
-            name: "E.T. the Extra-Terrestrial",
-            posterPath: "/pEKStszBzTZCvR0H4tosjqxmE7X.jpg"
-        },
-        {
-            id: "346",
-            name: "Seven Samurai",
-            posterPath: "/1wCRVLGI7SoTOoDRzWlbt2dMDuy.jpg"
-        },
-    ]
-};
+import {swGreen} from '../styles/Colors';
+import {connect} from 'react-redux';
 
-export default class WatchlistPreview extends Component {
+
+
+class WatchlistPreview extends Component {
     render() {
+        console.log(this.props.watchList);
         return (
-            <ThumbnailList listTitle={"MY WATCHLIST"} movieList={test_watchlist.movies}/>
-            );
+            <ThumbnailList listTitle={"MY WATCHLIST"}
+            navigation={this.props.navigation}
+            movieList={this.props.watchList} />
+        );
     }
 }
+
+function mapStateToProps(state){
+    return {
+        watchList: state.watchList
+    }
+}
+
+function mapDispatchToProps(dispatch){
+    return{
+        // Nothing
+    }
+}
+
+export default connect(mapStateToProps, null)(WatchlistPreview)
+
 
 const styles = StyleSheet.create({
     container: {

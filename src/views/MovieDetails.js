@@ -1,111 +1,83 @@
-import React, {Component, useEffect, useState} from "react";
+import React, {Component} from "react";
 import {
     Text,
-    Button,
     View,
     StyleSheet,
-    FlatList,
-    ActivityIndicator, NativeEventEmitter,
+    ActivityIndicator,
     SafeAreaView,
     ImageBackground,
     ScrollView,
-    Image,
-    SectionList
 } from "react-native";
 import {TMDB_KEY} from "@env";
-import { ListItem, SearchBar, Avatar } from 'react-native-elements';
-import LinearGradient from "expo-linear-gradient";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { swGrey } from "../styles/Colors";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import {
-    FIREBASE_API_KEY,
-    FIREBASE_AUTH_DOMAIN,
-    FIREBASE_DB_URL,
-    FIREBASE_STORAGE_BUCKET,
-    FIREBASE_PROJECT_ID,
-    FIREBASE_APP_ID
-} from '@env';
 import * as firebase from "firebase";
 import "firebase/firestore";
 import "firebase/auth";
+import {connect} from "react-redux"
+import {getWatchList} from "../api/WatchListApi.js"
+import Rating from "../components/Ratings.js"
+import SimilarMovies from "../components/SimilarMovies.js"
 
-export default class Search extends Component{
+class MovieDetails extends Component{
 
     constructor(props){
         super(props);
-        this.id; 
+        this.id;
         this.state = {
-            loading: false,      
-            data: [],      
+            loading: false,
+            data: [],
             error: null,
             genres: "",
             year:"",
             inWatchlist: false
         };
-        this.firestore;
     }
 
     componentDidMount(){
-        //console.log(this.props);
-        console.log("name: "+this.props.route.params.name+"=========");
-        const firebase_config = {
-            apiKey: FIREBASE_API_KEY,
-            authDomain: FIREBASE_AUTH_DOMAIN,
-            databaseURL: FIREBASE_DB_URL,
-            storageBucket: FIREBASE_STORAGE_BUCKET,
-            projectId: FIREBASE_PROJECT_ID,
-            appId: FIREBASE_APP_ID,
-        };
-        !firebase.apps.length ? firebase.initializeApp(firebase_config) : firebase.app();
-        this.firestore = firebase.firestore();
         this.id = this.props.route.params.id;
-        console.log(this.id);
         this.getWatchlistInfo()
         this.makeRemoteRequest();
     }
 
-    getWatchlistInfo = () =>{
-        this.firestore
-        .collection("watchList")
-        .doc("WiEkX1WL5XmcYp4jODIb")
-        .get()
-        .then((doc) => {
-            var i;
-            for(i = 0; i<doc.data().movies.length; i++){
-                if(this.id==doc.data().movies[i].id){
-                    console.log(this.id);
-                    console.log(doc.data().movies[i].id);
-                    this.setState({
-                        inWatchlist:true
-                    });
-                    console.log("This movie is here");
-                    break;
+    getWatchlistInfo = async() =>{
+        try {
+            var userIDkey = this.props.customUser.watchListId;
+            var userWatchList = await getWatchList(userIDkey);
+            userWatchList.forEach((movie)=>{
+                var i;
+                for(i = 0; i<userWatchList.length; i++){
+                    if(this.id==movie.id){
+                        this.setState({
+                            inWatchlist:true
+                        });
+                    }
                 }
-            }
-        });
+            })
+            this.props.updateWatchList(userWatchList);
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     makeRemoteRequest = () => {
         this.setState({ loading: true});
         const url = "https://api.themoviedb.org/3/movie/"+this.id+"?api_key="+TMDB_KEY;
-        console.log(url);
         fetch(url)
         .then(res => res.json())
         .then(res => {
-            //console.log(res);
             let temp = [];
+            console.log(res);
             res.genres.forEach(element => temp.push(element.name));
             while(temp.length>4){
                 temp.pop();
             }
             this.setState({
                 loading:false,
-                data:res, 
+                data:res,
                 genres:temp.join(" • "),
                 year:res.release_date.substring(0,4)
             });
-            console.log(this.state.genres);
         })
         .catch(error =>{
             this.setState({
@@ -117,44 +89,55 @@ export default class Search extends Component{
 
     toggleInWatchlistRequest = () =>{
         if(this.state.inWatchlist){
-            this.firestore
-            .collection("watchList")
-            .doc("WiEkX1WL5XmcYp4jODIb")
-            .get()
-            .then((doc) => {
-                var temp = doc.data().movies;
-                var i;
-                for(i = 0; i<temp.length; i++){
-                    if(temp[i].id==this.id){
-                        temp.splice(i,1);
-                        break;
-                    }
-                }
-                this.firestore
-                .collection("watchList")
-                .doc("WiEkX1WL5XmcYp4jODIb")
-                .update({movies:temp});
-            });
+            this.removeMovieFromWatchList();
         }else{
-            this.firestore
-            .collection("watchList")
-            .doc("WiEkX1WL5XmcYp4jODIb")
-            .get()
-            .then((doc) => {
-                var temp = doc.data().movies;
-                temp.push({
-                    description:this.state.data.overview,
-                    id:this.id,
-                    name:this.state.data.title,
-                    posterPath:this.state.data.poster_path
-                })
-                this.firestore
-                .collection("watchList")
-                .doc("WiEkX1WL5XmcYp4jODIb")
-                .update({movies:temp});
-            });
+            this.addMovieToWatchList();
         }
     }
+
+    removeMovieFromWatchList = ()=>{
+        try {
+            let tempWatchList = this.props.watchList.filter((movie) =>{
+                return (movie.id !== this.id)
+            });
+            this.props.updateWatchList(tempWatchList);
+            firebase.firestore()
+                .collection("watchList")
+                .doc(this.props.customUser.watchListId)
+                .update({movies:tempWatchList})
+                .catch(error=>{
+                    console.warn(error);
+                })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    addMovieToWatchList = ()=>{
+        try {
+            var currentMovie = {
+                description:this.state.data.overview,
+                id:this.id,
+                name:this.state.data.title,
+                posterPath:this.state.data.poster_path
+            }
+            let temp = [...this.props.watchList]
+            temp.push(currentMovie)
+
+            this.props.updateWatchList(temp);
+            firebase.firestore()
+                .collection("watchList")
+                .doc(this.props.customUser.watchListId)
+                .update({movies:temp})
+                .catch(error=>{
+                    console.warn(error);
+                });
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
 
     render(){
         if(this.state.loading){
@@ -166,52 +149,87 @@ export default class Search extends Component{
         }else{
             return (
                 <SafeAreaView>
-                    <ScrollView height="100%" backgroundColor={swGrey}>
-                    <ImageBackground opacity={1} source={{uri:"https://image.tmdb.org/t/p/w1280"+this.state.data.poster_path}}
-                    style={{ width: '100%', height: undefined, aspectRatio:2/3}}>
-                        <View style={styles.container}>
-                            <Text style={styles.title}>{this.state.data.title + " (" + this.state.year + ")"}</Text>
-                            <Text numberOfLines={3} style={styles.description}>{this.state.data.overview}</Text>
-                            <View style = {{flexDirection:'row'}}>
-                                <Text style={styles.detail}>{this.state.genres}</Text>
-                                <Text style={styles.detail}>|</Text>
-                                <Text style={styles.detail}>{""+Math.floor(this.state.data.runtime/60)+"h "+this.state.data.runtime%60+"m"}</Text>
+                    <ScrollView height="100%" backgroundColor={"black"}>
+
+                        <ImageBackground
+                        opacity={1}
+                        source={{uri:"https://image.tmdb.org/t/p/w1280"+this.state.data.poster_path}}
+                        style={styles.moviePoster} />
+
+                        <View style={styles.informationBlock}>
+                            <View style={styles.container}>
+                                <Text style={styles.title}>{this.state.data.title + " (" + this.state.year + ")"}</Text>
+                                <Rating id={this.id}></Rating>
+                                <View style = {{flexDirection:'row'}}>
+                                    <Text style={styles.detail}>{this.state.genres}</Text>
+                                    <Text style={styles.detail}> | </Text>
+                                    <Text style={styles.detail}>{""+Math.floor(this.state.data.runtime/60)+"h "+this.state.data.runtime%60+"m"}</Text>
+                                </View>
+                                <Text style={styles.description}>{this.state.data.overview}</Text>
                             </View>
                         </View>
-                        <View style={styles.buttonRow}>
-                                <TouchableOpacity style={{alignContent:"center",paddingLeft:"20%" , paddingBottom:"90%"}} 
-                                    onPress={() => {
-                                        this.setState({
-                                            inWatchlist:!this.state.inWatchlist
-                                        })
-                                        this.toggleInWatchlistRequest();
-                                    }
-                                }>
-                                    <MaterialCommunityIcons
-                                    style={styles.buttonIcon}
-                                    name= {(this.state.inWatchlist)? "playlist-check":"playlist-plus"}
-                                    color="#ffffff" size ={32}
-                                    />
-                                    <Text style={styles.buttonLabel}>{(this.state.inWatchlist)?"Remove from Watchlist":"Add to Watchlist"}</Text>
-                                </TouchableOpacity>
+
+                        <View style={styles.padding}></View>
+
+                        <SimilarMovies style= {styles.similarMovies} id={this.id} ></SimilarMovies>
+
+                        <View style={styles.padding}></View>
+
+                        <View style={styles.buttonRow} >
+                            <TouchableOpacity 
+                            onPress={() => {
+                                this.setState({
+                                    inWatchlist:!this.state.inWatchlist
+                                })
+                                this.toggleInWatchlistRequest();
+                            }}>
+                                <MaterialCommunityIcons
+                                style={styles.buttonIcon}
+                                name= {(this.state.inWatchlist)? "playlist-check":"playlist-plus"}
+                                color="#ffffff" 
+                                size ={32}
+                                />
+                                <Text style={styles.buttonLabel}>{(this.state.inWatchlist)?"Remove from Watchlist":"Add to Watchlist"}</Text>
+                            </TouchableOpacity>
                         </View>
-                    </ImageBackground>
-                    <View>
-                        
-                    </View>
+
+                        <View style={styles.padding}></View>
+
                     </ScrollView>
                 </SafeAreaView>
             );
         }
     }
-    
+
 }
+
+function mapStateToProps(state){
+    return {
+        customUser: state.customUser,
+        watchList: state.watchList
+    }
+}
+
+function mapDispatchToProps(dispatch){
+    return{
+        updateWatchList: (watchList)=> dispatch({
+            type:"UPDATEWATCHLIST",
+            payload: watchList
+        })
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MovieDetails)
+
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
         justifyContent: "center",
+        paddingTop: "5%",
+        paddingLeft: "3%",
+        paddingRight: "3%",
     },
     linearGradient: {
         flex: 1,
@@ -223,30 +241,23 @@ const styles = StyleSheet.create({
         fontWeight:"700",
         textAlign: "left",
         color:"#ffffff",
-        fontSize:35,
-        marginTop:"50%",
-        paddingLeft:"7.5%",
-        paddingRight:"7.5%"
+        fontSize:25,
+
     },
     description: {
         textAlign: "left",
         color:"#ffffff",
-        fontSize:11,
+        fontSize:14,
         marginTop:"1%",
-        paddingLeft:"5%",
-        paddingRight:"25%"
     },
     detail: {
         textAlign: "left",
-        color:"#ffffff",
+        color:"#D85600",
         fontWeight:'500',
-        fontSize:13,
+        fontSize:14,
         marginTop:"1%",
-        paddingLeft:"4%",
     },
     buttonLabel: {
-        textAlign: "center",
-        width:"45%",
         color:"#ffffff",
         fontWeight:'500',
         fontSize:11,
@@ -257,7 +268,26 @@ const styles = StyleSheet.create({
         paddingLeft:"4.8%",
     },
     buttonRow: {
+        backgroundColor: "black",
         flexDirection: "row",
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        paddingLeft: "5%"
     },
+    informationBlock: {
+        backgroundColor: 'black',
+    },
+    moviePoster: {
+        width: '100%',
+        height: undefined,
+        aspectRatio: 2/3
+    },
+    padding: {
+        paddingBottom: "5%",
+        backgroundColor: "black"
+    },
+    similarMovies: {
+        paddingTop: "5%",
+        paddingLeft: "3%",
+        paddingRight: "3%",
+    }
+
 });
