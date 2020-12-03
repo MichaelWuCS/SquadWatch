@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, ScrollView, Button, ActivityIndicator } from "react-native";
+import { StyleSheet, Text, View, ScrollView, Button, ActivityIndicator, Alert } from "react-native";
 import RecElement from "../components/RecElement";
 import {connect} from "react-redux";
 import {getUserWatchList} from "../views/WatchList";
@@ -38,6 +38,7 @@ class Recommendations extends Component {
         this.setState({empty: false });*/
         if(randomMovie == undefined){
             this.setState({loading: false });
+            this.setState({empty: true});
             return;
         }
         const requestStr = "https://api.themoviedb.org/3/movie/" + randomMovie.id + "/recommendations" + "?api_key=" + TMDB_KEY;
@@ -97,15 +98,18 @@ class Recommendations extends Component {
 
 
     render() {
-        /*if(this.state.empty){
-            console.log("emptryy");
-            <View style={styles.container}>
-                <ScrollView styles={styles.scrollView}>
-                </ScrollView>
-            </View> 
-        }*/
+        if(this.state.empty){
+            Alert.alert(
+                'Error generating Recommendations List', 
+                'WatchList is empty',
+                [
+                  { text: 'OK', onPress: () => console.log('OK Pressed') }
+                ],
+                { cancelable: false }
+              );
+              return null;
+        }
         if(this.state.loading){
-            console.log("loading")
             return <ActivityIndicator/>
         }
         else{
