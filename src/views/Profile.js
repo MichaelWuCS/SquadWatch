@@ -46,7 +46,7 @@ updateFields=(first,last,currentpwd,newpswd,key)=>{
                 <Avatar
                 rounded
                 size="large"
-                title={this.props.customUser.first.charAt(0)+this.props.customUser.last.charAt(0)}
+                title={this.state.first.charAt(0)+this.state.last.charAt(0)}
                 source={{
                     showAccessory:true,
                     uri:'http://identicon-1132.appspot.com/random?/p=7'
