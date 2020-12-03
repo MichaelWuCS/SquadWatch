@@ -9,23 +9,37 @@ import firebase from 'firebase';
 import {TMDB_KEY} from "@env";
 
 const firebaseAuth = firebase.auth();
+const empty = false;
 
 class Recommendations extends Component {
     constructor(props){
         super(props);
         this.state = {
             loading: true,
-            recommendations: []
+            empty: false,
+            recommendations: [{}]
         };
     }
 
     componentDidMount() {
-
         this.get_recommendations(this.props.watchList);
     }
 
     get_recommendations = (watch_list) => {
+        
         const randomMovie = watch_list[Math.floor(Math.random() * watch_list.length)];
+        /*if(randomMovie == undefined){
+            console.log("undefined");
+            this.setState({empty: true});
+            this.setState({loading: false });
+            return;
+        }
+        console.log("falsinggg");
+        this.setState({empty: false });*/
+        if(randomMovie == undefined){
+            this.setState({loading: false });
+            return;
+        }
         const requestStr = "https://api.themoviedb.org/3/movie/" + randomMovie.id + "/recommendations" + "?api_key=" + TMDB_KEY;
         fetch(requestStr)
             .then(res => res.json())
@@ -54,6 +68,9 @@ class Recommendations extends Component {
     }
 
     movieArray = (rec) => {
+        if(rec == undefined){
+            return {}
+        }
         return rec.map((movie,index)=>{
             console.log(movie)
             let temp = [];
@@ -80,7 +97,15 @@ class Recommendations extends Component {
 
 
     render() {
+        /*if(this.state.empty){
+            console.log("emptryy");
+            <View style={styles.container}>
+                <ScrollView styles={styles.scrollView}>
+                </ScrollView>
+            </View> 
+        }*/
         if(this.state.loading){
+            console.log("loading")
             return <ActivityIndicator/>
         }
         else{
