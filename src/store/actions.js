@@ -1,4 +1,4 @@
-import { ADDCUSTOMUSER, UPDATERECLIST, UPDATEWATCHLIST } from "./actionTypes.js";
+import { ADDCUSTOMUSER, UPDATERECLIST, UPDATEWATCHLIST, UPDATEUSER } from "./actionTypes.js";
 
 export const updateRecList = () => ({
     type: UPDATERECLIST,
@@ -11,4 +11,3 @@ export const updateWatchList = () => ({
 export const addCustomUser = () => ({
     type: ADDCUSTOMUSER,
 });
-

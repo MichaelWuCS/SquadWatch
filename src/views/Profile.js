@@ -3,7 +3,9 @@ import { StyleSheet, Text, View,SafeAreaView,TouchableWithoutFeedback,Keyboard} 
 import {Avatar,Input,Button} from  'react-native-elements';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {swNavy,swOrange,swWhite} from '../styles/Colors';
-import {connect} from 'react-redux'
+import {connect} from 'react-redux';
+import {updateCustomUser,changePassword} from '../api/CustomUserApi'
+import * as firebase from "firebase";
 
 class  Profile extends Component{
     constructor(props){
@@ -18,6 +20,24 @@ class  Profile extends Component{
     }
 
 
+updateFields=(first,last,currentpwd,newpswd,key)=>{
+    let user = {
+        first: first,
+        last:last,
+        watchListId:key
+    }
+    
+    updateCustomUser(key,user);
+    var newInfo = {...this.props.customUser}
+    newInfo.first=user.first;
+    newInfo.last =user.last;
+    this.props.updateCustomUser(newInfo);
+    if(currentpwd!='' || newpswd!=''){
+        changePassword(currentpwd,newpswd);
+    }
+    
+}
+
     render(){
         return(
             <SafeAreaView style={{backgroundColor:swOrange}}>
@@ -26,7 +46,7 @@ class  Profile extends Component{
                 <Avatar
                 rounded
                 size="large"
-                title='JD'
+                title={this.props.customUser.first.charAt(0)+this.props.customUser.last.charAt(0)}
                 source={{
                     showAccessory:true,
                     uri:'http://identicon-1132.appspot.com/random?/p=7'
@@ -82,10 +102,13 @@ class  Profile extends Component{
                     </View>
                     </TouchableWithoutFeedback>
                     <Button
-                    title="save"
+                    title="Update"
                     titleStyle={{color:swOrange}}
-                    containerStyle={{width:70, alignSelf:'center', marginTop:50}}
+                    containerStyle={{width:90, alignSelf:'center', marginTop:50}}
                     buttonStyle={{backgroundColor:swWhite, borderRadius:30}}
+                    onPress={()=> {
+                    this.updateFields(this.state.first,this.state.last,this.state.oldPswd,this.state.newPswd,this.props.customUser.watchListId);
+                    this.props.navigation.goBack(null);}}
                     />
 
                 

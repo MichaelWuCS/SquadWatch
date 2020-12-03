@@ -55,3 +55,18 @@ export async function updateCustomUser(key, customUser){
     .update(customUser);
 
 }
+function reauthenticate(currentPassword){
+    var user = firebase.auth().currentUser;
+    var cred = firebase.auth.EmailAuthProvider.credential(
+        user.email, currentPassword);
+    return user.reauthenticateWithCredential(cred);
+  }
+
+export async function changePassword (currentPassword, newPassword) {
+    reauthenticate(currentPassword).then(() => {
+      var user = firebase.auth().currentUser;
+      user.updatePassword(newPassword).then(() => {
+        console.log("Password updated!");
+      }).catch((error) => { console.log(error); });
+    }).catch((error) => { console.log(error); });
+  }
