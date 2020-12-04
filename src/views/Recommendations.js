@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, ScrollView, Button, ActivityIndicator } from "react-native";
+import { StyleSheet, Text, View, ScrollView, Button, ActivityIndicator, Alert } from "react-native";
 import RecElement from "../components/RecElement";
 import {connect} from "react-redux";
 import {getUserWatchList} from "../views/WatchList";
@@ -9,23 +9,38 @@ import firebase from 'firebase';
 import {TMDB_KEY} from "@env";
 
 const firebaseAuth = firebase.auth();
+const empty = false;
 
 class Recommendations extends Component {
     constructor(props){
         super(props);
         this.state = {
             loading: true,
-            recommendations: []
+            empty: false,
+            recommendations: [{}]
         };
     }
 
     componentDidMount() {
-
         this.get_recommendations(this.props.watchList);
     }
 
     get_recommendations = (watch_list) => {
+        
         const randomMovie = watch_list[Math.floor(Math.random() * watch_list.length)];
+        /*if(randomMovie == undefined){
+            console.log("undefined");
+            this.setState({empty: true});
+            this.setState({loading: false });
+            return;
+        }
+        console.log("falsinggg");
+        this.setState({empty: false });*/
+        if(randomMovie == undefined){
+            this.setState({loading: false });
+            this.setState({empty: true});
+            return;
+        }
         const requestStr = "https://api.themoviedb.org/3/movie/" + randomMovie.id + "/recommendations" + "?api_key=" + TMDB_KEY;
         fetch(requestStr)
             .then(res => res.json())
@@ -54,6 +69,9 @@ class Recommendations extends Component {
     }
 
     movieArray = (rec) => {
+        if(rec == undefined){
+            return {}
+        }
         return rec.map((movie,index)=>{
             console.log(movie)
             let temp = [];
@@ -80,6 +98,17 @@ class Recommendations extends Component {
 
 
     render() {
+        if(this.state.empty){
+            Alert.alert(
+                'Error generating Recommendations List', 
+                'WatchList is empty',
+                [
+                  { text: 'OK', onPress: () => console.log('OK Pressed') }
+                ],
+                { cancelable: false }
+              );
+              return null;
+        }
         if(this.state.loading){
             return <ActivityIndicator/>
         }

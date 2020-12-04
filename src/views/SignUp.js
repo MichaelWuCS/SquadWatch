@@ -152,15 +152,15 @@ export class SignUp extends Component {
                             }
                             let valid = (signUp(this.state.email, this.state.password, this.state.first, this.state.last));
                             valid.then((data) =>{
-                                console.log(data);
-                                (this.props.addCustomUserToRedux({
+                                
+                                if(data == true){
+                                    console.log(data);
+                                    (this.props.addCustomUserToRedux({
                                     first: this.state.first,
                                     last: this.state.last,
                                     watchListId: firebase.auth().currentUser.uid
-                                }));
+                                    }));
                                 this.props.updateWatchList([]);
-                                if(data == true){
-
                                     this.props.navigation.reset({
                                         index: 0,
                                         routes: [{ name: 'Dashboard' }],
