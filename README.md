@@ -20,6 +20,8 @@ Run the following command:
 
 Place the ```.env``` file in the top level directory of the local copy, i.e. resulting in the path ```/squadwatch/.env```  
 
+Run the line ```yarn add react-native-paper```
+
 In the terminal, run the command ```expo start```. This will start a 'metro bundler' on a local port, and a GUI interface will open in a browser for you to run the app in different forms.  
 
 * To open the app in an Android emulator, click on "Run on Android device/emulator".  
