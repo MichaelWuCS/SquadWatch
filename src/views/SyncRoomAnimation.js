@@ -37,7 +37,7 @@ const firebase_config = {
 !firebase.apps.length ? firebase.initializeApp(firebase_config) : firebase.app();
 const firestore = firebase.firestore();
 
-const members = ["kcnprYOOyDQzT1FYpyTGpaT322u1", "lN3sv04bsGamBqI9Gc0WbHuvpER2"];
+//const members = ["kcnprYOOyDQzT1FYpyTGpaT322u1", "lN3sv04bsGamBqI9Gc0WbHuvpER2"];
 
 export default class SyncRoomAnimation extends Component {
     constructor(props) {

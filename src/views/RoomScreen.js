@@ -83,7 +83,7 @@ export class RoomScreen extends Component {
     }
 
     initListener(roomID){
-        firestore
+        const unsub = firestore
             .collection("squadRoom")
             .doc(roomID)
             .onSnapshot(querySnapshot=>{
@@ -118,8 +118,16 @@ export class RoomScreen extends Component {
                     console.log(this.props.navigation);
                     console.log("<<<===<<<===")
                     this.props.navigation.push("SyncAnimation", {
-                        members: this.state.data.members,
+                        members: this.state.data.members
                     });
+                    unsub()
+                    firestore
+                        .collection("squadRoom")
+                        .doc(roomID)
+                        .update({syncing:false})
+                        .catch(e =>{
+                            console.warn(e);
+                        })
                 }
             });
     }
