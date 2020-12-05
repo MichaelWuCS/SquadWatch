@@ -2,11 +2,19 @@
 
 ## How do I try out SquadWatch with Expo?
 
-#### Step 1: Installing Expo
+#### Step 1: Install Primary Dependencies
+
+Building and running this project requires installation of Node.js and Yarn. If you don't have these dependencies, links are provided below: 
+
+Yarn installation: https://classic.yarnpkg.com/en/docs/install/  
+
+Node.js installation: https://nodejs.org/en/download/ 
+
+#### Step 2: Installing Expo
 
 Follow steps 1 and 2 from the following link to install the Expo CLI and client app: https://docs.expo.io/get-started/installation/
 
-#### Step 2: Downloading and running SquadWatch
+#### Step 3: Downloading and running SquadWatch
 
 Clone our git repository with the url as prompted by bitbucket. The clone line you put in terminal will be of the following form:
 
